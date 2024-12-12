@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35208.52
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Rhythm-Racing-Engine", "Rhythm-Racing-Engine.vcxproj", "{4BA4F3D8-9574-46B0-9D9B-26C6BDB24D8E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4BA4F3D8-9574-46B0-9D9B-26C6BDB24D8E}.Debug|x86.ActiveCfg = Debug|Win32
+		{4BA4F3D8-9574-46B0-9D9B-26C6BDB24D8E}.Debug|x86.Build.0 = Debug|Win32
+		{4BA4F3D8-9574-46B0-9D9B-26C6BDB24D8E}.Release|x86.ActiveCfg = Release|Win32
+		{4BA4F3D8-9574-46B0-9D9B-26C6BDB24D8E}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2B062C37-C120-4378-B335-FAA100274B87}
+	EndGlobalSection
+EndGlobal
