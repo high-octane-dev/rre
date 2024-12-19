@@ -21,7 +21,7 @@ struct ShaderCollection {
 	}
 	inline void* GetByName(const char* param_1) const {
 		for (std::size_t i = 0; i < len; i++) {
-			if (stricmp(entries[i].name, param_1) == 0) {
+			if (_stricmp(entries[i].name, param_1) == 0) {
 				return entries[i].data;
 			}
 		}

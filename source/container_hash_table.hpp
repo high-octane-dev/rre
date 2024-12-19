@@ -88,7 +88,6 @@ public:
     TVal GetNextValue(Node** node);
     int GetNextValue(Node** node, TKey* key, TVal* value);
     */
-    REPLACE_OPERATOR_NEW_DELETE;
 };
 
 template <class TKey, class TVal>

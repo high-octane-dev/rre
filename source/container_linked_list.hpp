@@ -60,7 +60,7 @@ public:
 			auto node = start_node;
 			while (node != nullptr) {
 				auto next_node = node->next;
-				operator_delete(node);
+				delete node;
 				node = next_node;
 			}
 			len = 0;
@@ -70,7 +70,7 @@ public:
 	}
 	
 	inline int Append(T elem) {
-		auto new_node = reinterpret_cast<ContainerLinkedList<T>*>(operator_new(sizeof(ContainerLinkedList<T>)));
+		auto new_node = new ContainerLinkedListNode<T>;
 		if (new_node == nullptr) {
 			return 0;
 		}
@@ -187,7 +187,7 @@ public:
 			node->next->prev = node->prev;
 		}
 		if (node != nullptr) {
-			operator_delete(node);
+			delete node;
 		}
 		len--;
 	}

@@ -11,5 +11,5 @@ public:
 	virtual std::int32_t GetRefCount();
 	virtual void PreRelease();
 protected:
-	std::int32_t refCount;
+	std::int32_t ref_count;
 };

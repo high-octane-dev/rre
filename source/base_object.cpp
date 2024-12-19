@@ -2,7 +2,7 @@
 
 BaseObject::BaseObject()
 {
-	refCount = 1;
+	ref_count = 1;
 }
 
 BaseObject::~BaseObject()
@@ -11,31 +11,31 @@ BaseObject::~BaseObject()
 
 std::int32_t BaseObject::AddRef()
 {
-	return refCount++;
+	return ref_count++;
 }
 
 std::int32_t BaseObject::RemoveRef()
 {
-	if (refCount != 0) {
-		return refCount--;
+	if (ref_count != 0) {
+		return ref_count--;
 	}
 	return 0;
 }
 
 std::int32_t BaseObject::Release()
 {
-	refCount--;
-	if (refCount == 0) {
+	ref_count--;
+	if (ref_count == 0) {
 		PreRelease();
 		delete this;
 		return 0;
 	}
-	return refCount;
+	return ref_count;
 }
 
 std::int32_t BaseObject::GetRefCount()
 {
-	return refCount;
+	return ref_count;
 }
 
 void BaseObject::PreRelease()

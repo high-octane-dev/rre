@@ -3,6 +3,64 @@
 #include "panic.hpp"
 #include "data_access.hpp"
 
+
+static void RemoveWhiteSpace(const char* input_str, char* output_str, int is_loaded_from_memory) {
+	int input_index = 0;
+	int output_index = 0;
+	int bracket_depth = 0;
+	int inside_quotes = 0;
+
+	// Calculate the number of characters in the input string (excluding the null terminator)
+	int input_length = strlen(input_str);
+
+	// Initialize the output string with an empty string
+	*output_str = '\0';
+
+	// Process the input string if it contains more than one character
+	if (input_length > 0) {
+		do {
+			switch (input_str[input_index]) {
+				// Skip whitespace characters (tab, newline, carriage return, space) 
+			case '\t':
+			case '\n':
+			case '\r':
+			case ' ':
+				// Only allow whitespace within quotes or inside brackets
+				if ((bracket_depth > 0) || (inside_quotes != 0)) break;
+				input_index++;
+				continue;
+
+				// Handle quote characters and toggle quote mode
+			case '\"':
+				inside_quotes = 1 - inside_quotes;
+				if (is_loaded_from_memory != 0) {
+					input_index++;
+					continue;
+				}
+				break;
+
+				// Handle opening brackets and increase bracket depth
+			case '[':
+				bracket_depth++;
+				break;
+
+				// Handle closing brackets and decrease bracket depth
+			case ']':
+				bracket_depth--;
+				break;
+			}
+
+			// Copy the current character from input to output
+			output_str[output_index] = input_str[input_index];
+			output_index++;
+			input_index++;
+		} while (input_index < input_length);
+	}
+
+	// Null-terminate the output string
+	output_str[output_index] = '\0';
+}
+
 ParameterBlock::ParameterBlock() {
 	(search).current_header_name[0] = '\0';
 	(search).current_parameter_name[0] = '\0';
@@ -549,63 +607,6 @@ void ParameterBlock::GetHeaderList(char* dest, int len) {
 		return;
 	}
 	panic("ParameterBlock is 'loaded from memory'.");
-}
-
-static void RemoveWhiteSpace(const char* input_str, char* output_str, int is_loaded_from_memory) {
-	int input_index = 0;
-	int output_index = 0;
-	int bracket_depth = 0;
-	int inside_quotes = 0;
-
-	// Calculate the number of characters in the input string (excluding the null terminator)
-	int input_length = strlen(input_str);
-
-	// Initialize the output string with an empty string
-	*output_str = '\0';
-
-	// Process the input string if it contains more than one character
-	if (input_length > 0) {
-		do {
-			switch (input_str[input_index]) {
-				// Skip whitespace characters (tab, newline, carriage return, space) 
-			case '\t':
-			case '\n':
-			case '\r':
-			case ' ':
-				// Only allow whitespace within quotes or inside brackets
-				if ((bracket_depth > 0) || (inside_quotes != 0)) break;
-				input_index++;
-				continue;
-
-				// Handle quote characters and toggle quote mode
-			case '\"':
-				inside_quotes = 1 - inside_quotes;
-				if (is_loaded_from_memory != 0) {
-					input_index++;
-					continue;
-				}
-				break;
-
-				// Handle opening brackets and increase bracket depth
-			case '[':
-				bracket_depth++;
-				break;
-
-				// Handle closing brackets and decrease bracket depth
-			case ']':
-				bracket_depth--;
-				break;
-			}
-
-			// Copy the current character from input to output
-			output_str[output_index] = input_str[input_index];
-			output_index++;
-			input_index++;
-		} while (input_index < input_length);
-	}
-
-	// Null-terminate the output string
-	output_str[output_index] = '\0';
 }
 
 // Returns 0 if Header, 1 if Parameter, 2 if comma-separated-value.

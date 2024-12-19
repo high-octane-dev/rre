@@ -1,14 +1,14 @@
 #define NOMINMAX
 
 #include "game.hpp"
-#include "dependencies/bass.h"
+#include <BASS.h>
 
 Game* lpGame = nullptr;
 
 LanguageConfiguration* Game::GetLanguageConfiguration(char* name)
 {
     for (auto& elem : lang_confs) {
-        if (stricmp(elem->Name, name) == 0) {
+        if (_stricmp(elem->Name, name) == 0) {
             return elem;
         }
     }

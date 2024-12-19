@@ -24,8 +24,6 @@ public:
 	char* StringBlockAllocator_AllocStringByLength(int length, int unk);
 	char* StringBlockAllocator_AllocStringByString(char* str, int unk);
 	void FreeString(char* str);
-	
-	REPLACE_OPERATOR_NEW_DELETE;
 };
 
 static_assert(sizeof(StringBlockAllocator::StringBlock) == 16);

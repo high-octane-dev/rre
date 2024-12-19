@@ -88,7 +88,7 @@ public:
 				return 0;
 			}
 			else {
-				memory = realloc(memory, sizeof(T) * new_capacity);
+				memory = reinterpret_cast<T*>(realloc(memory, sizeof(T) * new_capacity));
 				capacity = new_capacity;
 				return 1;
 			}
@@ -100,7 +100,7 @@ public:
 
 	inline std::size_t CLNonMacroCreate(int initial_capacity, int capacity_growth, int max_capacity) {
 		length = 0;
-		memory = malloc(initial_capacity * sizeof(T));
+		memory = reinterpret_cast<T*>(malloc(initial_capacity * sizeof(T)));
 		capacity_add = capacity_growth;
 		capacity = initial_capacity;
 		max = max_capacity;

@@ -346,7 +346,7 @@ GameObject::GameObject(bool startEnabled) : BaseObject()
 	this->flags.packetEnabled = startEnabled;
 	this->flags.isPaused = false;
 	this->flags.killMe = false;
-	this->refCount = 1;
+	this->ref_count = 1;
 	this->typeID = 0xFF;
 }
 

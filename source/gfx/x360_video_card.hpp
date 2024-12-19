@@ -24,4 +24,4 @@ public:
 };
 
 extern X360VideoCard* g_VideoCard;
-extern IDirect3DDevice9* LPDIRECT3DDEVICE9;
+extern IDirect3DDevice9* g_D3DDevice9;

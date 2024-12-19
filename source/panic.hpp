@@ -1,5 +1,6 @@
 #pragma once
 #include <format>
+#include <source_location>
 
 void panic_impl(const char*);
 

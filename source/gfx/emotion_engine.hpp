@@ -27,7 +27,7 @@ namespace EE {
 	public:
 		List(std::size_t initial_capacity) {
 			capacity = initial_capacity;
-			data = malloc(initial_capacity);
+			data = reinterpret_cast<T*>(malloc(initial_capacity));
 		}
 		void InsertRaw(std::size_t index, T element) {
 		}

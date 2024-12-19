@@ -1,8 +1,8 @@
-#include "core/globals.hpp"
 #include "string_block_allocator.hpp"
+#include "bind.hpp"
 
-DeclareFunction(char*, __thiscall, _StringBlockAllocator_AllocStringByLength_Impl, 0x005b6830, StringBlockAllocator*, int, int, const char*, int);
-DeclareFunction(void, __thiscall, _StringBlockAllocator_FreeString_Impl, 0x005952c0, StringBlockAllocator*, char*);
+// DeclareFunction(char*, __thiscall, _StringBlockAllocator_AllocStringByLength_Impl, 0x005b6830, StringBlockAllocator*, int, int, const char*, int);
+// DeclareFunction(void, __thiscall, _StringBlockAllocator_FreeString_Impl, 0x005952c0, StringBlockAllocator*, char*);
 
 
 StringBlockAllocator::StringBlockAllocator(std::size_t _initial_string_len, int _alloc_size)
@@ -28,7 +28,7 @@ __declspec(naked) void StringBlockAllocator::Create(int unk)
 
 char* StringBlockAllocator::StringBlockAllocator_AllocStringByLength(int length, int unk)
 {
-	return _StringBlockAllocator_AllocStringByLength_Impl(this, length, unk, nullptr, 0);
+	return nullptr;//_StringBlockAllocator_AllocStringByLength_Impl(this, length, unk, nullptr, 0);
 }
 
 char* StringBlockAllocator::StringBlockAllocator_AllocStringByString(char* str, int unk)
@@ -37,5 +37,5 @@ char* StringBlockAllocator::StringBlockAllocator_AllocStringByString(char* str, 
 }
 
 void StringBlockAllocator::FreeString(char* str) {
-	_StringBlockAllocator_FreeString_Impl(this, str);
+	// _StringBlockAllocator_FreeString_Impl(this, str);
 }

@@ -42,6 +42,8 @@ void GetPlatformIDAndD3DVersion(unsigned int* direct3dVersion, DWORD* outPlatfor
         *canUseSoftwareRenderer = 1;
         FreeLibrary(blade);
     }
+    /*
+    // doesnt compile for some fucking reason
     OSVERSIONINFOA version_info{};
     version_info.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
     if (!GetVersionExA(&version_info)) {
@@ -70,6 +72,18 @@ void GetPlatformIDAndD3DVersion(unsigned int* direct3dVersion, DWORD* outPlatfor
         *direct3dVersion = 0;
     }
     return;
+    */
+    HMODULE d3d9_dll = LoadLibraryA("d3d9.dll");
+    if (d3d9_dll != nullptr) {
+        FreeLibrary(d3d9_dll);
+        IDirect3D9* d3d9 = Direct3DCreate9(D3D_SDK_VERSION);
+        if (d3d9 != nullptr) {
+            d3d9->Release();
+            *direct3dVersion = DIRECT3D_VERSION;
+            return;
+        }
+    }
+    *direct3dVersion = 0;
 }
 
 void ReadConfigIni() {

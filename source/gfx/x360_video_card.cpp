@@ -7,7 +7,7 @@
 X360VideoCard::X360VideoCard() : VideoCard()
 {
     unused = nullptr;
-    LPDIRECT3DDEVICE9 = nullptr;
+    g_D3DDevice9 = nullptr;
     lpD3DStateManager = nullptr;
     flags = this->flags & 0xfc;
     current_frame = 0;
@@ -29,8 +29,8 @@ void X360VideoCard::Create()
     atexit(free_device_manager);
     if (lpD3DDeviceManager->Create() != 0) {
         if (lpD3DDeviceManager->CreateAdapters(lpCarsGame->hwnd) != 0) {
-            LPDIRECT3DDEVICE9 = lpD3DDeviceManager->device;
-            LPDIRECT3DDEVICE9->AddRef();
+            g_D3DDevice9 = lpD3DDeviceManager->device;
+            g_D3DDevice9->AddRef();
             capabilites = lpD3DDeviceManager->adapter_list.data[lpD3DDeviceManager->adapter_index]->capabilities;
             g_TargetFrameRate = 60.0;
             lpD3DStateManager = new D3DStateManager();
@@ -40,8 +40,8 @@ void X360VideoCard::Create()
 
 X360VideoCard::~X360VideoCard()
 {
-    if (LPDIRECT3DDEVICE9 != nullptr) {
-        LPDIRECT3DDEVICE9->Release();
+    if (g_D3DDevice9 != nullptr) {
+        g_D3DDevice9->Release();
     }
 
     if (lpD3DStateManager != nullptr) {
@@ -67,9 +67,9 @@ int X360VideoCard::ResetStateManager()
 
 int X360VideoCard::DisplayToScreen(int inc_frame_count)
 {
-    LPDIRECT3DDEVICE9->Present(0, 0, 0, 0);
+    g_D3DDevice9->Present(0, 0, 0, 0);
     for (std::size_t i = 0; i < 16; i++) {
-        LPDIRECT3DDEVICE9->SetTexture(i, nullptr);
+        g_D3DDevice9->SetTexture(i, nullptr);
     }
     if (should_inc_frame_count == 0 && inc_frame_count == 0) {
         current_frame = current_frame + 1;
