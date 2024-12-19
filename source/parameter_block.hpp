@@ -4,7 +4,11 @@
 #include "math/vector4.hpp"
 
 struct UnkArrayEntry {
-	char unk[0x410];
+	int file_offset;
+	int prev;
+	char header_name[0x400];
+	int unused;
+	int unused2;
 };
 
 class ParameterBlock {

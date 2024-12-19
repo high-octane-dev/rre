@@ -52,8 +52,8 @@ void X360ShaderManager::Create() {
     do {
         auto vs = LoadVertexShader(ffd.cFileName);
         compiled_vertex_shaders.AddEntry(ffd.cFileName, vs);
-        auto ps = LoadVertexShader(ffd.cFileName);
-        compiled_vertex_shaders.AddEntry(ffd.cFileName, ps);
+        auto ps = LoadPixelShader(ffd.cFileName);
+        compiled_pixel_shaders.AddEntry(ffd.cFileName, ps);
 
     } while (FindNextFileA(find, &ffd) != 0);
 
@@ -92,7 +92,6 @@ IDirect3DPixelShader9* X360ShaderManager::GetPixelShader(const char* name) const
     return reinterpret_cast<IDirect3DPixelShader9*>(ret);
 }
 
-/* 360_Bink.hlsl */
 IDirect3DVertexShader9* X360ShaderManager::LoadVertexShader(const char* name)
 {
     char full_path[260]{};
@@ -116,7 +115,7 @@ IDirect3DVertexShader9* X360ShaderManager::LoadVertexShader(const char* name)
     return shdr;
 }
 
-IDirect3DPixelShader9* X360ShaderManager::LoadPixelShader(const char*)
+IDirect3DPixelShader9* X360ShaderManager::LoadPixelShader(const char* name)
 {
     char full_path[260]{};
     char* shader_model_dir = lpD3DDeviceManager->GetRelativeShaderPath();

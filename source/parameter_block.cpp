@@ -113,7 +113,7 @@ void ParameterBlock::FreeValueStringTable() {
 	value_string_table = nullptr;
 	value_string_table_len = 0;
 }
-
+/*
 int ParameterBlock::OpenFile(const char* name, int load_from_memory_or_not, int in_resource_handle, std::size_t* buffer, std::size_t buffer_len)
 {
 	int line_type;
@@ -245,9 +245,173 @@ int ParameterBlock::OpenFile(const char* name, int load_from_memory_or_not, int 
 	}
 	return 0;
 }
+*/
+
+int ParameterBlock::OpenFile(const char* name, int load_from_memory_or_not, int in_resource_handle, std::size_t* buffer, std::size_t buffer_len) {
+	int line_type;
+	char* file_data = nullptr;
+	char* input_line = nullptr;
+	size_t string_buffer_len = 0;
+	int seek_forward = 0;
+	char temp[2048]{};
+
+	FreeKeyAndHeaderMemory();
+	loaded_from_memory = load_from_memory_or_not;
+	label_string_table = nullptr;
+	headers = nullptr;
+	label_string_table_len = 0;
+	headers_capacity = 0;
+	total_parameter_capacity = 0;
+	total_parameter_list_capacity = 0;
+	unk = -1;
+	resource_handle = -1;
+	successfully_loaded_from_memory = 0;
+	unk_array_len = 0;
+	unk_array_capacity = 0;
+	unk_array = nullptr;
+	value_string_table_len = 0;
+	value_string_table = nullptr;
+	(search).parent = this;
+
+	if (load_from_memory_or_not == 0) {
+		if (in_resource_handle == -1) {
+			if (buffer == nullptr) {
+				resource_handle = lpDataAccess->FOpen(name, "rb");
+				if (resource_handle == -1) {
+					return 0;
+				}
+				string_buffer_len = lpDataAccess->FSize(resource_handle);
+				file_data = reinterpret_cast<char*>(malloc(string_buffer_len + 2));
+				lpDataAccess->FRead(resource_handle, file_data, string_buffer_len, 1);
+			}
+			else {
+				if (buffer_len == 0xFFFFFFFF) {
+					buffer_len = *buffer;
+					buffer = buffer + 1;
+				}
+				string_buffer_len = buffer_len;
+				file_data = reinterpret_cast<char*>(malloc(buffer_len + 2));
+				memcpy(file_data, buffer, string_buffer_len);
+			}
+		}
+		else {
+			lpDataAccess->FRead(in_resource_handle, &string_buffer_len, 4);
+			file_data = reinterpret_cast<char*>(malloc(string_buffer_len + 2));
+			lpDataAccess->FRead(in_resource_handle, file_data, string_buffer_len);
+		}
+
+		file_data[string_buffer_len] = '\r';
+		file_data[string_buffer_len + 1] = '\n';
+
+		if (headers == nullptr) {
+			int header_count = 0;
+			input_line = file_data;
+
+			while (input_line < file_data + string_buffer_len && *input_line != '\0') {
+				line_type = CheckLine(temp, &seek_forward, input_line);
+				input_line += seek_forward;
+				if (line_type == 0) {
+					header_count++;
+				}
+			}
+
+			headers_capacity = header_count;
+			if (header_count > 0) {
+				headers = reinterpret_cast<Header*>(malloc(header_count * sizeof(Header)));
+				for (std::size_t i = 0; i < headers_capacity; i++) {
+					headers[i].flag_or_index = 0xFFFF;
+					headers[i].parameters = nullptr;
+					headers[i].parameter_count = 0;
+					headers[i].parameter_lists = nullptr;
+					headers[i].parameter_list_count = 0;
+				}
+			}
+		}
+
+		input_line = file_data;
+		while (input_line < file_data + string_buffer_len && *input_line != '\0') {
+			line_type = CheckLine(temp, &seek_forward, input_line);
+			input_line += seek_forward;
+
+			if (line_type == 0) {
+				StoreNewHeader(temp, seek_forward);
+			}
+			else if (line_type == 1) {
+				StoreNewParameter(temp, seek_forward);
+			}
+			else if (line_type == 2) {
+				ReadCommaSeparatedParams(temp, seek_forward);
+			}
+			else if (line_type == -2) {
+				break;
+			}
+		}
+
+		if (search.current_header_index != -1 && search.current_header_index < headers_capacity) {
+			headers_capacity = search.current_header_index + 1;
+			headers = reinterpret_cast<Header*>(realloc(headers, (search.current_header_index + 1) * sizeof(Header)));
+		}
+
+		if (resource_handle != -1) {
+			lpDataAccess->FClose(resource_handle);
+			resource_handle = -1;
+		}
+
+		free(file_data);
+		return 1;
+	}
+	else if (load_from_memory_or_not == 1) {
+		resource_handle = lpDataAccess->FOpen(name, "rb");
+		if (resource_handle != -1) {
+			successfully_loaded_from_memory = 1;
+			OpenFromMemory(resource_handle);
+			return 1;
+		}
+	}
+
+	return 0;
+}
 
 void ParameterBlock::OpenFromMemory(int resource_handle) {
+	char sanitized_header_name[1024];
+	char stripped_whitespace[1024];
+	char current_line[1024];
 
+	int current_header_index = 0;
+	char* success = lpDataAccess->FGets(resource_handle, current_line, 0x400);
+	do {
+		if (success == nullptr) {
+			if (0 < this->unk_array_len) {
+				this->unk_array[this->unk_array_len + -1].prev = (current_header_index - this->unk_array[this->unk_array_len + -1].prev) + -1;
+			}
+			return;
+		}
+		RemoveWhiteSpace(current_line, stripped_whitespace, this->loaded_from_memory == 0);
+		if (stripped_whitespace[0] == '[') {
+			int sanitized_len = strcspn(stripped_whitespace + 1, "]\n\r");
+			strncpy(sanitized_header_name, stripped_whitespace + 1, sanitized_len);
+			sanitized_header_name[sanitized_len] = '\0';
+			if (GetHeaderIndex(sanitized_header_name) == -1) {
+				if (this->unk_array == nullptr) {
+					this->unk_array_capacity = 10;
+					this->unk_array = (UnkArrayEntry*)malloc(10 * sizeof(UnkArrayEntry));
+				}
+				else if (this->unk_array_capacity <= this->unk_array_len) {
+					this->unk_array_capacity = this->unk_array_capacity + 10;
+					this->unk_array = (UnkArrayEntry*)realloc(this->unk_array, this->unk_array_capacity * sizeof(UnkArrayEntry));
+				}
+				strcpy(this->unk_array[this->unk_array_len].header_name, sanitized_header_name);
+				this->unk_array[this->unk_array_len].file_offset = lpDataAccess->file_lookup_list[resource_handle]->current_offset;
+				this->unk_array[this->unk_array_len].prev = current_header_index;
+				if (0 < this->unk_array_len) {
+					this->unk_array[this->unk_array_len + -1].prev = current_header_index - this->unk_array[this->unk_array_len + -1].prev - 1;
+				}
+				this->unk_array_len = this->unk_array_len + 1;
+			}
+		}
+		current_header_index = current_header_index + 1;
+		success = lpDataAccess->FGets(resource_handle, current_line, 0x400);
+	} while (true);
 }
 
 // All GetParameter overloads WITH default values:

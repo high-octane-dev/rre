@@ -14,9 +14,9 @@
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{4ba4f3d8-9574-46b0-9d9b-26c6bdb24d8e}</ProjectGuid>
-    <RootNamespace>Rhythm-Racing-Engine</RootNamespace>
+    <RootNamespace>RRE</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Rhythm-Racing-Engine</ProjectName>
+    <ProjectName>RRE</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -84,6 +84,7 @@
     <ClCompile Include="source\base_object.cpp" />
     <ClCompile Include="source\block_allocator.cpp" />
     <ClCompile Include="source\data_access.cpp" />
+    <ClCompile Include="source\file_io.cpp" />
     <ClCompile Include="source\gfx\d3d_state_manager.cpp" />
     <ClCompile Include="source\gfx\emotion_engine.cpp" />
     <ClCompile Include="source\gfx\video_card.cpp" />
@@ -109,6 +110,7 @@
     <ClInclude Include="source\container_linked_list.hpp" />
     <ClInclude Include="source\container_list.hpp" />
     <ClInclude Include="source\data_access.hpp" />
+    <ClInclude Include="source\file_io.hpp" />
     <ClInclude Include="source\game.hpp" />
     <ClInclude Include="source\game_object.hpp" />
     <ClInclude Include="source\gfx\d3d_state_manager.hpp" />

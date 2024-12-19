@@ -87,12 +87,52 @@ public:
     // not this though!!!!!
     StringBlockAllocator* string_block_allocator;
 public:
-    void FClose(int resource_handle);
-    int FOpen(const char*, const char*);
-    int FSize(int);
-    int FRead(int, void*, int, int);
-    int FRead(int, void*, int);
+    DataAccess();
+    DataAccess(const DataAccess&) = delete;
+    DataAccess& operator=(const DataAccess&) = delete;
+    virtual ~DataAccess() override;
+
+    int ActivateDevice(VirtualDataDevice*, int);
+    int AddFile(char*, int, int, int, int*);
+    int AllocateDeviceCache(VirtualDeviceCache*, int);
+    int AllowBundledAccessOnly(int);
+    int AttachObject(int, void*);
+    int DropDevice(char*, int);
+    int DropDevice(VirtualDataDevice*, int);
+    int DropAllDevices(int);
+    int FClose(int resource_handle);
+    char* FGets(int, char*, int);
+    int FileExists(char*);
     int FindVirtualFile(char*);
+    int FOpen(const char*, const char*);
+    int FRead(int, void*, int);
+    int FRead(int, void*, int, int);
+    void FreeAllFiles();
+    void FreeDevice(VirtualDataDevice*);
+    void FreeDeviceCache(VirtualDeviceCache*);
+    void FreeFile(int);
+    void FreeSystemResources();
+    int FSize(int);
+
+    // basically does nothing anyway
+    int UNK_00549770();
+
+    int GetDataOrFileHandle(char*, char*, int*, int*, int);
+    void GetDeviceSlot(int);
+    int GrowDeviceList(int);
+    int GrowFileLookupList(int);
+    int Initialize(int, std::size_t, int, int, int);
+    int LoadDiskFile(char*, char*, int);
+    int LoadResourceFile(char*, int, unsigned int*, int, int, unsigned int*, unsigned int*, int**, int**, int);
+    void LoadResourceFromBuffer(unsigned int*, int, char*, int**, unsigned int, int, unsigned char*, int**, int**, int**, unsigned int*, int**, int*, int, int, long*);
+    void LoadResourceFromFile(char*, unsigned int*, unsigned int, int, unsigned char*, unsigned int**, long*, unsigned int, unsigned int*, unsigned int*, int*, int, int, long*);
+    void OpenVirtualFile(int);
+    unsigned int ReadData(VirtualDataDevice*, void*, void*, unsigned int);
+    int ResizeDeviceCache(unsigned int);
+    void SaveResourceFile(char*, int, int, int, int, void*, size_t, int);
+    void SaveResourceFileList(char*, char*);
+    int SetNumberOfDeviceCachePages(int);
+    void UpdateDeviceCache(VirtualDataDevice*, int, int, int);
 };
 
 extern DataAccess* lpDataAccess;
