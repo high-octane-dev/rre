@@ -103,6 +103,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\action_manager.cpp" />
     <ClCompile Include="source\base_object.cpp" />
     <ClCompile Include="source\block_allocator.cpp" />
     <ClCompile Include="source\data_access.cpp" />
@@ -124,6 +125,7 @@
     <ClCompile Include="source\x360_game.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\action_manager.hpp" />
     <ClInclude Include="source\base_object.hpp" />
     <ClInclude Include="source\bind.hpp" />
     <ClInclude Include="source\block_allocator.hpp" />
