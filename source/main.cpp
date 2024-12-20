@@ -25,8 +25,8 @@ int g_WindowHeight = 720;
 float g_TargetFrameRate = 0.0;
 char g_ClassName[256]{};
 char g_Caption[256]{};
-char g_DataDir[256] = {"e:\\dev_Cars2\\DataPC\\"};
-char g_RootDirectory[260]{};
+char g_DataPCDirectory[256] = {"e:\\dev_Cars2\\DataPC\\"};
+char g_StreamingDataPCDirectory[260]{};
 char g_LanguageName[64]{};
 char g_LocalizedMovieDirectory[260]{};
 char g_NTSCOrPal = 0;
@@ -73,6 +73,7 @@ void GetPlatformIDAndD3DVersion(unsigned int* direct3dVersion, DWORD* outPlatfor
     }
     return;
     */
+    *outPlatformId = VER_PLATFORM_WIN32_NT;
     HMODULE d3d9_dll = LoadLibraryA("d3d9.dll");
     if (d3d9_dll != nullptr) {
         FreeLibrary(d3d9_dll);
@@ -314,15 +315,8 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
     setlocale(0, "English");
     GetCurrentDirectoryA(0x104, lpGame->install_dir);
 
-    std::span install_dir_view(lpGame->install_dir);
-    auto it = std::find(install_dir_view.rbegin(), install_dir_view.rend(), '\\');
-    if (it != install_dir_view.rend()) {
-        auto index = std::distance(it, install_dir_view.rend()) - 1;
-        lpGame->install_dir[index] = 0;
-    }
-
-    vsnprintf(g_DataDir, 256, "%s\\DataPC\\", lpGame->install_dir);
-    strcpy(g_RootDirectory, g_DataDir);
+    snprintf(g_DataPCDirectory, 256, "%s\\DataPC\\", lpGame->install_dir);
+    strcpy(g_StreamingDataPCDirectory, g_DataPCDirectory);
 
     ReadConfigIni();
 

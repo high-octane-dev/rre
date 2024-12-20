@@ -2,6 +2,8 @@
 
 #include <BASS.h>
 #include "game.hpp"
+#include "data_access.hpp"
+#include "gfx/x360_video_card.hpp"
 
 Game* lpGame = nullptr;
 
@@ -35,6 +37,17 @@ Game::Game()
     this->unk = 0;
     this->screen_fade_complete = 0;
     this->world_ticks = 0;
+    
+    lpDataAccess = new DataAccess();
+    lpVirtualFileAllocator = new BlockAllocator(sizeof(VirtualDataFile), 1024 * sizeof(VirtualDataFile));
+    /*
+    lpSceneObjectMaterialTemplate = new X360MaterialTemplate();
+    lpIconMaterialTemplate = new X360MaterialTemplate();
+    lpMotionLibrary = new MotionLibrary();
+    g_RenderTarget = nullptr;
+    */
+    g_VideoCard = nullptr;
+
 
     this->flags = this->flags & 0xf9 | 0x40;
     this->control_interface = nullptr;
@@ -96,7 +109,8 @@ Game::Game()
 
 Game::~Game()
 {
-    
+    lpDataAccess->Release();
+    lpVirtualFileAllocator->Release();
 }
 
 int Game::InitializeRenderer(const char*)
@@ -244,8 +258,6 @@ RenderTarget* Game::CreateRenderTarget()
 {
     return nullptr;
 }
-
-RenderTarget* CreateRenderTarget() {}
 
 int Game::PostDisplayModeChange() {
     return 0;

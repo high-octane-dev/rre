@@ -66,7 +66,7 @@ public:
     int num_device_cache_pages;
     VirtualFileCache file_cache_list[8];
     int next_available_file_cache_id;
-    ContainerHashTable<char*, int>* file_list;
+    ContainerHashTable<char*, VirtualDataFile*>* file_list;
     VirtualDataFile** file_lookup_list;
     int file_lookup_list_num_slots;
     int last_get_data_or_file_handle;
@@ -120,7 +120,7 @@ public:
     int GetDataOrFileHandle(char*, char*, int*, int*, int);
     void GetDeviceSlot(int);
     int GrowDeviceList(int);
-    int GrowFileLookupList(int);
+    int GrowFileLookupList();
     int Initialize(int, std::size_t, int, int, int);
     int LoadDiskFile(char*, char*, int);
     int LoadResourceFile(char*, int, unsigned int*, int, int, unsigned int*, unsigned int*, int**, int**, int);
@@ -136,6 +136,7 @@ public:
 };
 
 extern DataAccess* lpDataAccess;
+extern BlockAllocator* lpVirtualFileAllocator;
 
 static_assert(sizeof(VirtualDataDevice) == 40);
 static_assert(sizeof(VirtualDataFile) == 36);

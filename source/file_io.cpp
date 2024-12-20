@@ -15,7 +15,7 @@ FILE* FOPEN(char* filename, const char* mode) {
     // Otherwise, prepend the DataDir and then open the file.
     else {
         // If not an absolute path, prepend a base directory (g_DataDir)
-        snprintf(resolvedPath, sizeof(resolvedPath), "%s%s", g_DataDir, filename);
+        snprintf(resolvedPath, sizeof(resolvedPath), "%s%s", g_DataPCDirectory, filename);
         return fopen(resolvedPath, mode);
     }
 

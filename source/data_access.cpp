@@ -2,6 +2,7 @@
 #include "file_io.hpp"
 
 DataAccess* lpDataAccess = nullptr;
+BlockAllocator* lpVirtualFileAllocator = nullptr;
 
 DataAccess::DataAccess() : BaseObject() {
     flags = 0;
@@ -109,7 +110,53 @@ int DataAccess::ActivateDevice(VirtualDataDevice* device, int offset) {
 
 int DataAccess::AddFile(char* file_name, int device_id, int start_offset, int size, int* handle)
 {
-    return 0;
+    char lowercase_file_name[260]{};
+    if (file_name == nullptr) {
+        return 0;
+    }
+    for (std::size_t i = 0; i < sizeof(lowercase_file_name); i++) {
+        if (file_name[i] == 0) {
+            break;
+        }
+        lowercase_file_name[i] = std::tolower(file_name[i]);
+    }
+    VirtualDataFile* file = nullptr;
+    int already_present = file_list->Lookup(file_name, &file);
+
+    int new_cache_id = 0;
+    int new_resource_handle = 0;
+    void* new_resource_data = nullptr;
+
+    if (already_present == 0) {
+        int old_len = GrowFileLookupList();
+        if (old_len == -1) {
+            return 0;
+        }
+        int did_allocate_new_block = 0;
+        file = reinterpret_cast<VirtualDataFile*>(lpVirtualFileAllocator->AllocBlock(&did_allocate_new_block));
+        file->file_name = string_block_allocator->StringBlockAllocator_AllocStringByLength(strlen(lowercase_file_name), 0);
+        strcpy(file->file_name, lowercase_file_name);
+        file_list->CHTAdd(file->file_name, file);
+        file_lookup_list[old_len] = file;
+        new_resource_handle = old_len;
+        new_resource_data = nullptr;
+    }
+    else {
+        new_resource_handle = file->resource_handle;
+        new_resource_data = file->resource_data;
+        if (file->device_id != device_id) {
+            new_cache_id = -1;
+        }
+    }
+    file->flag_data = 0;
+    file->device_id = device_id;
+    file->start_offset = start_offset;
+    file->current_offset = 0;
+    file->size = size;
+    file->cache_id = new_cache_id;
+    file->resource_data = new_resource_data;
+    file->resource_handle = new_resource_handle;
+    return 1;
 }
 
 int DataAccess::AllocateDeviceCache(VirtualDeviceCache* device_cache, int size_bytes)
@@ -155,6 +202,7 @@ int DataAccess::AllowBundledAccessOnly(int should_allow_only_bundled_access)
 int DataAccess::AttachObject(int resource_handle, void* object)
 {
     this->file_lookup_list[resource_handle]->resource_data = object;
+    return 1;
 }
 
 int DataAccess::DropDevice(char*, int)
@@ -204,7 +252,7 @@ int DataAccess::FindVirtualFile(char*)
 
 int DataAccess::FOpen(const char*, const char*)
 {
-    return 0;
+    return -1;
 }
 
 int DataAccess::FRead(int resource_handle, void* dst, int size)
@@ -265,9 +313,23 @@ int DataAccess::GrowDeviceList(int)
     return 0;
 }
 
-int DataAccess::GrowFileLookupList(int)
-{
-    return 0;
+int DataAccess::GrowFileLookupList() {
+    std::size_t used_slots = 0;
+    for (std::size_t i = 0; i < file_lookup_list_num_slots; i++) {
+        if (file_lookup_list[i] == nullptr) {
+            break;
+        }
+        used_slots++;
+    }
+    if (file_lookup_list_num_slots <= used_slots) {
+        file_lookup_list = reinterpret_cast<VirtualDataFile**>(realloc(file_lookup_list, (file_lookup_list_num_slots + 16) * sizeof(VirtualDataFile*)));
+        if (file_lookup_list == nullptr) {
+            return -1;
+        }
+        memset(file_lookup_list + file_lookup_list_num_slots, 0, 16 * sizeof(VirtualDataFile*));
+        file_lookup_list_num_slots += 16;
+    }
+    return used_slots;
 }
 
 int DataAccess::Initialize(int, std::size_t, int, int, int)
