@@ -9,6 +9,10 @@ public:
 		char* end;
 		// always set to zero so doesn't matter
 		int unk;
+		StringBlock();
+		StringBlock(const StringBlock&) = delete;
+		StringBlock& operator=(const StringBlock&) = delete;
+		~StringBlock();
 	};
 private:
 	std::size_t initial_string_len;
