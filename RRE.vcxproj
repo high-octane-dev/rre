@@ -114,6 +114,7 @@
     <ClInclude Include="source\bind.hpp" />
     <ClInclude Include="source\block_allocator.hpp" />
     <ClInclude Include="source\cars_game.hpp" />
+    <ClInclude Include="source\containers\dynamic_array.hpp" />
     <ClInclude Include="source\container_hash_table.hpp" />
     <ClInclude Include="source\container_linked_list.hpp" />
     <ClInclude Include="source\container_list.hpp" />
