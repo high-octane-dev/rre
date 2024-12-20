@@ -1,7 +1,11 @@
+#include <d3d9.h>
 #include "x360_game.hpp"
 #include "gfx/x360_video_card.hpp"
 #include "gfx/x360_shader_manager.hpp"
-#include <d3d9.h>
+
+X360Game::~X360Game()
+{
+}
 
 int X360Game::InitializeRenderer(const char*)
 {
@@ -15,7 +19,48 @@ int X360Game::InitializeRenderer(const char*)
             if (lpX360ShaderManager != nullptr) {
                 lpX360ShaderManager->Create();
                 this->SetDisplayMode(nullptr);
+                return 1;
             }
         }
     }
+    return 0;
+}
+
+int X360Game::PreGameInitialize(DisplayMode*)
+{
+    return 0;
+}
+
+int X360Game::SetBasicRenderStates()
+{
+    return 0;
+}
+
+void X360Game::PrepareFrame()
+{
+}
+
+int X360Game::KeyUpHandler(ProcessNode*, KeyInfo*)
+{
+    return 0;
+}
+
+int X360Game::KeyDownHandler(ProcessNode*, KeyInfo*)
+{
+    return 0;
+}
+
+int X360Game::Terminate()
+{
+    return 0;
+}
+
+int X360Game::SetDisplayMode(DisplayMode*)
+{
+    return 0;
+}
+
+RenderTarget* X360Game::CreateRenderTarget()
+{
+    return nullptr;
 }

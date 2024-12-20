@@ -1,6 +1,6 @@
 #pragma once
 #include "base_object.hpp"
-#include "container_hash_table.hpp"
+#include "containers/container_hash_table.hpp"
 #include "string_block_allocator.hpp"
 
 struct VirtualDataDevice {

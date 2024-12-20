@@ -275,7 +275,7 @@ int InitializeWindow(HINSTANCE param_1) {
     }
 }
 
-int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
+int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
     unsigned int direct3DVersion = 0;
     DWORD platformID = 0;
     unsigned int canUseSwRenderer = 0;

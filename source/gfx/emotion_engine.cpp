@@ -1,4 +1,6 @@
-#include "emotion_engine.hpp"
+#include "gfx/emotion_engine.hpp"
+
+EE::D3DDeviceManager* lpD3DDeviceManager = nullptr;
 
 EE::RefObject::~RefObject()
 {
@@ -144,5 +146,9 @@ void EE::D3DDeviceManager::ResetBackBufferAndDepthStencilSurface()
 }
 
 void EE::D3DDeviceManager::Reset()
+{
+}
+
+void EE::D3DDepthStencil::ResolveQualityLevel(IDirect3D9* d3d9, D3DDEVTYPE dev_type, D3DFORMAT fmt, int windowed)
 {
 }

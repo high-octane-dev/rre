@@ -1,6 +1,8 @@
 #include "data_access.hpp"
 #include "file_io.hpp"
 
+DataAccess* lpDataAccess = nullptr;
+
 DataAccess::DataAccess() : BaseObject() {
     flags = 0;
     number_of_devices_in_list = 0;
@@ -205,13 +207,16 @@ int DataAccess::FOpen(const char*, const char*)
     return 0;
 }
 
-int DataAccess::FRead(int, void*, int)
+int DataAccess::FRead(int resource_handle, void* dst, int size)
 {
     return 0;
 }
 
-int DataAccess::FRead(int, void*, int, int)
-{
+int DataAccess::FRead(int resource_handle, void* dst, int size, int count) {
+    size_t read_bytes = FRead(resource_handle, dst, size * count);
+    if (size != 0) {
+        return read_bytes / size;
+    }
     return 0;
 }
 

@@ -1,6 +1,6 @@
-#include "block_allocator.hpp"
 #include <corecrt_malloc.h>
 #include <cstddef>
+#include "block_allocator.hpp"
 
 BlockAllocator::BlockAllocator(int _used_size_per_block, int _block_size_bytes) : BaseObject() {
     used_size_per_block = _used_size_per_block;

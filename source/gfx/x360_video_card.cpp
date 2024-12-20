@@ -1,8 +1,11 @@
-#include "x360_video_card.hpp"
-#include "emotion_engine.hpp"
-#include "d3d_state_manager.hpp"
-#include "../cars_game.hpp"
-#include "../globals.hpp"
+#include "gfx/x360_video_card.hpp"
+#include "gfx/emotion_engine.hpp"
+#include "gfx/d3d_state_manager.hpp"
+#include "cars_game.hpp"
+#include "globals.hpp"
+
+X360VideoCard* g_VideoCard = nullptr;
+IDirect3DDevice9* g_D3DDevice9 = nullptr;
 
 X360VideoCard::X360VideoCard() : VideoCard()
 {

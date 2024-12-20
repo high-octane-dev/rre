@@ -1,7 +1,7 @@
 #define NOMINMAX
 
-#include "game.hpp"
 #include <BASS.h>
+#include "game.hpp"
 
 Game* lpGame = nullptr;
 
@@ -104,7 +104,9 @@ int Game::InitializeRenderer(const char*)
     return 0;
 }
 
-int Game::Initialize() {}
+int Game::Initialize() {
+    return 0;
+}
 
 void Game::CreateStringTables() {}
 
@@ -124,11 +126,17 @@ void Game::RemoveTimeIntervalCallback(void (**callback)(int, float, void*), void
     delete data;
 }
 
-int Game::PreWindowInitialize() {}
+int Game::PreWindowInitialize() {
+    return 0;
+}
 
-int Game::PreGameInitialize(struct DisplayMode*) {}
+int Game::PreGameInitialize(struct DisplayMode*) {
+    return 0;
+}
 
-int Game::LoadResources() {}
+int Game::LoadResources() {
+    return 0;
+}
 
 void Game::LoadConfigFile(ParameterBlock*) {}
 
@@ -138,24 +146,34 @@ void Game::EndAutoTest(int) {
     std::abort();
 }
 
-int Game::CreateMaterialPropertyManager() {}
+int Game::CreateMaterialPropertyManager() {
+    return 0;
+}
 
-int Game::Activate() {}
+int Game::Activate() {
+    return 0;
+}
 
 int Game::Deactivate() {
     BASS_Pause();
     return 1;
 }
 
-int Game::SetBasicRenderStates() {}
+int Game::SetBasicRenderStates() {
+    return 0;
+}
 
 void Game::PrepareFrame() {}
 
-int Game::UpdateScreen() {}
+int Game::UpdateScreen() { return 0; }
 
-int Game::Tick() {}
+int Game::Tick() {
+    return 0;
+}
 
-int Game::PauseGame(int) {}
+int Game::PauseGame(int) {
+    return 0;
+}
 
 int Game::EventHandler(int event) {
     return parent_game_object->EventHandler(event) != 0;
@@ -192,20 +210,29 @@ void Game::GetCameras(Camera* dest[4]) {
     dest[3] = this->cameras[3];
 }
 
-int Game::Terminate() {}
+int Game::Terminate() {
+    return 0;
+}
 
-int Game::GetFullPathToContentFile(const char*, char*) {}
+int Game::GetFullPathToContentFile(const char*, char*) {
+    return 0;
+}
 
-int Game::SetDisplayMode(struct DisplayMode*) {}
+int Game::SetDisplayMode(struct DisplayMode*) {
+    return 0;
+}
 
 void Game::InitPlatformGraphicsCallback() {}
 
 int Game::GetResourceString(const char*, char* dest) {
     static char Default[] = "No Strings Available";
     std::memcpy(dest, Default, 21);
+    return 0;
 }
 
-int Game::Timeout(int) {}
+int Game::Timeout(int) {
+    return 0;
+}
 
 void Game::ReportMemoryUsage(char*) {}
 
@@ -213,6 +240,13 @@ void Game::UpdateLocalizedPaths() {}
 
 void Game::UpdateTextureContentDirectories() {}
 
+RenderTarget* Game::CreateRenderTarget()
+{
+    return nullptr;
+}
+
 RenderTarget* CreateRenderTarget() {}
 
-int Game::PostDisplayModeChange() {}
+int Game::PostDisplayModeChange() {
+    return 0;
+}

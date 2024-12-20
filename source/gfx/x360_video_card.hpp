@@ -1,5 +1,5 @@
 #pragma once
-#include "video_card.hpp"
+#include "gfx/video_card.hpp"
 #include <d3d9.h>
 
 class X360VideoCard : VideoCard {

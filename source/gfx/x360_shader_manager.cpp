@@ -1,11 +1,13 @@
-#include "../globals.hpp"
-#include "x360_shader_manager.hpp"
-#include "emotion_engine.hpp"
-#include "x360_video_card.hpp"
+#include "globals.hpp"
+#include "gfx/x360_shader_manager.hpp"
+#include "gfx/emotion_engine.hpp"
+#include "gfx/x360_video_card.hpp"
 
 #include <stdio.h>
 #include <dxsdk-d3dx/d3dx9.h>
 #include <format>
+
+X360ShaderManager* lpX360ShaderManager = nullptr;
 
 int X360ShaderManager::Unk1(int, int, int, int, int, int)
 {

@@ -1,9 +1,9 @@
 #pragma once
 #include "language_definition.hpp"
 #include "language_configuration.hpp"
-#include "container_list.hpp"
+#include "containers/container_list.hpp"
 #include "game_object.hpp"
-#include "container_linked_list.hpp"
+#include "containers/container_linked_list.hpp"
 
 struct TimeIntervalCallback {
     void (**callback)(int, float, void*);

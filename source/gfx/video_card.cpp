@@ -1,4 +1,4 @@
-#include "video_card.hpp"
+#include "gfx/video_card.hpp"
 
 VideoCard::VideoCard()
 {
