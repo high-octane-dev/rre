@@ -205,24 +205,141 @@ int DataAccess::AttachObject(int resource_handle, void* object)
     return 1;
 }
 
-int DataAccess::DropDevice(char*, int)
+void DataAccess::ClearDeviceCache(VirtualDeviceCache* cache)
 {
+    if (cache->cache_buffer != nullptr && cache->page_sizes != nullptr && this->num_device_cache_pages > 0) {
+        for (std::size_t page_index = 0; page_index < this->num_device_cache_pages; page_index++) {
+            if (cache->cache_buffer[page_index] != nullptr) {
+                memset(cache->cache_buffer[page_index], 0, cache->page_sizes[page_index]);
+            }
+        }
+    }
+}
+
+int DataAccess::DropDevice(char* name, int force_delete)
+{
+    if (device_list == nullptr) {
+        return 0;
+    }
+
+    VirtualDataDevice* current_device = device_list;
+    VirtualDataDevice* last_device = device_list + number_of_devices_in_list - 1;
+
+    while (current_device <= last_device) {
+        if (current_device->file_name != nullptr) {
+            if (_stricmp(current_device->file_name, name) == 0) {
+                return DropDevice(current_device, force_delete);
+            }
+        }
+        current_device++;
+    }
     return 0;
 }
 
-int DataAccess::DropDevice(VirtualDataDevice*, int)
-{
-    return 0;
+int DataAccess::DropDevice(VirtualDataDevice* device, int force_delete) {
+    int free_device_slot = 1;
+    device->flag_data |= 0x20;
+    
+    ContainerHashTable<char*, VirtualDataFile*>::Node* node = nullptr;
+    VirtualDataFile* current_file = nullptr;
+    char* current_key = nullptr;
+
+    int has_next_value = 1;
+    file_list->GetNextValue(&node, &current_key, &current_file);
+    do {
+        has_next_value = file_list->GetNextValue(&node, &current_key, &current_file);
+        if (current_file != nullptr) {
+            if (current_file->device_id == device->id) {
+                if (!force_delete && (current_file->resource_data != nullptr || (current_file->flag_data & 4) != 0)) {
+                    free_device_slot = 0;
+                }
+                else {
+                    FreeFile(current_file->resource_handle);
+                }
+            }
+        }
+    } while (has_next_value != 0);
+    if (free_device_slot) {
+        FreeDevice(device);
+        return 1;
+    }
+    fclose(device->file_pointer);
+    device->file_pointer = nullptr;
+    return 1;
 }
 
-int DataAccess::DropAllDevices(int)
+int DataAccess::DropAllDevices(int force_delete)
 {
-    return 0;
+    int result = 1;
+
+    if (this->device_list != nullptr) {
+        VirtualDataDevice* current_device = this->device_list;
+        VirtualDataDevice* last_device = this->device_list + this->number_of_devices_in_list - 1;
+
+        if (this->number_of_devices_in_list > 1) {
+            while (current_device != last_device) {
+                if (DropDevice(current_device, force_delete) == 0) {
+                    result = 0;
+                }
+                current_device++;
+            }
+        }
+
+        if (DropDevice(last_device, force_delete) == 0) {
+            result = 0;
+        }
+
+        ResetStow();
+    }
+
+    return result;
 }
 
 int DataAccess::FClose(int resource_handle)
 {
-    return 0;
+    if (resource_handle < 0) {
+        return 0;
+    }
+
+    VirtualDataFile* current_file = file_lookup_list[resource_handle];
+
+    if ((current_file->flag_data & 4U) == 0) {
+        return 0;
+    }
+
+    VirtualDataDevice* device = &device_list[current_file->device_id];
+
+    if ((device->flag_data & 0x4000U) != 0) {
+        device->flag_data &= ~4U;
+        current_file->flag_data &= ~4U;
+        return 1;
+    }
+
+    current_file->current_offset = 0;
+    current_file->flag_data &= ~4U;
+
+    if (current_file->cache_id >= 0 && file_cache_list[current_file->cache_id].resource_handle == resource_handle) {
+        next_available_file_cache_id = current_file->cache_id;
+    }
+
+    if ((device->flag_data & 2U) == 0) {
+        if (device->file_pointer != nullptr) {
+            if ((device->flag_data & 0x10U) != 0) {
+                fseek(device->file_pointer, 0, SEEK_END);
+                long file_size = ftell(device->file_pointer);
+                current_file->size = file_size;
+                device->size = file_size;
+            }
+            fclose(device->file_pointer);
+            device->flag_data &= ~4U;
+            device->file_pointer = nullptr;
+        }
+        if (current_file->resource_data == 0 && ((current_file->flag_data & 8) == 0)) {
+            FreeDevice(device);
+            FreeFile(current_file->resource_handle);
+        }
+    }
+    return 1;
 }
 
 char* DataAccess::FGets(int, char*, int)
@@ -265,6 +382,11 @@ int DataAccess::FRead(int resource_handle, void* dst, int size, int count) {
     if (size != 0) {
         return read_bytes / size;
     }
+    return 0;
+}
+
+int DataAccess::FREADDeviceCache(VirtualDeviceCache*, int, FILE*)
+{
     return 0;
 }
 
@@ -355,6 +477,11 @@ void DataAccess::LoadResourceFromFile(char*, unsigned int*, unsigned int, int, u
 {
 }
 
+int DataAccess::MemcpyDeviceCache(VirtualDeviceCache*, int, void*)
+{
+    return 0;
+}
+
 void DataAccess::OpenVirtualFile(int)
 {
 }
@@ -362,6 +489,15 @@ void DataAccess::OpenVirtualFile(int)
 unsigned int DataAccess::ReadData(VirtualDataDevice*, void*, void*, unsigned int)
 {
     return 0;
+}
+
+void DataAccess::ResetStow()
+{
+    int* current_device = first_device_stow;
+    do {
+        *current_device = -1;
+        current_device++;
+    } while (current_device <= last_device_stow);
 }
 
 int DataAccess::ResizeDeviceCache(unsigned int)
@@ -377,9 +513,9 @@ void DataAccess::SaveResourceFileList(char*, char*)
 {
 }
 
-int DataAccess::SetNumberOfDeviceCachePages(int param_1)
+int DataAccess::SetNumberOfDeviceCachePages(int new_device_cache_page_count)
 {
-    if (this->num_device_cache_pages == param_1) {
+    if (this->num_device_cache_pages == new_device_cache_page_count) {
         return 1;
     }
     int cache_size = (this->device_cache).size;
@@ -392,7 +528,7 @@ int DataAccess::SetNumberOfDeviceCachePages(int param_1)
         current_device = current_device + 1;
     } while (current_device <= this->last_device_stow);
     FreeDeviceCache(&this->device_cache);
-    this->num_device_cache_pages = param_1;
+    this->num_device_cache_pages = new_device_cache_page_count;
     if (AllocateDeviceCache(&this->device_cache, cache_size) == 0) {
         (this->device_cache).size = 0;
     }

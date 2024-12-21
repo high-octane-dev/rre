@@ -97,6 +97,7 @@ public:
     int AllocateDeviceCache(VirtualDeviceCache*, int);
     int AllowBundledAccessOnly(int);
     int AttachObject(int, void*);
+    void ClearDeviceCache(VirtualDeviceCache*);
     int DropDevice(char*, int);
     int DropDevice(VirtualDataDevice*, int);
     int DropAllDevices(int);
@@ -107,6 +108,7 @@ public:
     int FOpen(const char*, const char*);
     int FRead(int, void*, int);
     int FRead(int, void*, int, int);
+    int FREADDeviceCache(VirtualDeviceCache*, int, FILE*);
     void FreeAllFiles();
     void FreeDevice(VirtualDataDevice*);
     void FreeDeviceCache(VirtualDeviceCache*);
@@ -126,8 +128,10 @@ public:
     int LoadResourceFile(char*, int, unsigned int*, int, int, unsigned int*, unsigned int*, int**, int**, int);
     void LoadResourceFromBuffer(unsigned int*, int, char*, int**, unsigned int, int, unsigned char*, int**, int**, int**, unsigned int*, int**, int*, int, int, long*);
     void LoadResourceFromFile(char*, unsigned int*, unsigned int, int, unsigned char*, unsigned int**, long*, unsigned int, unsigned int*, unsigned int*, int*, int, int, long*);
+    int MemcpyDeviceCache(VirtualDeviceCache*, int, void*);
     void OpenVirtualFile(int);
     unsigned int ReadData(VirtualDataDevice*, void*, void*, unsigned int);
+    void ResetStow();
     int ResizeDeviceCache(unsigned int);
     void SaveResourceFile(char*, int, int, int, int, void*, size_t, int);
     void SaveResourceFileList(char*, char*);

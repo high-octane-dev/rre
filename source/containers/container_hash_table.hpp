@@ -83,11 +83,9 @@ public:
     void EnumAllNodes(HashEnumCallBack hashEnumCallback, void* userData);
     void RemoveAllNodes();
     void RemoveNode(Node* node);
-    
-    /*
+
     TVal GetNextValue(Node** node);
     int GetNextValue(Node** node, TKey* key, TVal* value);
-    */
 };
 
 template <class TKey, class TVal>
@@ -277,7 +275,6 @@ void ContainerHashTable<TKey, TVal>::RemoveNode(Node* node)
     }
 }
 
-/*
 // return the value of the node after the given one
 // (node==nullptr to start the search)
 template <class TKey, class TVal>
@@ -373,7 +370,6 @@ int ContainerHashTable<TKey, TVal>::GetNextValue(Node** node, TKey* key, TVal* v
     (*node) = nullptr;
     return 0;
 }
-*/
 
 static_assert(sizeof(ContainerHashTable<const char*, int>::Node) == 20);
 static_assert(sizeof(ContainerHashTable<const char*, int>) == 24);
