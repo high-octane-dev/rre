@@ -1,6 +1,10 @@
 #include "action_script.hpp"
 #include <format>
 
+ActionScript::ActionScript() : GameObject(true)
+{
+}
+
 int ActionScript::Tick(float deltaSeconds)
 {
     return GameObject::Tick(deltaSeconds);

@@ -83,7 +83,7 @@ public:
     ContainerList<LanguageDefinition*> lang_defs;
     ContainerList<LanguageConfiguration*> lang_confs;
     char selected_language_configuration_name[32];
-    struct LanguageConfiguration* selected_language_configuration;
+    LanguageConfiguration* selected_language_configuration;
     int use_dashboard_locale;
     // int unused16;
 public:

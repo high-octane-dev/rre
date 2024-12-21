@@ -265,7 +265,6 @@ int InitializeWindow(HINSTANCE param_1) {
     
     g_HWND = CreateWindowExA(0, g_ClassName, g_Caption, dwStyle, 0, 0, g_WindowWidth, g_WindowHeight, nullptr, nullptr, param_1, nullptr);
     if (g_HWND == nullptr) {
-        GetLastError();
         return 0;
     }
     SetWindowPos(g_HWND, nullptr, 0, 0, 0, 0, 0x43);
@@ -274,6 +273,7 @@ int InitializeWindow(HINSTANCE param_1) {
         AdjustWindowRect(&wnd_rect, 0xcf0000, 0);
         MoveWindow(g_HWND, 0, 30, wnd_rect.right - wnd_rect.left, wnd_rect.bottom - wnd_rect.top, 1);
     }
+    return 1;
 }
 
 int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {

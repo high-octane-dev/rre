@@ -12,7 +12,7 @@ X360VideoCard::X360VideoCard() : VideoCard()
     unused = nullptr;
     g_D3DDevice9 = nullptr;
     lpD3DStateManager = nullptr;
-    flags = this->flags & 0xfc;
+    flags = flags & 0xfc;
     current_frame = 0;
     unk_refresh_rate_param = 2;
     enable_fullscreen_effects = true;

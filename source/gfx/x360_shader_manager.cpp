@@ -21,9 +21,6 @@ int X360ShaderManager::Unk2(int, int)
 
 X360ShaderManager::X360ShaderManager()
 {
-    (this->compiled_vertex_shaders).len = 0;
-    (this->compiled_pixel_shaders).len = 0;
-    (this->shader_source_codes).len = 0;
 }
 
 X360ShaderManager::~X360ShaderManager()

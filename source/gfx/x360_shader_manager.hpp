@@ -2,6 +2,7 @@
 #include <d3d9.h>
 #include <cstdint>
 #include <cstddef>
+#include <cstring>
 
 struct Shader {
 	char name[260];
@@ -11,6 +12,10 @@ struct Shader {
 struct ShaderCollection {
 	int len;
 	Shader entries[256];
+	inline ShaderCollection() {
+		len = 0;
+		std::memset(&entries, 0, sizeof(entries));
+	}
 	inline void AddEntry(char* name, void* data) {
 		if (this->len < 256) {
 			Shader* entry = &this->entries[this->len];

@@ -12,7 +12,7 @@ public:
 	void Reset();
 	void SendData();
 	void SetRenderState(D3DRENDERSTATETYPE type, DWORD value);
-	void SetSamplerState(D3DSAMPLERSTATETYPE type, DWORD register, DWORD value);
+	void SetSamplerState(D3DSAMPLERSTATETYPE type, DWORD register_index, DWORD value);
 
 };
 

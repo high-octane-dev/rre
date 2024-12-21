@@ -1,6 +1,7 @@
 #pragma once
 #include "game_object.hpp"
 #include "containers/dynamic_array.hpp"
+#include "parameter_block.hpp"
 
 struct ActionSequenceStep {};
 

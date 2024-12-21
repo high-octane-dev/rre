@@ -377,7 +377,7 @@ int ParameterBlock::OpenFile(const char* name, int load_from_memory_or_not, int 
 			if (header_count > 0) {
 				headers = reinterpret_cast<Header*>(malloc(header_count * sizeof(Header)));
 				for (std::size_t i = 0; i < headers_capacity; i++) {
-					headers[i].flag_or_index = 0xFFFF;
+					headers[i].flag_or_index = -1;
 					headers[i].parameters = nullptr;
 					headers[i].parameter_count = 0;
 					headers[i].parameter_lists = nullptr;
@@ -716,18 +716,18 @@ int ParameterBlock::ReadParameterBlock(const char* header) {
 
 int ParameterBlock::ParseIndexedHeaderFromName(char* header_name) {
 	std::size_t len = strlen(header_name);
-	if (header_name[len - 1] >= '0' && header_name[len - 1] < ':') {
-		char digits[10]{};
-		char* digits_start = header_name + len - 1;
-		while (*digits_start >= '0' && *digits_start < ':') {
-			digits_start--;
+	if (len > 1) {
+		if (header_name[len - 1] >= '0' && header_name[len - 1] < ':') {
+			char* digits_start = header_name + len - 1;
+			while (*digits_start >= '0' && *digits_start < ':') {
+				digits_start--;
+			}
+			int index = std::atol(digits_start);
+			return index;
 		}
-		int index = std::atol(digits_start);
-		*digits_start = 0;
-	}
-	else {
 		return -1;
 	}
+	return -1;
 }
 
 void ParameterBlock::ReadCommaSeparatedParams(char*, int) {
@@ -737,8 +737,8 @@ void ParameterBlock::ReadCommaSeparatedParams(char*, int) {
 void ParameterBlock::ResizeValueStringTable(int len) {
 	value_string_table_len = len;
 	if (len > 0) {
-		value_string_table = (char**)malloc(len * sizeof(char*));
-		*value_string_table = (char*)malloc(value_string_table_len * 1024);
+		value_string_table = reinterpret_cast<char**>(malloc(len * sizeof(char*)));
+		*value_string_table = reinterpret_cast<char*>(malloc(value_string_table_len * 1024));
 		if (value_string_table_len > 1) {
 			for (std::size_t i = 1; i < value_string_table_len; i++) {
 				value_string_table[i - 1] = value_string_table[i] + 1024;
@@ -773,7 +773,7 @@ void ParameterBlock::StoreNewHeader(const char* line, int line_len) {
 		headers_capacity = 32;
 		headers = reinterpret_cast<Header*>(malloc(sizeof(Header) * headers_capacity));
 		for (std::size_t i = 0; i < headers_capacity; i++) {
-			headers[i].flag_or_index = 0xFFFF;
+			headers[i].flag_or_index = -1;
 			headers[i].parameters = nullptr;
 			headers[i].parameter_count = 0;
 			headers[i].parameter_lists = nullptr;
@@ -786,7 +786,7 @@ void ParameterBlock::StoreNewHeader(const char* line, int line_len) {
 			headers_capacity = old_headers_capacity + 32;
 			headers = reinterpret_cast<Header*>(realloc(headers, headers_capacity * sizeof(Header)));
 			for (; old_headers_capacity < headers_capacity; old_headers_capacity++) {
-				headers[old_headers_capacity].flag_or_index = 0xFFFF;
+				headers[old_headers_capacity].flag_or_index = -1;
 				headers[old_headers_capacity].parameters = nullptr;
 				headers[old_headers_capacity].parameter_count = 0;
 				headers[old_headers_capacity].parameter_lists = nullptr;
@@ -889,7 +889,7 @@ int ParameterBlock::PBSearch::GetParameter(const char* parameter, char* dest) {
 int ParameterBlock::PBSearch::GetParameter(const char* parameter, float* dest) {
 	char buffer[1024]{};
 	if (GetParameter(parameter, buffer, 0x400) != 0) {
-		*dest = std::atof(buffer);
+		*dest = static_cast<float>(std::atof(buffer));
 		return 1;
 	}
 	return 0;
@@ -956,7 +956,7 @@ int ParameterBlock::PBSearch::GetParameter(const char* parameter, float* dest, s
 		if (start == nullptr) {
 			return 0;
 		}
-		dest[i] = std::atof(start);
+		dest[i] = static_cast<float>(std::atof(start));
 		start = strtok(nullptr, ",");
 	}
 	return 1;
@@ -1023,14 +1023,14 @@ int ParameterBlock::PBSearch::GetParameter(const char* parameter, Vector4* defau
 		return 0;
 	}
 	char* next = strtok(buffer, " ,");
-	dest->x = atof(next);
+	dest->x = static_cast<float>(std::atof(next));
 	next = strtok(nullptr, " ,");
-	dest->y = atof(next);
+	dest->y = static_cast<float>(std::atof(next));
 	next = strtok(nullptr, " ,\n");
-	dest->z = atof(next);
+	dest->z = static_cast<float>(std::atof(next));
 	next = strtok(nullptr, " \n");
 	if (next != nullptr) {
-		dest->w = atof(next);
+		dest->w = static_cast<float>(std::atof(next));
 		return 1;
 	}
 	dest->w = default_value->w;

@@ -22,6 +22,6 @@ void D3DStateManager::SetRenderState(D3DRENDERSTATETYPE type, DWORD value)
 {
 }
 
-void D3DStateManager::SetSamplerState(D3DSAMPLERSTATETYPE type, DWORD, DWORD value)
+void D3DStateManager::SetSamplerState(D3DSAMPLERSTATETYPE type, DWORD register_index, DWORD value)
 {
 }
