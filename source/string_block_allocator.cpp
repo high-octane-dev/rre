@@ -1,6 +1,7 @@
 #include "string_block_allocator.hpp"
 #include "bind.hpp"
 
+// OFFSET: 0x00595280
 StringBlockAllocator::StringBlockAllocator(std::size_t _initial_string_len, int _alloc_size) {
 	initial_string_len = _initial_string_len;
 	if (_alloc_size == -1) {
@@ -11,6 +12,7 @@ StringBlockAllocator::StringBlockAllocator(std::size_t _initial_string_len, int 
 	}
 }
 
+// OFFSET: 0x00595300
 StringBlockAllocator::~StringBlockAllocator() {
 	for (std::size_t i = 0; i < string_blocks.Length(); i++) {
 		delete string_blocks[i];
@@ -18,6 +20,7 @@ StringBlockAllocator::~StringBlockAllocator() {
 	string_blocks.Clear();
 }
 
+// OFFSET: 0x005b6780
 void StringBlockAllocator::Create(int unk) {
 	string_blocks.CLNonMacroCreate(0x80, 0x40, std::numeric_limits<int>::max());
 	StringBlock* block = new StringBlock();
@@ -28,6 +31,7 @@ void StringBlockAllocator::Create(int unk) {
 	string_blocks.CLAddItem(block);
 }
 
+// OFFSET: 0x005b6830
 char* StringBlockAllocator::StringBlockAllocator_AllocStringByLength(int length, int unk)
 {
 	for (int block_index = 0; block_index < string_blocks.Length(); block_index++) {
@@ -76,11 +80,13 @@ char* StringBlockAllocator::StringBlockAllocator_AllocStringByLength(int length,
 	return allocated_string;
 }
 
+// OFFSET: 0x005b68f0
 char* StringBlockAllocator::StringBlockAllocator_AllocStringByString(char* str, int unk)
 {
 	return StringBlockAllocator_AllocStringByLength(strlen(str), unk);
 }
 
+// OFFSET: 0x005952c0
 void StringBlockAllocator::FreeString(char* str) {
 	std::size_t index = -1;
 	for (std::size_t i = 0; i < string_blocks.Length(); i++) {
@@ -99,6 +105,7 @@ void StringBlockAllocator::FreeString(char* str) {
 	string_blocks[index]->end = string_blocks[index]->start;
 }
 
+// OFFSET: INLINE
 StringBlockAllocator::StringBlock::StringBlock()
 {
 	start = nullptr;
@@ -107,6 +114,7 @@ StringBlockAllocator::StringBlock::StringBlock()
 	unk = 0;
 }
 
+// OFFSET: INLINE
 StringBlockAllocator::StringBlock::~StringBlock()
 {
 	free(start);

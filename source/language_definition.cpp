@@ -2,6 +2,7 @@
 #include "game.hpp"
 #include "cars_game.hpp"
 
+// OFFSET: 0x00616ea0
 LanguageDefinition::LanguageDefinition()
 {
 	name[0] = '\0';
@@ -9,6 +10,7 @@ LanguageDefinition::LanguageDefinition()
 	prefix_index = -1;
 }
 
+// OFFSET: 0x00618340
 void LanguageDefinition::Read(ParameterBlock* file)
 {
 	file->ReadParameterBlock(name);

@@ -7,6 +7,7 @@
 
 Game* lpGame = nullptr;
 
+// OFFSET: 0x006182c0
 LanguageConfiguration* Game::GetLanguageConfiguration(char* name)
 {
     for (auto& elem : lang_confs) {
@@ -17,6 +18,7 @@ LanguageConfiguration* Game::GetLanguageConfiguration(char* name)
     return nullptr;
 }
 
+// OFFSET: 0x00618310
 void Game::SetLanguageConfiguration(char* name)
 {
     auto conf = GetLanguageConfiguration(name);
@@ -26,11 +28,13 @@ void Game::SetLanguageConfiguration(char* name)
     }
 }
 
+// OFFSET: 0x00618270
 int Game::GetLanguageDefinitionIndex(char* name)
 {
     return 0;
 }
 
+// OFFSET: 0x00618580
 Game::Game()
 {
     lpGame = this;
@@ -107,28 +111,34 @@ Game::Game()
     this->use_dashboard_locale = 0;
 }
 
+// OFFSET: 0x00618a50
 Game::~Game()
 {
     lpDataAccess->Release();
     lpVirtualFileAllocator->Release();
 }
 
+// OFFSET: INLINE
 int Game::InitializeRenderer(const char*)
 {
     return 0;
 }
 
+// OFFSET: 0x00617d30
 int Game::Initialize() {
     return 0;
 }
 
+// OFFSET: 0x00616ee0
 void Game::CreateStringTables() {}
 
+// OFFSET: 0x00618980
 void Game::AddTimeIntervalCallback(void (**callback)(int, float, void*), void* time_interval) {
     TimeIntervalCallback* time_interval_callback = new TimeIntervalCallback{callback, time_interval};
     time_interval_callbacks.Append(time_interval_callback);
 }
 
+// OFFSET: 0x006189c0
 void Game::RemoveTimeIntervalCallback(void (**callback)(int, float, void*), void* time_interval) {
     TimeIntervalCallback* data = nullptr;
     for (auto& elem : time_interval_callbacks) {
@@ -144,55 +154,71 @@ int Game::PreWindowInitialize() {
     return 0;
 }
 
+// OFFSET: 0x006170c0
 int Game::PreGameInitialize(struct DisplayMode*) {
     return 0;
 }
 
+// OFFSET: INLINE
 int Game::LoadResources() {
     return 0;
 }
 
+// OFFSET: 0x00617ac0
 void Game::LoadConfigFile(ParameterBlock*) {}
 
+// OFFSET: INLINE
 void Game::BeginAutoTest() {}
 
+// OFFSET: 0x00617990
 void Game::EndAutoTest(int) {
     std::abort();
 }
 
+// OFFSET: 0x00617180
 int Game::CreateMaterialPropertyManager() {
     return 0;
 }
 
+// OFFSET: 0x006171b0
 int Game::Activate() {
-    return 0;
+    BASS_Start();
+    return 1;
 }
 
+// OFFSET: 0x006171c0
 int Game::Deactivate() {
     BASS_Pause();
     return 1;
 }
 
+// OFFSET: INLINE
 int Game::SetBasicRenderStates() {
     return 0;
 }
 
+// OFFSET: INLINE
 void Game::PrepareFrame() {}
 
+// OFFSET: 0x00617370
 int Game::UpdateScreen() { return 0; }
 
+// OFFSET: 0x006173c0
 int Game::Tick() {
     return 0;
 }
 
+// OFFSET: 0x006177d0
 int Game::PauseGame(int) {
     return 0;
 }
 
+// OFFSET: 0x00617810
 int Game::EventHandler(int event) {
     return parent_game_object->EventHandler(event) != 0;
 }
 
+// OFFSET: 0x00617830
 int Game::KeyUpHandler(ProcessNode* node, KeyInfo* key) {
     if ((this->flags & 8) != 0) {
         return 1;
@@ -200,6 +226,7 @@ int Game::KeyUpHandler(ProcessNode* node, KeyInfo* key) {
     return parent_game_object->KeyUpHandler(node, key) != 0;
 }
 
+// OFFSET: 0x00617870
 int Game::KeyDownHandler(ProcessNode* node, KeyInfo* key) {
     if ((this->flags & 8) != 0) {
         return 1;
@@ -207,16 +234,22 @@ int Game::KeyDownHandler(ProcessNode* node, KeyInfo* key) {
     return parent_game_object->KeyDownHandler(node, key) != 0;
 }
 
+// OFFSET: 0x006178b0
 void Game::LoadMaterials(int, int) {}
 
+// OFFSET: 0x00617900
 void Game::ReloadMaterials(int) {}
 
+// OFFSET: 0x00617930
 void Game::ReloadMaterialsAndTextures(int) {}
 
+// OFFSET: 0x00617970
 void Game::LoadShaders() {}
 
+// OFFSET: 0x00617200
 void Game::SetCameras(Camera*, Camera*, Camera*, Camera*) {}
 
+// OFFSET: 0x00617280
 void Game::GetCameras(Camera* dest[4]) {
     dest[0] = this->cameras[0];
     dest[1] = this->cameras[1];
@@ -224,41 +257,52 @@ void Game::GetCameras(Camera* dest[4]) {
     dest[3] = this->cameras[3];
 }
 
+// OFFSET: 0x00617ff0
 int Game::Terminate() {
     return 0;
 }
 
+// OFFSET: 0x006179a0
 int Game::GetFullPathToContentFile(const char*, char*) {
     return 0;
 }
 
+// OFFSET: INLINE
 int Game::SetDisplayMode(struct DisplayMode*) {
     return 0;
 }
 
+// OFFSET: INLINE
 void Game::InitPlatformGraphicsCallback() {}
 
+// OFFSET: 0x00617a20
 int Game::GetResourceString(const char*, char* dest) {
     static char Default[] = "No Strings Available";
     std::memcpy(dest, Default, 21);
     return 0;
 }
 
+// OFFSET: 0x00617a60
 int Game::Timeout(int) {
     return 0;
 }
 
+// OFFSET: INLINE
 void Game::ReportMemoryUsage(char*) {}
 
+// OFFSET: INLINE
 void Game::UpdateLocalizedPaths() {}
 
+// OFFSET: INLINE
 void Game::UpdateTextureContentDirectories() {}
 
+// OFFSET: INLINE
 RenderTarget* Game::CreateRenderTarget()
 {
     return nullptr;
 }
 
+// OFFSET: 0x006171d0
 int Game::PostDisplayModeChange() {
     return 0;
 }

@@ -110,6 +110,7 @@ public:
 
 	int GetParameter(const char* parameter, float* dest);
 	int GetParameter(const char* parameter, int* dest);
+	int GetParameter(const char* parameter, char* dest);
 	int GetParameter(const char* parameter, char* dest, std::size_t dest_len);
 	int GetParameter(const char* parameter, int* dest, std::size_t dest_len);
 	int GetParameter(const char* parameter, float* dest, std::size_t dest_len);

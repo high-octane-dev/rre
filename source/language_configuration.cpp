@@ -1,6 +1,7 @@
 #include "language_configuration.hpp"
 #include "game.hpp"
 
+// OFFSET: 0x00616ec0
 LanguageConfiguration::LanguageConfiguration()
 {
     Name[0] = '\0';
@@ -13,6 +14,7 @@ LanguageConfiguration::LanguageConfiguration()
     TimerHundrethsMarkerFlag = '.';
 }
 
+// OFFSET: 0x006183f0
 void LanguageConfiguration::Read(ParameterBlock* file)
 {
     char language[32]{};

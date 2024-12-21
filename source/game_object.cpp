@@ -2,8 +2,8 @@
 
 #include "game_object.hpp"
 
-static int* SearchesOpen = reinterpret_cast<int*>(0x007161A8);
-static int* TotalGameObjects = reinterpret_cast<int*>(0x007161AC);
+static int SearchesOpen = 0;
+static int TotalGameObjects = 0;
 
 constexpr std::uint32_t kWantsNothing = 0x0;
 constexpr std::uint32_t kWantsTickWhileInactive = 0x1;
@@ -21,11 +21,32 @@ constexpr std::uint32_t kWantsPacketHandler = 0x800;
 constexpr std::uint32_t kWantsPrepareGeometry = 0x1000;
 constexpr std::uint32_t kWantsAllEvents = 0xffffffff;
 
+// OFFSET: 0x0054c6f0
 std::int32_t GameObject::Release()
 {
-	return std::int32_t();
+	if (SearchesOpen == 0) {
+
+		if (GetRefCount() < 2) {
+			// Is this accurate?
+			flags.enabled = true;
+			RemoveFromChain();
+		}
+
+		if (firstChild != nullptr) {
+			firstChild->ReleaseSiblingsInReverseCreationOrder();
+		}
+		ref_count--;
+
+		if (ref_count != 0) {
+			return ref_count;
+		}
+		PreRelease();
+		delete this;
+	}
+	return 0;
 }
 
+// OFFSET: 0x0054bf30
 void GameObject::Disable()
 {
 	flags.enabled = false;
@@ -33,11 +54,12 @@ void GameObject::Disable()
 	AncestorsDisabled();
 }
 
+// OFFSET: 0x0054bf50
 void GameObject::DisableAll()
 {
-	this->flags.enabled = false;
-	this->flags.packetEnabled = false;
-	GameObject* child = this->firstChild;
+	flags.enabled = false;
+	flags.packetEnabled = false;
+	GameObject* child = firstChild;
 	while (child != nullptr) {
 		if (!child->flags.killMe) {
 			child->DisableAll();
@@ -46,6 +68,7 @@ void GameObject::DisableAll()
 	}
 }
 
+// OFFSET: 0x0054bf40
 void GameObject::Enable()
 {
 	flags.enabled = true;
@@ -53,11 +76,12 @@ void GameObject::Enable()
 	AncestorsEnabled();
 }
 
+// OFFSET: 0x0054bf80
 void GameObject::EnableAll()
 {
-	this->flags.enabled = true;
-	this->flags.packetEnabled = true;
-	GameObject* child = this->firstChild;
+	flags.enabled = true;
+	flags.packetEnabled = true;
+	GameObject* child = firstChild;
 	while (child != nullptr) {
 		if (!child->flags.killMe) {
 			child->EnableAll();
@@ -66,9 +90,10 @@ void GameObject::EnableAll()
 	}
 }
 
+// OFFSET: 0x0054bef0
 void GameObject::AncestorsDisabled()
 {
-	GameObject* child = this->firstChild;
+	GameObject* child = firstChild;
 	while (child != nullptr) {
 		if (!child->flags.killMe) {
 			child->AncestorsDisabled();
@@ -77,9 +102,10 @@ void GameObject::AncestorsDisabled()
 	}
 }
 
+// OFFSET: 0x0054bf10
 void GameObject::AncestorsEnabled()
 {
-	GameObject* child = this->firstChild;
+	GameObject* child = firstChild;
 	while (child != nullptr) {
 		if (!child->flags.killMe) {
 			child->AncestorsEnabled();
@@ -88,26 +114,30 @@ void GameObject::AncestorsEnabled()
 	}
 }
 
+// OFFSET: 0x0054c1c0
 void GameObject::EnableEvents(std::uint32_t param_1)
 {
 	descendantsWantedEventMask |= param_1;
 	if (parent != nullptr) {
-		parent->descendantsWantedEventMask = parent->descendantsWantedEventMask | this->descendantsWantedEventMask | this->wantedEventMask;
+		parent->descendantsWantedEventMask = parent->descendantsWantedEventMask | descendantsWantedEventMask | wantedEventMask;
 		UpPropogateMasks();
 	}
 	return;
 }
 
+// OFFSET: 0x0054c1f0
 void GameObject::DisableEvents(std::uint32_t mask)
 {
-	this->wantedEventMask &= ~mask;
+	wantedEventMask &= ~mask;
 }
 
+// OFFSET: 0x0055aad0
 GameObject* GameObject::Create()
 {
 	return this;
 }
 
+// OFFSET: 0x0054c400
 int GameObject::TickWhileInactive(float deltaSeconds)
 {
 	if (descendantsWantedEventMask & kWantsTickWhileInactive) {
@@ -122,10 +152,11 @@ int GameObject::TickWhileInactive(float deltaSeconds)
 	return 1;
 }
 
+// OFFSET: 0x0054c390
 int GameObject::Tick(float deltaSeconds)
 {
-	if ((this->descendantsWantedEventMask & kWantsTick) != 0) {
-		for (GameObject* child = this->firstChild; child != nullptr; child = child->next) {
+	if ((descendantsWantedEventMask & kWantsTick) != 0) {
+		for (GameObject* child = firstChild; child != nullptr; child = child->next) {
 			if (child->flags.enabled && !child->flags.isPaused && !child->flags.killMe) {
 				if ((child->wantedEventMask & kWantsTick) == 0) {
 					if ((child->descendantsWantedEventMask & kWantsTick) != 0) {
@@ -142,17 +173,19 @@ int GameObject::Tick(float deltaSeconds)
 	return 1;
 }
 
+// OFFSET: 0x0054f370
 int GameObject::SimulationTick(float deltaSeconds)
 {
 	return 1;
 }
 
+// OFFSET: 0x0054c230
 int GameObject::PrepareGeometry()
 {
-	if ((this->descendantsWantedEventMask & kWantsPrepareGeometry) == 0) {
+	if ((descendantsWantedEventMask & kWantsPrepareGeometry) == 0) {
 		return 1;
 	}
-	for (GameObject* child = this->firstChild; child != nullptr; child = child->next) {
+	for (GameObject* child = firstChild; child != nullptr; child = child->next) {
 		if (child->flags.enabled && !child->flags.killMe) {
 			if ((child->wantedEventMask & kWantsPrepareGeometry) == 0) {
 				if ((child->descendantsWantedEventMask & kWantsPrepareGeometry) != 0) {
@@ -167,12 +200,13 @@ int GameObject::PrepareGeometry()
 	return 1;
 }
 
+// OFFSET: 0x0054c280
 int GameObject::RenderPre3D()
 {
-	if ((this->descendantsWantedEventMask & kWantsRenderPre3D) == 0) {
+	if ((descendantsWantedEventMask & kWantsRenderPre3D) == 0) {
 		return 1;
 	}
-	for (GameObject* child = this->firstChild; child != nullptr; child = child->next) {
+	for (GameObject* child = firstChild; child != nullptr; child = child->next) {
 		if (child->flags.enabled && !child->flags.killMe) {
 			if ((child->wantedEventMask & kWantsRenderPre3D) == 0) {
 				if ((child->descendantsWantedEventMask & kWantsRenderPre3D) != 0) {
@@ -187,12 +221,13 @@ int GameObject::RenderPre3D()
 	return 1;
 }
 
+// OFFSET: 0x0054c2d0
 int GameObject::Render3D(int userData)
 {
-	if ((this->descendantsWantedEventMask & kWantsRender3D) == 0) {
+	if ((descendantsWantedEventMask & kWantsRender3D) == 0) {
 		return 1;
 	}
-	GameObject* child = this->firstChild;
+	GameObject* child = firstChild;
 	if (child == nullptr) {
 		return 1;
 	}
@@ -212,12 +247,13 @@ int GameObject::Render3D(int userData)
 	return 1;
 }
 
+// OFFSET: 0x0054c340
 int GameObject::RenderPost3D()
 {
-	if ((this->descendantsWantedEventMask & kWantsRenderPost3D) == 0) {
+	if ((descendantsWantedEventMask & kWantsRenderPost3D) == 0) {
 		return 1;
 	}
-	for (GameObject* child = this->firstChild; child != nullptr; child = child->next) {
+	for (GameObject* child = firstChild; child != nullptr; child = child->next) {
 		if (child->flags.enabled && !child->flags.killMe) {
 			if ((child->wantedEventMask & kWantsRenderPost3D) == 0) {
 				if ((child->descendantsWantedEventMask & kWantsRenderPost3D) != 0) {
@@ -232,13 +268,14 @@ int GameObject::RenderPost3D()
 	return 1;
 }
 
+// OFFSET: 0x0054c450
 int GameObject::Pause(int bPaused)
 {
-	this->flags.isPaused = bPaused;
-	if ((this->descendantsWantedEventMask & kWantsPause) == 0) {
+	flags.isPaused = bPaused;
+	if ((descendantsWantedEventMask & kWantsPause) == 0) {
 		return 1;
 	}
-	for (GameObject* child = this->firstChild; child != nullptr; child = child->next) {
+	for (GameObject* child = firstChild; child != nullptr; child = child->next) {
 		if (!child->flags.killMe && ((child->wantedEventMask & kWantsPause) != 0)) {
 			child->Pause(bPaused);
 		}
@@ -246,10 +283,11 @@ int GameObject::Pause(int bPaused)
 	return 1;
 }
 
+// OFFSET: 0x0054c4f0
 int GameObject::LostFocus()
 {
-	if ((this->descendantsWantedEventMask & kWantsLostFocus) != 0) {
-		for (GameObject* child = this->firstChild; child != nullptr; child = child->next) {
+	if ((descendantsWantedEventMask & kWantsLostFocus) != 0) {
+		for (GameObject* child = firstChild; child != nullptr; child = child->next) {
 			if (!child->flags.killMe) {
 				child->LostFocus();
 			}
@@ -259,10 +297,11 @@ int GameObject::LostFocus()
 	return 1;
 }
 
+// OFFSET: 0x0054c4b0
 int GameObject::Restore()
 {
-	if ((this->descendantsWantedEventMask & kWantsRestore) != 0) {
-		for (GameObject* child = this->firstChild; child != nullptr; child = child->next) {
+	if ((descendantsWantedEventMask & kWantsRestore) != 0) {
+		for (GameObject* child = firstChild; child != nullptr; child = child->next) {
 			if (!child->flags.killMe) {
 				child->Restore();
 			}
@@ -272,10 +311,11 @@ int GameObject::Restore()
 	return 1;
 }
 
+// OFFSET: 0x0054c530
 int GameObject::EventHandler(std::int32_t eventNumber)
 {
-	if ((this->descendantsWantedEventMask & kWantsEventHandler) != 0) {
-		for (GameObject* child = this->firstChild; child != nullptr; child = child->next) {
+	if ((descendantsWantedEventMask & kWantsEventHandler) != 0) {
+		for (GameObject* child = firstChild; child != nullptr; child = child->next) {
 			if (child->flags.enabled && !child->flags.killMe && child->EventHandler(eventNumber)) {
 				return 1;
 			}
@@ -284,10 +324,11 @@ int GameObject::EventHandler(std::int32_t eventNumber)
 	return 0;
 }
 
+// OFFSET: 0x0054c580
 int GameObject::KeyUpHandler(ProcessNode* event, KeyInfo* keyInfo)
 {
-	if ((this->descendantsWantedEventMask & kWantsKeyUpHandler) != 0) {
-		for (GameObject* child = this->firstChild; child != nullptr; child = child->next) {
+	if ((descendantsWantedEventMask & kWantsKeyUpHandler) != 0) {
+		for (GameObject* child = firstChild; child != nullptr; child = child->next) {
 			if ((child->flags.enabled && !child->flags.killMe) && child->KeyUpHandler(event, keyInfo)) {
 				return 1;
 			}
@@ -296,10 +337,11 @@ int GameObject::KeyUpHandler(ProcessNode* event, KeyInfo* keyInfo)
 	return 0;
 }
 
+// OFFSET: 0x0054c5e0
 int GameObject::KeyDownHandler(ProcessNode* event, KeyInfo* keyInfo)
 {
-	if ((this->descendantsWantedEventMask & kWantsKeyDownHandler) != 0) {
-		for (GameObject* child = this->firstChild; child != nullptr; child = child->next) {
+	if ((descendantsWantedEventMask & kWantsKeyDownHandler) != 0) {
+		for (GameObject* child = firstChild; child != nullptr; child = child->next) {
 			if ((child->flags.enabled && !child->flags.killMe) && child->KeyDownHandler(event, keyInfo)) {
 				return 1;
 			}
@@ -308,11 +350,12 @@ int GameObject::KeyDownHandler(ProcessNode* event, KeyInfo* keyInfo)
 	return 0;
 }
 
+// OFFSET: 0x0054c640
 int GameObject::PacketHandler(std::uint32_t message, void* lpMsg, std::uint32_t idFrom, std::uint32_t idTo, std::uint32_t receiveTime)
 {
 
-	if ((this->descendantsWantedEventMask & kWantsPacketHandler) != 0) {
-		for (GameObject* child = this->firstChild; child != nullptr; child = child->next) {
+	if ((descendantsWantedEventMask & kWantsPacketHandler) != 0) {
+		for (GameObject* child = firstChild; child != nullptr; child = child->next) {
 			if ((child->flags.packetEnabled && !child->flags.killMe) && child->PacketHandler(message, lpMsg, idFrom, idTo, receiveTime)) {
 				return 1;
 			}
@@ -321,46 +364,159 @@ int GameObject::PacketHandler(std::uint32_t message, void* lpMsg, std::uint32_t 
 	return 0;
 }
 
+// OFFSET: 0x0054c200
 void GameObject::Kill()
 {
-	for (GameObject* object = this->firstChild; object != nullptr; object = object->next) {
+	for (GameObject* object = firstChild; object != nullptr; object = object->next) {
 		object->Kill();
 	}
-	this->flags.killMe = true;
+	flags.killMe = true;
 }
 
+// OFFSET: 0x00583e70
 void GameObject::DumpHierarchy(char*, DumpType, std::int32_t)
 {
 }
 
-GameObject::GameObject(bool startEnabled) : BaseObject()
-{
-	(*TotalGameObjects)++;
-	this->prev = nullptr;
-	this->next = nullptr;
-	this->firstChild = nullptr;
-	this->parent = nullptr;
-	this->wantedEventMask = 0;
-	this->descendantsWantedEventMask = 0;
-	this->flags.enabled = startEnabled;
-	this->flags.packetEnabled = startEnabled;
-	this->flags.isPaused = false;
-	this->flags.killMe = false;
-	this->ref_count = 1;
-	this->typeID = 0xFF;
+// OFFSET: 0x0054c000
+GameObject* GameObject::AddChild(GameObject* child, unsigned int eventMask) {
+	if (SearchesOpen != 0) {
+		return 0;
+	}
+	
+	if (child != nullptr) {
+		GameObject* lastChild = this->firstChild;
+		if (lastChild == nullptr) {
+			this->firstChild = child;
+			child->prev = nullptr;
+		}
+		else {
+			while (lastChild->next != nullptr) {
+				lastChild = lastChild->next;
+			}
+			lastChild->next = child;
+			child->prev = lastChild;
+		}
+
+		GameObject* current = child;
+		while (current != nullptr) {
+			current->parent = this;
+			current = current->next;
+		}
+
+		child->wantedEventMask = eventMask;
+		if (child->parent != nullptr) {
+			GameObject* parent = child->parent;
+			parent->descendantsWantedEventMask |= child->descendantsWantedEventMask | eventMask;
+			parent->UpPropogateMasks();
+		}
+	}
+
+	return child;
 }
 
+// OFFSET: 0x005837d0
+void GameObject::DumpHierarchy(FILE*, DumpType, std::int32_t)
+{
+}
+
+// OFFSET: 0x0054bea0
+GameObject::GameObject(bool startEnabled) : BaseObject()
+{
+	(TotalGameObjects)++;
+	prev = nullptr;
+	next = nullptr;
+	firstChild = nullptr;
+	parent = nullptr;
+	wantedEventMask = 0;
+	descendantsWantedEventMask = 0;
+	flags.enabled = startEnabled;
+	flags.packetEnabled = startEnabled;
+	flags.isPaused = false;
+	flags.killMe = false;
+	ref_count = 1;
+	typeID = 0xFF;
+}
+
+// OFFSET: 0x0054bfb0
 void GameObject::UpPropogateMasks()
 {
 	GameObject* object = this;
 	while (object->parent != nullptr) {
 		object->parent->descendantsWantedEventMask = object->parent->descendantsWantedEventMask | object->descendantsWantedEventMask | object->wantedEventMask;
-		object = this->parent;
+		object = parent;
 	}
 	return;
 }
 
+// OFFSET: 0x0054c070
+int GameObject::RemoveFromChain()
+{
+	if (SearchesOpen != 0) {
+		return 0;
+	}
+
+	if (prev != nullptr) {
+		prev->next = next;
+	}
+	if (next != nullptr) {
+		next->prev = prev;
+	}
+
+	if (parent != nullptr && parent->firstChild == this) {
+		parent->firstChild = next;
+	}
+
+	GameObject* root = parent;
+	while (root != nullptr && root->parent != nullptr) {
+		root = root->parent;
+	}
+	if (root != this && !root->flags.enabled && root->descendantsWantedEventMask != 0) {
+		root->ReEvaluateDescendantsWantedEventMasks();
+	}
+
+	parent = nullptr;
+	next = nullptr;
+	prev = nullptr;
+
+	return 1;
+}
+
+// OFFSET: 0x0054c6b0
+int GameObject::ReleaseSiblingsInReverseCreationOrder()
+{
+	if (SearchesOpen != 0) {
+		return 0;
+	}
+
+	if (next != nullptr) {
+		next->ReleaseSiblingsInReverseCreationOrder();
+	}
+
+	if (prev != nullptr) {
+		prev->next = nullptr;
+	}
+
+	next = nullptr;
+
+	return Release();
+}
+
+// OFFSET: 0x0054bfd0
+void GameObject::ReEvaluateDescendantsWantedEventMasks()
+{
+	GameObject* child = firstChild;
+	descendantsWantedEventMask = 0;
+
+	while (child != nullptr) {
+		child->ReEvaluateDescendantsWantedEventMasks();
+		descendantsWantedEventMask |= child->descendantsWantedEventMask | child->wantedEventMask;
+		child = child->next;
+	}
+}
+
+// OFFSET: 0x005a4480
 GameObject::~GameObject()
 {
-	(*TotalGameObjects)--;
+	(TotalGameObjects)--;
 }

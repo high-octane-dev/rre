@@ -3,7 +3,7 @@
 #include "panic.hpp"
 #include "data_access.hpp"
 
-
+// OFFSET: 0x00539d10
 static void RemoveWhiteSpace(const char* input_str, char* output_str, int is_loaded_from_memory) {
 	int input_index = 0;
 	int output_index = 0;
@@ -61,6 +61,7 @@ static void RemoveWhiteSpace(const char* input_str, char* output_str, int is_loa
 	output_str[output_index] = '\0';
 }
 
+// OFFSET: 0x00587e60
 ParameterBlock::ParameterBlock() {
 	(search).current_header_name[0] = '\0';
 	(search).current_parameter_name[0] = '\0';
@@ -86,10 +87,12 @@ ParameterBlock::ParameterBlock() {
 	loaded_from_memory = 0;
 }
 
+// OFFSET: 0x005c4440
 ParameterBlock::~ParameterBlock() {
 	FreeKeyAndHeaderMemory();
 }
 
+// OFFSET: 0x00554660
 void ParameterBlock::FreeHeaders() {
 	if (label_string_table != nullptr) {
 		for (std::size_t i = 0; i < label_string_table_len; i++) {
@@ -134,6 +137,7 @@ void ParameterBlock::FreeHeaders() {
 	return;
 }
 
+// OFFSET: 0x005ae1d0
 void ParameterBlock::FreeKeyAndHeaderMemory() {
 	FreeHeaders();
 	if (resource_handle != -1) {
@@ -160,6 +164,7 @@ void ParameterBlock::FreeKeyAndHeaderMemory() {
 	}
 }
 
+// OFFSET: 0x00553d60
 void ParameterBlock::FreeValueStringTable() {
 	char** string_table = value_string_table;
 	if (string_table != nullptr) {
@@ -171,6 +176,7 @@ void ParameterBlock::FreeValueStringTable() {
 	value_string_table = nullptr;
 	value_string_table_len = 0;
 }
+
 /*
 int ParameterBlock::OpenFile(const char* name, int load_from_memory_or_not, int in_resource_handle, std::size_t* buffer, std::size_t buffer_len)
 {
@@ -304,7 +310,7 @@ int ParameterBlock::OpenFile(const char* name, int load_from_memory_or_not, int 
 	return 0;
 }
 */
-
+// OFFSET: 0x005d87c0
 int ParameterBlock::OpenFile(const char* name, int load_from_memory_or_not, int in_resource_handle, std::size_t* buffer, std::size_t buffer_len) {
 	int line_type;
 	char* file_data = nullptr;
@@ -430,6 +436,7 @@ int ParameterBlock::OpenFile(const char* name, int load_from_memory_or_not, int 
 	return 0;
 }
 
+// OFFSET: 0x005c4450
 void ParameterBlock::OpenFromMemory(int resource_handle) {
 	char sanitized_header_name[1024];
 	char stripped_whitespace[1024];
@@ -474,6 +481,7 @@ void ParameterBlock::OpenFromMemory(int resource_handle) {
 
 // All GetParameter overloads WITH default values:
 
+// OFFSET: 0x00588250
 int ParameterBlock::GetParameter(const char* parameter, int default_value, int* dest) {
 	if (search.GetParameter(parameter, dest) != 0) {
 		return 1;
@@ -482,6 +490,7 @@ int ParameterBlock::GetParameter(const char* parameter, int default_value, int* 
 	return 0;
 }
 
+// OFFSET: 0x00588280
 int ParameterBlock::GetParameter(const char* parameter, unsigned int default_value, unsigned int* dest) {
 	if (search.GetParameter(parameter, dest) != 0) {
 		return 1;
@@ -490,6 +499,7 @@ int ParameterBlock::GetParameter(const char* parameter, unsigned int default_val
 	return 0;
 }
 
+// OFFSET: 0x00588220
 int ParameterBlock::GetParameter(const char* parameter, short default_value, short* dest) {
 	if (search.GetParameter(parameter, dest) != 0) {
 		return 1;
@@ -498,6 +508,7 @@ int ParameterBlock::GetParameter(const char* parameter, short default_value, sho
 	return 0;
 }
 
+// OFFSET: 0x005881f0
 int ParameterBlock::GetParameter(const char* parameter, char default_value, char* dest) {
 	if (search.GetParameter(parameter, dest) != 0) {
 		return 1;
@@ -506,6 +517,7 @@ int ParameterBlock::GetParameter(const char* parameter, char default_value, char
 	return 0;
 }
 
+// OFFSET: 0x005882b0
 int ParameterBlock::GetParameter(const char* parameter, float default_value, float* dest) {
 	if (search.GetParameter(parameter, dest) != 0) {
 		return 1;
@@ -514,6 +526,7 @@ int ParameterBlock::GetParameter(const char* parameter, float default_value, flo
 	return 0;
 }
 
+// OFFSET: 0x005881a0
 int ParameterBlock::GetParameter(const char* parameter, const char* default_value, char* dest, std::size_t dest_len) {
 	if (search.GetParameter(parameter, dest) != 0) {
 		return 1;
@@ -522,20 +535,29 @@ int ParameterBlock::GetParameter(const char* parameter, const char* default_valu
 	return 0;
 }
 
+// OFFSET: 0x005882e0
 int ParameterBlock::GetParameter(const char* parameter, Vector4* default_value, Vector4* dest) {
 	return search.GetParameter(parameter, default_value, dest);
 }
 
 // All GetParameter overloads WITHOUT default values:
 
+// OFFSET: 0x00588190
 int ParameterBlock::GetParameter(const char* parameter, float* dest) {
 	return search.GetParameter(parameter, dest);
 }
 
+// OFFSET: 0x00588180
 int ParameterBlock::GetParameter(const char* parameter, int* dest) {
 	return search.GetParameter(parameter, dest);
 }
 
+// OFFSET: 0x00588170
+int ParameterBlock::GetParameter(const char* parameter, char* dest) {
+	return search.GetParameter(parameter, dest);
+}
+
+// OFFSET: 0x00587fb0
 int ParameterBlock::GetParameter(const char* parameter, char* dest, std::size_t dest_len) {
 	if (loaded_from_memory == 0) {
 		return search.GetParameter(parameter, dest, dest_len);
@@ -543,16 +565,18 @@ int ParameterBlock::GetParameter(const char* parameter, char* dest, std::size_t 
 	panic("ParameterBlock is 'loaded from memory'.");
 }
 
+// OFFSET: 0x00588300
 int ParameterBlock::GetParameter(const char* parameter, int* dest, std::size_t dest_len) {
 	return search.GetParameter(parameter, dest, dest_len);
 }
 
+// OFFSET: 0x005882f0
 int ParameterBlock::GetParameter(const char* parameter, float* dest, std::size_t dest_len) {
 	return search.GetParameter(parameter, dest, dest_len);
 }
 
 // Finally done with all the overloads...
-
+// OFFSET: 0x00587fa0
 int ParameterBlock::GetNumberOfParameterValues(const char* parameter) {
 	if (search.current_header_index == -1) {
 		return -1;
@@ -569,6 +593,7 @@ int ParameterBlock::GetNumberOfParameterValues(const char* parameter) {
 	return -1;
 }
 
+// OFFSET: 0x00587ec0
 int ParameterBlock::GetHeaderIndex(const char* name) {
 	char buffer[1024]{};
 	if (loaded_from_memory == 0) {
@@ -586,6 +611,7 @@ int ParameterBlock::GetHeaderIndex(const char* name) {
 	panic("ParameterBlock is 'loaded from memory'.");
 }
 
+// OFFSET: 0x00588310
 void ParameterBlock::GetHeaderList(char* dest, int len) {
 	char* dest_ptr = dest;
 	if (loaded_from_memory == 0) {
@@ -610,6 +636,7 @@ void ParameterBlock::GetHeaderList(char* dest, int len) {
 }
 
 // Returns 0 if Header, 1 if Parameter, 2 if comma-separated-value.
+// OFFSET: 0x00554140
 int ParameterBlock::CheckLine(char* output_buffer, int* length_output, char* input_buffer) const {
 	// Copy characters from input buffer to output buffer.
 	for (std::size_t i = 0; i < strlen(input_buffer); i++) {
@@ -670,6 +697,7 @@ int ParameterBlock::CheckLine(char* output_buffer, int* length_output, char* inp
 	return result_code;
 }
 
+// OFFSET: 0x00554020
 int ParameterBlock::GetOrInsertStringTableIndex(char* label) {
 	if (label_string_table == nullptr) {
 		label_string_table_len = 64;
@@ -706,7 +734,7 @@ int ParameterBlock::GetOrInsertStringTableIndex(char* label) {
 	return i;
 }
 
-
+// OFFSET: 0x005c4620
 int ParameterBlock::ReadParameterBlock(const char* header) {
 	if (loaded_from_memory == 0) {
 		return search.ReadParameterBlock(header);
@@ -714,6 +742,7 @@ int ParameterBlock::ReadParameterBlock(const char* header) {
 	panic("ParameterBlock is 'loaded from memory'.");
 }
 
+// OFFSET: 0x00553e00
 int ParameterBlock::ParseIndexedHeaderFromName(char* header_name) {
 	std::size_t len = strlen(header_name);
 	if (len > 1) {
@@ -730,10 +759,12 @@ int ParameterBlock::ParseIndexedHeaderFromName(char* header_name) {
 	return -1;
 }
 
+// OFFSET: 0x00588510
 void ParameterBlock::ReadCommaSeparatedParams(char*, int) {
 
 }
 
+// OFFSET: 0x00553da0
 void ParameterBlock::ResizeValueStringTable(int len) {
 	value_string_table_len = len;
 	if (len > 0) {
@@ -748,6 +779,7 @@ void ParameterBlock::ResizeValueStringTable(int len) {
 	return;
 }
 
+// OFFSET: 0x00554270
 void ParameterBlock::StoreNewHeader(const char* line, int line_len) {
 	char buffer[2048]{};
 
@@ -801,6 +833,7 @@ void ParameterBlock::StoreNewHeader(const char* line, int line_len) {
 	return;
 }
 
+// OFFSET: 0x00554430
 void ParameterBlock::StoreNewParameter(char* line, int line_len) {
 	char buffer[2048]{};
 
@@ -854,11 +887,13 @@ void ParameterBlock::StoreNewParameter(char* line, int line_len) {
 	return;
 }
 
+// OFFSET: 0x00553d20
 void ParameterBlock::PBSearch::SetResetParameterSearch(int reset_param_search) {
 	reset_parameter_search = reset_param_search;
 	current_parameter_index = -1;
 }
 
+// OFFSET: 0x005ae170
 int ParameterBlock::PBSearch::ReadParameterBlock(const char* header) {
 	if (parent->loaded_from_memory == 0) {
 		current_header_index = parent->GetHeaderIndex(header);
@@ -877,6 +912,7 @@ int ParameterBlock::PBSearch::ReadParameterBlock(const char* header) {
 	return parent->ReadParameterBlock(header);
 }
 
+// OFFSET: 0x00587710
 int ParameterBlock::PBSearch::GetParameter(const char* parameter, char* dest) {
 	char buffer[1024]{};
 	if (GetParameter(parameter, buffer, 0x400) != 0) {
@@ -886,6 +922,7 @@ int ParameterBlock::PBSearch::GetParameter(const char* parameter, char* dest) {
 	return 0;
 }
 
+// OFFSET: 0x00587980
 int ParameterBlock::PBSearch::GetParameter(const char* parameter, float* dest) {
 	char buffer[1024]{};
 	if (GetParameter(parameter, buffer, 0x400) != 0) {
@@ -895,6 +932,7 @@ int ParameterBlock::PBSearch::GetParameter(const char* parameter, float* dest) {
 	return 0;
 }
 
+// OFFSET: 0x00587810
 int ParameterBlock::PBSearch::GetParameter(const char* parameter, int* dest) {
 	char buffer[1024]{};
 	if (GetParameter(parameter, buffer, 0x400) == 0) {
@@ -927,6 +965,7 @@ int ParameterBlock::PBSearch::GetParameter(const char* parameter, int* dest) {
 	return 1;
 }
 
+// OFFSET: 0x00587a00
 int ParameterBlock::PBSearch::GetParameter(const char* parameter, unsigned int* dest) {
 	char buffer[1024]{};
 	if (GetParameter(parameter, buffer, 0x400) != 0) {
@@ -937,6 +976,7 @@ int ParameterBlock::PBSearch::GetParameter(const char* parameter, unsigned int* 
 	return 0;
 }
 
+// OFFSET: 0x00587790
 int ParameterBlock::PBSearch::GetParameter(const char* parameter, short* dest) {
 	char buffer[1024]{};
 	if (GetParameter(parameter, buffer, 0x400) != 0) {
@@ -946,6 +986,7 @@ int ParameterBlock::PBSearch::GetParameter(const char* parameter, short* dest) {
 	return 0;
 }
 
+// OFFSET: 0x00587be0
 int ParameterBlock::PBSearch::GetParameter(const char* parameter, float* dest, std::size_t dest_len) {
 	char buffer[2048]{};
 	if (GetParameter(parameter, buffer, 2048) == 0) {
@@ -962,6 +1003,7 @@ int ParameterBlock::PBSearch::GetParameter(const char* parameter, float* dest, s
 	return 1;
 }
 
+// OFFSET: 0x00587d20
 int ParameterBlock::PBSearch::GetParameter(const char* parameter, int* dest, std::size_t dest_len) {
 	char buffer[2048]{};
 	if (GetParameter(parameter, buffer, 2048) == 0) {
@@ -978,6 +1020,7 @@ int ParameterBlock::PBSearch::GetParameter(const char* parameter, int* dest, std
 	return 1;
 }
 
+// OFFSET: 0x005875e0
 int ParameterBlock::PBSearch::GetParameter(const char* parameter, char* dest, std::size_t dest_len) {
 	if (parent->loaded_from_memory == 0) {
 		if (current_header_index != -1) {
@@ -1011,6 +1054,7 @@ int ParameterBlock::PBSearch::GetParameter(const char* parameter, char* dest, st
 	return 0;
 }
 
+// OFFSET: 0x00587a90
 int ParameterBlock::PBSearch::GetParameter(const char* parameter, Vector4* default_value, Vector4* dest) {
 	char buffer[256]{};
 	if (GetParameter(parameter, buffer, 256) == 0) {

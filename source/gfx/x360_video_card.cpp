@@ -7,6 +7,7 @@
 X360VideoCard* g_VideoCard = nullptr;
 IDirect3DDevice9* g_D3DDevice9 = nullptr;
 
+// OFFSET: 0x00414ea0
 X360VideoCard::X360VideoCard() : VideoCard()
 {
     unused = nullptr;
@@ -18,10 +19,12 @@ X360VideoCard::X360VideoCard() : VideoCard()
     enable_fullscreen_effects = true;
 }
 
+// OFFSET: 0x00673260
 void free_device_manager() {
     delete lpD3DDeviceManager;
 }
 
+// OFFSET: 0x00414fc0
 void X360VideoCard::Create()
 {
     lpD3DDeviceManager = new EE::D3DDeviceManager(lpCarsGame->d3d9);
@@ -41,6 +44,7 @@ void X360VideoCard::Create()
     }
 }
 
+// OFFSET: 0x00414f10
 X360VideoCard::~X360VideoCard()
 {
     if (g_D3DDevice9 != nullptr) {
@@ -57,17 +61,20 @@ X360VideoCard::~X360VideoCard()
     }
 }
 
+// OFFSET: 0x004153e0
 void X360VideoCard::FreeCursor()
 {
     // UNIMPLEMENTED
 }
 
+// OFFSET: 0x00414e00
 int X360VideoCard::ResetStateManager()
 {
     lpD3DStateManager->Reset();
     return 1;
 }
 
+// OFFSET: 0x00414e20
 int X360VideoCard::DisplayToScreen(int inc_frame_count)
 {
     g_D3DDevice9->Present(0, 0, 0, 0);
@@ -81,22 +88,27 @@ int X360VideoCard::DisplayToScreen(int inc_frame_count)
     return 1;
 }
 
+// OFFSET: INLINE
 void X360VideoCard::Unk4()
 {
 }
 
+// OFFSET: INLINE
 void X360VideoCard::Unk5()
 {
 }
 
+// OFFSET: INLINE
 void X360VideoCard::Unk6()
 {
 }
 
+// OFFSET: INLINE
 void X360VideoCard::Unk7()
 {
 }
 
+// OFFSET: INLINE
 void X360VideoCard::Unk8()
 {
 }

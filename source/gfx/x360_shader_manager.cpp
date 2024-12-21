@@ -9,20 +9,24 @@
 
 X360ShaderManager* lpX360ShaderManager = nullptr;
 
+// OFFSET: 0x00415920
 int X360ShaderManager::Unk1(int, int, int, int, int, int)
 {
     return 0;
 }
 
+// OFFSET: 0x004111d0
 int X360ShaderManager::Unk2(int, int)
 {
     return 0;
 }
 
+// OFFSET: 0x00415900
 X360ShaderManager::X360ShaderManager()
 {
 }
 
+// OFFSET: 0x00415b30
 X360ShaderManager::~X360ShaderManager()
 {
     for (std::size_t i = 0; i < compiled_vertex_shaders.len; i++) {
@@ -36,6 +40,7 @@ X360ShaderManager::~X360ShaderManager()
     FreeSourceCode();
 }
 
+// OFFSET: 0x00416150
 void X360ShaderManager::Create() {
     char filter[260]{};
     char* shader_model_dir = lpD3DDeviceManager->GetRelativeShaderPath();
@@ -59,6 +64,7 @@ void X360ShaderManager::Create() {
     FindClose(find);
 }
 
+// OFFSET: 0x00415930
 void X360ShaderManager::FreeSourceCode() {
     for (std::size_t i = 0; i < shader_source_codes.len; i++) {
         if (shader_source_codes.entries[i].data != nullptr) {
@@ -73,6 +79,7 @@ void X360ShaderManager::FreeSourceCode() {
     return;
 }
 
+// OFFSET: 0x00415990
 IDirect3DVertexShader9* X360ShaderManager::GetVertexShader(const char* name) const
 {
     auto ret = compiled_vertex_shaders.GetByName(name);
@@ -82,6 +89,7 @@ IDirect3DVertexShader9* X360ShaderManager::GetVertexShader(const char* name) con
     return reinterpret_cast<IDirect3DVertexShader9*>(ret);
 }
 
+// OFFSET: 0x004159c0
 IDirect3DPixelShader9* X360ShaderManager::GetPixelShader(const char* name) const
 {
     auto ret = compiled_pixel_shaders.GetByName(name);
@@ -91,6 +99,7 @@ IDirect3DPixelShader9* X360ShaderManager::GetPixelShader(const char* name) const
     return reinterpret_cast<IDirect3DPixelShader9*>(ret);
 }
 
+// OFFSET: 0x00415bb0
 IDirect3DVertexShader9* X360ShaderManager::LoadVertexShader(const char* name)
 {
     char full_path[260]{};
@@ -114,6 +123,7 @@ IDirect3DVertexShader9* X360ShaderManager::LoadVertexShader(const char* name)
     return shdr;
 }
 
+// OFFSET: 0x00415e30
 IDirect3DPixelShader9* X360ShaderManager::LoadPixelShader(const char* name)
 {
     char full_path[260]{};

@@ -2,6 +2,7 @@
 #include <cstddef>
 #include "block_allocator.hpp"
 
+// OFFSET: 0x0053db80
 BlockAllocator::BlockAllocator(int _used_size_per_block, int _block_size_bytes) : BaseObject() {
     used_size_per_block = _used_size_per_block;
     alignment_unused = 0;
@@ -18,6 +19,7 @@ BlockAllocator::BlockAllocator(int _used_size_per_block, int _block_size_bytes) 
     free_memory_not_new_block = nullptr;
 }
 
+// OFFSET: 0x0053dca0
 BlockAllocator::~BlockAllocator() {
     Block* block = big_blocks;
     while (block != nullptr) {
@@ -40,6 +42,7 @@ BlockAllocator::~BlockAllocator() {
     uses_in_current_block = this->max_extra_uses_per_block;
 }
 
+// OFFSET: 0x005a4d10
 void* BlockAllocator::AllocBlock(int* allocated_new_block) {
     Block* block;
     std::uint8_t* out_buf;
@@ -64,6 +67,7 @@ void* BlockAllocator::AllocBlock(int* allocated_new_block) {
     return AllocBlockComplex();
 }
 
+// OFFSET: 0x0053dc00
 int BlockAllocator::AllocBigBlock() {
     Block* block = nullptr;
     if (this->alignment_unused == 0) {
@@ -97,6 +101,7 @@ int BlockAllocator::AllocBigBlock() {
     return 1;
 }
 
+// OFFSET: 0x00574f20
 void* BlockAllocator::AllocBlockComplex() {
     if (this->small_blocks == nullptr) {
         if (AllocBigBlock() == 0) {
@@ -121,6 +126,7 @@ void* BlockAllocator::AllocBlockComplex() {
     return block_data;
 }
 
+// OFFSET: INLINE
 void BlockAllocator::FreeBlock(void* memory)
 {
     if (4 < used_size_per_block) {

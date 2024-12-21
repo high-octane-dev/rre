@@ -15,6 +15,15 @@ static_assert(sizeof(GameObjectFlags) == 1);
 
 class GameObject : public BaseObject
 {
+private:
+	GameObject* prev;
+	GameObject* next;
+	GameObject* firstChild;
+	GameObject* parent;
+	std::uint32_t wantedEventMask;
+	std::uint32_t descendantsWantedEventMask;
+	std::uint8_t typeID;
+	GameObjectFlags flags;
 public:
 	virtual ~GameObject() override;
 	virtual std::int32_t Release() override;
@@ -45,14 +54,13 @@ public:
 	virtual void DumpHierarchy(char*, DumpType, std::int32_t);
 
 	GameObject(bool startEnabled);
+	GameObject(const GameObject&) = delete;
+	GameObject& operator=(const GameObject&) = delete;
+	GameObject* AddChild(GameObject*, unsigned int);
+	void DumpHierarchy(FILE*, DumpType, std::int32_t);
+
 	void UpPropogateMasks();
-private:
-	GameObject* prev;
-	GameObject* next;
-	GameObject* firstChild;
-	GameObject* parent;
-	std::uint32_t wantedEventMask;
-	std::uint32_t descendantsWantedEventMask;
-	std::uint8_t typeID;
-	GameObjectFlags flags;
+	int RemoveFromChain();
+	int ReleaseSiblingsInReverseCreationOrder();
+	void ReEvaluateDescendantsWantedEventMasks();
 };
