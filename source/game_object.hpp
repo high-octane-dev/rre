@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdio>
 #include "base_object.hpp"
 
 struct ProcessNode;

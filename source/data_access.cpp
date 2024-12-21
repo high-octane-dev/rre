@@ -6,6 +6,7 @@ BlockAllocator* lpVirtualFileAllocator = nullptr;
 
 constexpr auto VirtualSectorSize = 0x6000;
 
+// OFFSET: 0x005ec450
 DataAccess::DataAccess() : BaseObject() {
     flags = 0;
     number_of_devices_in_list = 0;
@@ -57,10 +58,12 @@ DataAccess::DataAccess() : BaseObject() {
     Initialize(8, 0xc0, 0x100000, 8, -1);
 }
 
+// OFFSET: 0x005ec5a0
 DataAccess::~DataAccess() {
     FreeSystemResources();
 }
 
+// OFFSET: 0x00580ed0
 int DataAccess::ActivateDevice(VirtualDataDevice* device, int offset) {
     if ((device->flag_data & 0x4000U) == 0) {
         if (*first_device_stow != device->id) {
@@ -110,6 +113,7 @@ int DataAccess::ActivateDevice(VirtualDataDevice* device, int offset) {
     return 1;
 }
 
+// OFFSET: 0x005c09e0
 int DataAccess::AddFile(char* file_name, int device_id, int start_offset, int size, int* handle)
 {
     char lowercase_file_name[260]{};
@@ -161,6 +165,7 @@ int DataAccess::AddFile(char* file_name, int device_id, int start_offset, int si
     return 1;
 }
 
+// OFFSET: 0x005493d0
 int DataAccess::AllocateDeviceCache(VirtualDeviceCache* device_cache, int size_bytes)
 {
     std::size_t bytes_per_page = static_cast<std::size_t>(std::round(size_bytes / static_cast<float>(num_device_cache_pages)));
@@ -186,6 +191,7 @@ int DataAccess::AllocateDeviceCache(VirtualDeviceCache* device_cache, int size_b
     return success;
 }
 
+// OFFSET: 0x005492f0
 int DataAccess::AllowBundledAccessOnly(int should_allow_only_bundled_access)
 {
     unsigned int was_allowed = this->flags & 0x2000;
@@ -201,12 +207,14 @@ int DataAccess::AllowBundledAccessOnly(int should_allow_only_bundled_access)
     return was_allowed;
 }
 
+// OFFSET: 0x00549330
 int DataAccess::AttachObject(int resource_handle, void* object)
 {
     this->file_lookup_list[resource_handle]->resource_data = object;
     return 1;
 }
 
+// OFFSET: 0x00549530
 void DataAccess::ClearDeviceCache(VirtualDeviceCache* cache)
 {
     if (cache->cache_buffer != nullptr && cache->page_sizes != nullptr && this->num_device_cache_pages > 0) {
@@ -218,6 +226,7 @@ void DataAccess::ClearDeviceCache(VirtualDeviceCache* cache)
     }
 }
 
+// OFFSET: 0x005d3460
 int DataAccess::DropDevice(char* name, int force_delete)
 {
     if (device_list == nullptr) {
@@ -238,6 +247,7 @@ int DataAccess::DropDevice(char* name, int force_delete)
     return 0;
 }
 
+// OFFSET: 0x005c0b70
 int DataAccess::DropDevice(VirtualDataDevice* device, int force_delete) {
     int free_device_slot = 1;
     device->flag_data |= 0x20;
@@ -270,6 +280,7 @@ int DataAccess::DropDevice(VirtualDataDevice* device, int force_delete) {
     return 1;
 }
 
+// OFFSET: 0x005c0c50
 int DataAccess::DropAllDevices(int force_delete)
 {
     int result = 1;
@@ -297,6 +308,7 @@ int DataAccess::DropAllDevices(int force_delete)
     return result;
 }
 
+// OFFSET: 0x005a9af0
 int DataAccess::FClose(int resource_handle)
 {
     if (resource_handle < 0) {
@@ -344,6 +356,7 @@ int DataAccess::FClose(int resource_handle)
     return 1;
 }
 
+// OFFSET: 0x005c0cd0
 char* DataAccess::FGets(int resource_handle, char* buffer, int buffer_size) {
     VirtualDataFile* target_file = this->file_lookup_list[resource_handle];
     unsigned int remaining_size = target_file->size - target_file->current_offset;
@@ -402,6 +415,7 @@ char* DataAccess::FGets(int resource_handle, char* buffer, int buffer_size) {
     return buffer;
 }
 
+// OFFSET: 0x005810a0
 int DataAccess::FileExists(char* path)
 {
     if (FindVirtualFile(path) != -1) {
@@ -417,11 +431,13 @@ int DataAccess::FileExists(char* path)
     return 0;
 }
 
+// OFFSET: 0x00580fd0
 int DataAccess::FindVirtualFile(const char*)
 {
     return 0;
 }
 
+// OFFSET: 0x005d34f0
 int DataAccess::FOpen(const char* file_name, const char* mode)
 {
     int* last_resource_handle = &this->last_get_data_or_file_handle;
@@ -442,11 +458,13 @@ int DataAccess::FOpen(const char* file_name, const char* mode)
     return *last_resource_handle;
 }
 
+// OFFSET: 0x005c0e90
 int DataAccess::FRead(int resource_handle, void* dst, int size)
 {
     return 0;
 }
 
+// OFFSET: 0x005d34c0
 int DataAccess::FRead(int resource_handle, void* dst, int size, int count) {
     size_t read_bytes = FRead(resource_handle, dst, size * count);
     if (size != 0) {
@@ -455,56 +473,68 @@ int DataAccess::FRead(int resource_handle, void* dst, int size, int count) {
     return 0;
 }
 
+// OFFSET: 0x005812f0
 int DataAccess::FREADDeviceCache(VirtualDeviceCache*, int, FILE*)
 {
     return 0;
 }
 
+// OFFSET: 0x005a92f0
 void DataAccess::FreeAllFiles()
 {
 }
 
+// OFFSET: 0x005a9360
 void DataAccess::FreeDevice(VirtualDataDevice*)
 {
 }
 
+// OFFSET: 0x005494c0
 void DataAccess::FreeDeviceCache(VirtualDeviceCache*)
 {
 }
 
+// OFFSET: 0x005a9260
 void DataAccess::FreeFile(int)
 {
 }
 
+// OFFSET: 0x005d2cc0
 void DataAccess::FreeSystemResources()
 {
 }
 
+// OFFSET: 0x005492d0
 int DataAccess::FSize(int)
 {
     return 0;
 }
 
 // stubbed because it has no purpose
+// OFFSET: 0x00549770
 int DataAccess::UNK_00549770()
 {
     return 1;
 }
 
+// OFFSET: 0x005d3be0
 int DataAccess::GetDataOrFileHandle(char*, char*, int*, int*, int)
 {
     return 0;
 }
 
+// OFFSET: 0x00549040
 void DataAccess::GetDeviceSlot(int)
 {
 }
 
+// OFFSET: 0x00548f90
 int DataAccess::GrowDeviceList(int)
 {
     return 0;
 }
 
+// OFFSET: 0x00549090
 int DataAccess::GrowFileLookupList() {
     std::size_t used_slots = 0;
     for (std::size_t i = 0; i < file_lookup_list_num_slots; i++) {
@@ -524,43 +554,52 @@ int DataAccess::GrowFileLookupList() {
     return used_slots;
 }
 
+// OFFSET: 0x005d2e10
 int DataAccess::Initialize(int, std::size_t, int, int, int)
 {
     return 0;
 }
 
+// OFFSET: 0x005d3270
 int DataAccess::LoadDiskFile(const char*, const char*, int*)
 {
     return 0;
 }
 
+// OFFSET: 0x005d2fc0
 int DataAccess::LoadResourceFile(char*, int, unsigned int*, int, int, unsigned int*, unsigned int*, int**, int**, int)
 {
     return 0;
 }
 
+// OFFSET: 0x005c0f40
 void DataAccess::LoadResourceFromBuffer(unsigned int*, int, char*, int**, unsigned int, int, unsigned char*, int**, int**, int**, unsigned int*, int**, int*, int, int, long*)
 {
 }
 
+// OFFSET: 0x005c16b0
 void DataAccess::LoadResourceFromFile(char*, unsigned int*, unsigned int, int, unsigned char*, unsigned int**, long*, unsigned int, unsigned int*, unsigned int*, int*, int, int, long*)
 {
 }
 
+// OFFSET: 0x00549580
 int DataAccess::MemcpyDeviceCache(VirtualDeviceCache*, int, void*)
 {
     return 0;
 }
 
+// OFFSET: 0x005491c0
 void DataAccess::OpenVirtualFile(int)
 {
 }
 
+// OFFSET: 0x005a96a0
 unsigned int DataAccess::ReadData(VirtualDataDevice*, void*, void*, unsigned int)
 {
     return 0;
 }
 
+// OFFSET: INLINE
 void DataAccess::ResetStow()
 {
     int* current_device = first_device_stow;
@@ -570,19 +609,23 @@ void DataAccess::ResetStow()
     } while (current_device <= last_device_stow);
 }
 
+// OFFSET: 0x00581290
 int DataAccess::ResizeDeviceCache(unsigned int)
 {
     return 0;
 }
 
+// OFFSET: 0x005d3570
 void DataAccess::SaveResourceFile(char*, int, int, int, int, void*, size_t, int)
 {
 }
 
+// OFFSET: 0x005810f0
 void DataAccess::SaveResourceFileList(char*, char*)
 {
 }
 
+// OFFSET: 0x00549710
 int DataAccess::SetNumberOfDeviceCachePages(int new_device_cache_page_count)
 {
     if (this->num_device_cache_pages == new_device_cache_page_count) {
@@ -605,6 +648,7 @@ int DataAccess::SetNumberOfDeviceCachePages(int new_device_cache_page_count)
     return cache_size;
 }
 
+// OFFSET: 0x005a9450
 void DataAccess::UpdateDeviceCache(VirtualDataDevice*, int, int, int)
 {
 }
