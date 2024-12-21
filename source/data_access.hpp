@@ -104,7 +104,7 @@ public:
     int FClose(int resource_handle);
     char* FGets(int, char*, int);
     int FileExists(char*);
-    int FindVirtualFile(char*);
+    int FindVirtualFile(const char*);
     int FOpen(const char*, const char*);
     int FRead(int, void*, int);
     int FRead(int, void*, int, int);
@@ -124,7 +124,7 @@ public:
     int GrowDeviceList(int);
     int GrowFileLookupList();
     int Initialize(int, std::size_t, int, int, int);
-    int LoadDiskFile(char*, char*, int);
+    int LoadDiskFile(const char*, const char*, int*);
     int LoadResourceFile(char*, int, unsigned int*, int, int, unsigned int*, unsigned int*, int**, int**, int);
     void LoadResourceFromBuffer(unsigned int*, int, char*, int**, unsigned int, int, unsigned char*, int**, int**, int**, unsigned int*, int**, int*, int, int, long*);
     void LoadResourceFromFile(char*, unsigned int*, unsigned int, int, unsigned char*, unsigned int**, long*, unsigned int, unsigned int*, unsigned int*, int*, int, int, long*);

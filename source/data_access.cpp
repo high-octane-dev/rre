@@ -4,6 +4,8 @@
 DataAccess* lpDataAccess = nullptr;
 BlockAllocator* lpVirtualFileAllocator = nullptr;
 
+constexpr auto VirtualSectorSize = 0x6000;
+
 DataAccess::DataAccess() : BaseObject() {
     flags = 0;
     number_of_devices_in_list = 0;
@@ -342,9 +344,62 @@ int DataAccess::FClose(int resource_handle)
     return 1;
 }
 
-char* DataAccess::FGets(int, char*, int)
-{
-    return nullptr;
+char* DataAccess::FGets(int resource_handle, char* buffer, int buffer_size) {
+    VirtualDataFile* target_file = this->file_lookup_list[resource_handle];
+    unsigned int remaining_size = target_file->size - target_file->current_offset;
+
+    if (remaining_size < 1) {
+        *buffer = '\0';
+        return nullptr;
+    }
+
+    VirtualDataDevice* associated_device = this->device_list + target_file->device_id;
+    if (ActivateDevice(associated_device, target_file->start_offset + target_file->current_offset) == 0) {
+        return nullptr;
+    }
+
+    unsigned int remaining_in_block = ((target_file->current_offset / VirtualSectorSize) + 1) * VirtualSectorSize - target_file->current_offset;
+    unsigned int bytes_to_read = std::min({ remaining_size, static_cast<unsigned int>(buffer_size - 2), remaining_in_block });
+
+    unsigned int bytes_read = ReadData(associated_device, target_file, buffer, bytes_to_read);
+    if (bytes_read == 0) {
+        *buffer = '\0';
+        return nullptr;
+    }
+
+    char* buffer_end = buffer + bytes_to_read;
+    *buffer_end = '\0';
+
+    char* newline_pos = strchr(buffer, '\n');
+    if (newline_pos == nullptr) {
+        if (bytes_to_read != remaining_size) {
+            unsigned int additional_bytes = std::min(remaining_size - bytes_to_read, static_cast<unsigned int>(buffer_size - bytes_read - 2));
+            unsigned int additional_read = ReadData(associated_device, target_file, buffer_end, additional_bytes);
+            if (additional_read == 0) {
+                *buffer_end = '\0';
+                return nullptr;
+            }
+
+            buffer_end[additional_read] = '\0';
+            bytes_to_read += additional_read;
+            newline_pos = strchr(buffer, '\n');
+        }
+    }
+
+    if (newline_pos != nullptr) {
+        char* adjusted_pos = newline_pos;
+        if ((buffer < newline_pos) && (newline_pos[-1] == '\r')) {
+            adjusted_pos = newline_pos - 1;
+            *adjusted_pos = '\n';
+        }
+        adjusted_pos[1] = '\0';
+        target_file->current_offset += static_cast<int>(newline_pos - buffer + 1);
+    }
+    else {
+        target_file->current_offset += bytes_to_read;
+    }
+
+    return buffer;
 }
 
 int DataAccess::FileExists(char* path)
@@ -362,14 +417,29 @@ int DataAccess::FileExists(char* path)
     return 0;
 }
 
-int DataAccess::FindVirtualFile(char*)
+int DataAccess::FindVirtualFile(const char*)
 {
     return 0;
 }
 
-int DataAccess::FOpen(const char*, const char*)
+int DataAccess::FOpen(const char* file_name, const char* mode)
 {
-    return -1;
+    int* last_resource_handle = &this->last_get_data_or_file_handle;
+    int resource_handle = FindVirtualFile(file_name);
+    *last_resource_handle = resource_handle;
+    if (resource_handle != -1) {
+        if ((this->flags & 0x800) == 0) {
+            OpenVirtualFile(*last_resource_handle);
+            return *last_resource_handle;
+        }
+        if (_stricmp(file_lookup_list[resource_handle]->file_name, device_list[this->file_lookup_list[resource_handle]->device_id].file_name) == 0) {
+            OpenVirtualFile(*last_resource_handle);
+            return *last_resource_handle;
+        }
+    }
+    LoadDiskFile(file_name, mode, last_resource_handle);
+    OpenVirtualFile(*last_resource_handle);
+    return *last_resource_handle;
 }
 
 int DataAccess::FRead(int resource_handle, void* dst, int size)
@@ -459,7 +529,7 @@ int DataAccess::Initialize(int, std::size_t, int, int, int)
     return 0;
 }
 
-int DataAccess::LoadDiskFile(char*, char*, int)
+int DataAccess::LoadDiskFile(const char*, const char*, int*)
 {
     return 0;
 }
