@@ -51,7 +51,7 @@ ActionScript* ActionManager::CreateActionScript(char* param_1, char* param_2, Pa
 
     ActionScript* newActionScript = new ActionScript();
 
-    //newActionScript->ReadActionScript(param_2,param_3);
+    newActionScript->ReadActionScript(param_2,param_3);
     return newActionScript;
 }
 
@@ -93,7 +93,7 @@ ActionSequence* ActionManager::CreateActionSequence(char* param_1, char* param_2
     //RemoveActionSequence(pcVar4);
 
     ActionSequence* newActionSequence = new ActionSequence();
-    ///newActionSequence->ReadActionScript(param_2,param_3);
+    newActionSequence->ReadActionScript(param_2,param_3);
 
     return newActionSequence;
 }

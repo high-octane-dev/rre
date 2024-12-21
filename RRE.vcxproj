@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -104,6 +104,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\action_manager.cpp" />
+    <ClCompile Include="source\action_script.cpp" />
+    <ClCompile Include="source\action_sequence.cpp" />
     <ClCompile Include="source\base_object.cpp" />
     <ClCompile Include="source\block_allocator.cpp" />
     <ClCompile Include="source\data_access.cpp" />
@@ -126,6 +128,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\action_manager.hpp" />
+    <ClInclude Include="source\action_script.hpp" />
+    <ClInclude Include="source\action_sequence.hpp" />
     <ClInclude Include="source\base_object.hpp" />
     <ClInclude Include="source\bind.hpp" />
     <ClInclude Include="source\block_allocator.hpp" />

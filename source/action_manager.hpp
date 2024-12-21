@@ -4,21 +4,8 @@
 #include "containers/dynamic_array.hpp"
 #include "string_block_allocator.hpp"
 #include "parameter_block.hpp"
-
-class ActionSequence : public GameObject
-{
-public:
-	ActionSequence();
-};
-
-class ActionScript : public GameObject
-{
-public:
-	ActionScript();
-	ActionSequence* post_action;
-	int unk1;
-	char* unk3;
-};
+#include "action_script.hpp"
+#include "action_sequence.hpp"
 
 struct MakeActionInfo {};
 struct MakeActionTestInfo {};
