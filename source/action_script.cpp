@@ -5,16 +5,19 @@ ActionScript::ActionScript() : GameObject(true)
 {
 }
 
+// OFFSET: 0x005cdd00
 int ActionScript::Tick(float deltaSeconds)
 {
     return GameObject::Tick(deltaSeconds);
 }
 
+// OFFSET: 0x0053aa50
 int ActionScript::IsPlaying()
 {
     return unk2 != 3;
 }
 
+// OFFSET: 0x005e78d0
 void ActionScript::ReadActionScript(char* param_1, char* param_2)
 {
     ParameterBlock local_85c;
@@ -30,6 +33,7 @@ void ActionScript::ReadActionScript(char* param_1, char* param_2)
     }
 }
 
+// OFFSET: 0x005cdf10
 void ActionScript::ReadActionScript(char* param_1, ParameterBlock* param_2)
 {
     char local_50[64];
@@ -40,6 +44,7 @@ void ActionScript::ReadActionScript(char* param_1, ParameterBlock* param_2)
     ReadNonBodySequence(param_2, local_50);
 }
 
+// OFFSET: 0x005cdd80
 void ActionScript::ReadNonBodySequence(ParameterBlock* param_1, char* param_2)
 {
     char local_30[32];
@@ -51,11 +56,13 @@ void ActionScript::ReadNonBodySequence(ParameterBlock* param_1, char* param_2)
     }
 }
 
+// OFFSET: 0x005a0d90
 void ActionScript::Reset()
 {
     unk4 = unk4 | 1;
 }
 
+// OFFSET: 0x005cdd70
 void ActionScript::Run()
 {
     unk4 = unk4 & 0xfe;

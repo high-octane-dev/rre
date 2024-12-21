@@ -13,6 +13,7 @@ struct MakeActionTestInfo {};
 class ActionManager : public GameObject
 {
 public:
+	ActionManager();
 	LinkedList<ActionSequence*> action_sequences;
 	LinkedList<ActionScript*> action_scripts;
 	int unk1;
@@ -30,3 +31,6 @@ public:
 	ActionSequence* CreateActionSequence(char*, char*, char*);
 	ActionSequence* CreateActionSequence(char*, char*, ParameterBlock*);
 };
+
+
+extern ActionManager* lpASManager;
