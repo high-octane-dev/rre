@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 
 template <class T> class DynamicArray {
 private:
@@ -38,7 +39,7 @@ public:
 		}
 
 		if (index + 1 > len) {
-			len = index + 1
+			len = index + 1;
 		}
 
 		return data[index];

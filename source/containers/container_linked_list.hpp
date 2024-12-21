@@ -46,8 +46,8 @@ public:
 		}
 	};
 
-	ContainerLinkedList(const ContainerList<T>&) = delete;
-	ContainerLinkedList& operator=(const ContainerList<T>&) = delete;
+	ContainerLinkedList(const ContainerLinkedList<T>&) = delete;
+	ContainerLinkedList& operator=(const ContainerLinkedList<T>&) = delete;
 	
 	inline ContainerLinkedList() {
 		len = 0;
