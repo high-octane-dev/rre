@@ -1,6 +1,18 @@
 #include "action_manager.hpp"
 #include "game.hpp"
 
+ActionManager* lpASManager = nullptr;
+
+ActionManager::ActionManager() : GameObject(true), action_infos(10), action_test_infos(10)
+{
+    lpASManager = this;
+    unk3 = 0;
+    unk4 = 0;
+    unk2 = 0;
+    unk1 = 0;
+}
+
+// OFFSET: 0x0056ef30
 int ActionManager::Tick(float deltaSeconds)
 {
     if ((lpGame->debug_flags & 8) != 0)
@@ -11,6 +23,7 @@ int ActionManager::Tick(float deltaSeconds)
     return GameObject::Tick(deltaSeconds);
 }
 
+// OFFSET: 0x005e7a20
 ActionScript* ActionManager::CreateActionScript(char* param_1, char* param_2, char* param_3)
 {
     char* local_860;
@@ -38,6 +51,7 @@ ActionScript* ActionManager::CreateActionScript(char* param_1, char* param_2, ch
     return pActionScript;
 }
 
+// OFFSET: 0x005ce220
 ActionScript* ActionManager::CreateActionScript(char* param_1, char* param_2, ParameterBlock* param_3)
 {
     char* pcVar4;
@@ -55,6 +69,7 @@ ActionScript* ActionManager::CreateActionScript(char* param_1, char* param_2, Pa
     return newActionScript;
 }
 
+// OFFSET: 0x005e7b80
 ActionSequence* ActionManager::CreateActionSequence(char* param_1, char* param_2, char* param_3)
 {
     char* local_860;
@@ -81,6 +96,7 @@ ActionSequence* ActionManager::CreateActionSequence(char* param_1, char* param_2
     return pActionSequence;
 }
 
+// OFFSET: 0x005ce3d0
 ActionSequence* ActionManager::CreateActionSequence(char* param_1, char* param_2, ParameterBlock* param_3)
 {
     char* pcVar4;
