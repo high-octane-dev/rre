@@ -43,7 +43,7 @@ X360ShaderManager::~X360ShaderManager()
 // OFFSET: 0x00416150
 void X360ShaderManager::Create() {
     char filter[260]{};
-    char* shader_model_dir = lpD3DDeviceManager->GetRelativeShaderPath();
+    const char* shader_model_dir = lpD3DDeviceManager->GetRelativeShaderPath();
     snprintf(filter, 260, "%s%s%s%s", g_DataPCDirectory, "C\\Shaders\\", shader_model_dir, "*.hlsl");
 
     WIN32_FIND_DATAA ffd{};
@@ -103,7 +103,7 @@ IDirect3DPixelShader9* X360ShaderManager::GetPixelShader(const char* name) const
 IDirect3DVertexShader9* X360ShaderManager::LoadVertexShader(const char* name)
 {
     char full_path[260]{};
-    char* shader_model_dir = lpD3DDeviceManager->GetRelativeShaderPath();
+    const char* shader_model_dir = lpD3DDeviceManager->GetRelativeShaderPath();
     snprintf(full_path, 260, "%s\\C\\Shaders\\%s%s.compiled.vsh", g_DataPCDirectory, shader_model_dir, name);
     FILE* f = fopen(full_path, "rb");
     if (f == nullptr) {
@@ -127,7 +127,7 @@ IDirect3DVertexShader9* X360ShaderManager::LoadVertexShader(const char* name)
 IDirect3DPixelShader9* X360ShaderManager::LoadPixelShader(const char* name)
 {
     char full_path[260]{};
-    char* shader_model_dir = lpD3DDeviceManager->GetRelativeShaderPath();
+    const char* shader_model_dir = lpD3DDeviceManager->GetRelativeShaderPath();
     snprintf(full_path, 260, "%s\\C\\Shaders\\%s%s.compiled.psh", g_DataPCDirectory, shader_model_dir, name);
     FILE* f = fopen(full_path, "rb");
     if (f == nullptr) {

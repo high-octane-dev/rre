@@ -110,6 +110,7 @@
     <ClCompile Include="source\block_allocator.cpp" />
     <ClCompile Include="source\data_access.cpp" />
     <ClCompile Include="source\file_io.cpp" />
+    <ClCompile Include="source\gfx\cache.cpp" />
     <ClCompile Include="source\gfx\d3d_state_manager.cpp" />
     <ClCompile Include="source\gfx\emotion_engine.cpp" />
     <ClCompile Include="source\gfx\video_card.cpp" />
@@ -142,6 +143,7 @@
     <ClInclude Include="source\file_io.hpp" />
     <ClInclude Include="source\game.hpp" />
     <ClInclude Include="source\game_object.hpp" />
+    <ClInclude Include="source\gfx\cache.hpp" />
     <ClInclude Include="source\gfx\d3d_state_manager.hpp" />
     <ClInclude Include="source\gfx\emotion_engine.hpp" />
     <ClInclude Include="source\gfx\vertex_buffer.hpp" />
