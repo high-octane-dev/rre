@@ -15,9 +15,10 @@ public:
 	~Cache();
 	Cache(const Cache&) = delete;
 	Cache& operator=(const Cache&) = delete;
+	void FreeAllNodes();
 
 	virtual ListEntry* CreateListEntry(int, int);
-	virtual void FreeListEntry(void*);
+	virtual void FreeListEntry(ListEntry*);
 	virtual ListEntry* ClearAndAddListEntry(int);
 };
 
