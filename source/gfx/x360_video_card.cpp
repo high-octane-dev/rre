@@ -44,6 +44,14 @@ void X360VideoCard::Create()
     }
 }
 
+// OFFSET: 0x00415440
+bool X360VideoCard::IsFXEnabled()
+{
+    auto pixel_shader_version_satisfied = 0xffff01ff < (lpD3DDeviceManager->adapter_list.data[lpD3DDeviceManager->adapter_index]->capabilities).PixelShaderVersion;
+    auto vertex_shader_version_satisfied = 0xfffe01ff < (lpD3DDeviceManager->adapter_list.data[lpD3DDeviceManager->adapter_index]->capabilities).VertexShaderVersion;
+    return enable_fullscreen_effects && pixel_shader_version_satisfied && vertex_shader_version_satisfied;
+}
+
 // OFFSET: 0x00414f10
 X360VideoCard::~X360VideoCard()
 {

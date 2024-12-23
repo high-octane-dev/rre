@@ -66,7 +66,7 @@ namespace EE {
 	static_assert(sizeof(D3DRenderTarget) == 0x1C);
 
 	class D3DBackBuffer : public RefObject {
-	private:
+	public:
 		D3DFORMAT surface_format;
 		bool fullscreen;
 		bool windowed;
@@ -77,10 +77,10 @@ namespace EE {
 	static_assert(sizeof(D3DBackBuffer) == 0x20);
 
 	class D3DDisplayMode : public RefObject {
-	private:
+	public:
 		D3DFORMAT format;
-		unsigned int width;
-		unsigned int height;
+		int width;
+		int height;
 		List<unsigned int> refresh_rate_list;
 	};
 
@@ -95,6 +95,9 @@ namespace EE {
 		List<D3DDisplayMode*> display_mode_list;
 		List<D3DBackBuffer*> back_buffer_list;
 		int unused;
+	public:
+		D3DAdapter(unsigned int index);
+		bool CreateBackBuffers(IDirect3D9* d3d9, D3DDEVTYPE device_type);
 	};
 
 	static_assert(sizeof(D3DAdapter) == 0x5b4);
@@ -140,13 +143,13 @@ namespace EE {
 		int IsResolutionAvailable(int w, int h);
 		int IsMultiSamplingEnabled();
 		void Initialize();
-		char* GetRelativeShaderPath();
+		const char* GetRelativeShaderPath();
 		IDirect3DTexture9* GetBackBuffer();
-		int Unk(D3DAdapter* adapter);
-		int Unk2(D3DAdapter* adapter, int back_buffer_index);
+		D3DFORMAT GetBestFormat(D3DAdapter* adapter);
+		D3DFORMAT GetBestDepthStencilFormat(D3DAdapter* adapter, int back_buffer_index);
 		int CreateAdapters(HWND hwnd);
 		int Create();
-		void CheckAdapterDisplayMode(D3DAdapter* adapter, D3DFORMAT fmt, int* w, int* h);
+		bool CheckAdapterDisplayMode(D3DAdapter* adapter, D3DFORMAT fmt, int* w, int* h);
 	};
 
 	static_assert(sizeof(D3DDeviceManager) == 0x9c);	

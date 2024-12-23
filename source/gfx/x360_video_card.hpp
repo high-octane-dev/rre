@@ -12,6 +12,7 @@ private:
 public:
 	X360VideoCard();
 	void Create();
+	bool IsFXEnabled();
 	virtual ~X360VideoCard() override;
 	virtual void FreeCursor() override;
 	virtual int ResetStateManager() override;
