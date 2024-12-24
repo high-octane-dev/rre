@@ -1,5 +1,6 @@
 #include "data_access.hpp"
 #include "file_io.hpp"
+#include "panic.hpp"
 
 DataAccess* lpDataAccess = nullptr;
 BlockAllocator* lpVirtualFileAllocator = nullptr;
@@ -432,9 +433,33 @@ int DataAccess::FileExists(char* path)
 }
 
 // OFFSET: 0x00580fd0
-int DataAccess::FindVirtualFile(const char*)
+int DataAccess::FindVirtualFile(const char* path)
 {
-    return 0;
+    char lowercase_file_name[260]{};
+    if (path == nullptr) {
+        return 0;
+    }
+    for (std::size_t i = 0; i < sizeof(lowercase_file_name); i++) {
+        if (path[i] == 0) {
+            break;
+        }
+        lowercase_file_name[i] = std::tolower(path[i]);
+    }
+
+    if (last_get_data_or_file_handle != -1 && file_lookup_list[last_get_data_or_file_handle] != nullptr) {
+        if (_stricmp(file_lookup_list[last_get_data_or_file_handle]->file_name, lowercase_file_name) == 0) {
+            return last_get_data_or_file_handle;
+        }
+    }
+
+    VirtualDataFile* virtual_file = nullptr;
+    if (file_list->Lookup(lowercase_file_name, &virtual_file) != 0) {
+        if (virtual_file != nullptr) {
+            return virtual_file->resource_handle;
+        }
+    }
+
+    return -1;
 }
 
 // OFFSET: 0x005d34f0
@@ -461,7 +486,35 @@ int DataAccess::FOpen(const char* file_name, const char* mode)
 // OFFSET: 0x005c0e90
 int DataAccess::FRead(int resource_handle, void* dst, int size)
 {
-    return 0;
+    VirtualDataFile* file = file_lookup_list[resource_handle];
+    VirtualDataDevice* device = &device_list[file->device_id];
+    if (ActivateDevice(device, file->start_offset + file->current_offset) == 0) {
+        return 0;
+    }
+    
+    int size_to_read = size;
+    int size_remaining = file->size - file->current_offset;
+    if (size_remaining < size_to_read) {
+        size_to_read = size_remaining;
+    }
+    if (size_to_read < 1) {
+        return 0;
+    }
+
+    if ((file->flag_data & 0x4000) != 0) {
+        panic("Flag 0x4000 was set!");
+    }
+    /*
+    if ((file->flag_data & 0x4000) != 0) { 
+        std::memcpy(dst, reinterpret_cast<const void*>(device->primary_data_offset + file->start_offset + file->current_offset), size_to_read);
+        file->current_offset += size_to_read;
+        return size_to_read;
+    }
+    */
+
+    int size_read = ReadData(device, file, dst, size_to_read);
+    file->current_offset += size_read;
+    return size_read;
 }
 
 // OFFSET: 0x005d34c0
@@ -474,14 +527,40 @@ int DataAccess::FRead(int resource_handle, void* dst, int size, int count) {
 }
 
 // OFFSET: 0x005812f0
-int DataAccess::FREADDeviceCache(VirtualDeviceCache*, int, FILE*)
+int DataAccess::FREADDeviceCache(VirtualDeviceCache* device_cache, int len, FILE* fp)
 {
-    return 0;
+    int bytes_read = 0;
+    int bytes_remaining = 0;
+
+    for (std::size_t i = 0; i < num_device_cache_pages; i++) {
+        if (device_cache->cache_buffer[i] != nullptr) {
+            bytes_remaining = len - bytes_read;
+            if (device_cache->page_sizes[i] < len - bytes_read) {
+                bytes_remaining = device_cache->page_sizes[i];
+            }
+            if (0 < bytes_remaining) {
+                bytes_remaining = fread(device_cache->cache_buffer[i], 1, bytes_remaining, fp);
+                bytes_read = bytes_read + bytes_remaining;
+            }
+        }
+    }
+
+    return bytes_read;
 }
 
 // OFFSET: 0x005a92f0
-void DataAccess::FreeAllFiles()
-{
+void DataAccess::FreeAllFiles() {
+    if (file_list != nullptr) {
+        ContainerHashTable<char*, VirtualDataFile*>::Node* node = nullptr;
+        VirtualDataFile* current_file = nullptr;
+        char* current_key = nullptr;
+
+        while (file_list->GetNextValue(&node, &current_key, &current_file) != 0) {
+            if (current_file != nullptr) {
+                FreeFile(current_file->resource_handle);
+            }
+        }
+    }
 }
 
 // OFFSET: 0x005a9360
@@ -505,8 +584,12 @@ void DataAccess::FreeSystemResources()
 }
 
 // OFFSET: 0x005492d0
-int DataAccess::FSize(int)
-{
+int DataAccess::FSize(int resource_handle) {
+    if (resource_handle != -1) {
+        if (file_lookup_list[resource_handle] != nullptr) {
+            return file_lookup_list[resource_handle]->size;
+        }
+    }
     return 0;
 }
 

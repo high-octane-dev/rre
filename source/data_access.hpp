@@ -10,7 +10,7 @@ struct VirtualDataDevice {
     std::uint32_t flag_data;
     FILE* file_pointer;
     std::uint32_t size;
-    int primary_data_offset;
+    std::intptr_t primary_data_offset;
     int sector_list_offset;
     std::uint32_t size_of_sector_list;
     std::uint8_t original_key;
