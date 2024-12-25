@@ -119,8 +119,8 @@ public:
     // basically does nothing anyway
     int UNK_00549770();
 
-    int GetDataOrFileHandle(char*, char*, int*, int*, int);
-    void GetDeviceSlot(int);
+    int GetDataOrFileHandle(char*, char*, int*, void**, int);
+    int GetDeviceSlot();
     int GrowDeviceList(int);
     int GrowFileLookupList();
     int Initialize(int, std::size_t, int, int, int);

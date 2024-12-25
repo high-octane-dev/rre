@@ -103,7 +103,7 @@ inline void ContainerHashTable<TKey, TVal>::CHTCreateFull(int _bucket_count, int
 {
     bucket_count = _bucket_count;
     initialized = true;
-    buckets = reinterpret_cast<Node**>(operator_new(sizeof(Node*) * bucket_count));
+    buckets = new Node* [bucket_count];//reinterpret_cast<Node**>(operator_new(sizeof(Node*) * bucket_count));
 
     for (int i = 0; i < bucket_count; i++) {
         buckets[i] = nullptr;
@@ -133,7 +133,7 @@ ContainerHashTable<TKey, TVal>::~ContainerHashTable()
             }
         }
 
-        operator_delete(buckets);
+        delete[] buckets;
     }
 
     if (block_allocator != nullptr) {

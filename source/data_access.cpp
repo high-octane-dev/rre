@@ -2,6 +2,10 @@
 #include "file_io.hpp"
 #include "panic.hpp"
 
+/*
+Looks like devices can be marked with flag 0x4000 to denote that an entire .res file is loaded directly into memory.
+*/
+
 DataAccess* lpDataAccess = nullptr;
 BlockAllocator* lpVirtualFileAllocator = nullptr;
 
@@ -167,26 +171,26 @@ int DataAccess::AddFile(char* file_name, int device_id, int start_offset, int si
 }
 
 // OFFSET: 0x005493d0
-int DataAccess::AllocateDeviceCache(VirtualDeviceCache* device_cache, int size_bytes)
+int DataAccess::AllocateDeviceCache(VirtualDeviceCache* _device_cache, int size_bytes)
 {
     std::size_t bytes_per_page = static_cast<std::size_t>(std::round(size_bytes / static_cast<float>(num_device_cache_pages)));
-    device_cache->size = 0;
+    _device_cache->size = 0;
     int success = 1;
-    if (device_cache->cache_buffer == nullptr) {
-        device_cache->cache_buffer = new std::uint8_t* [num_device_cache_pages];
+    if (_device_cache->cache_buffer == nullptr) {
+        _device_cache->cache_buffer = new std::uint8_t* [num_device_cache_pages];
     }
-    if (device_cache->page_sizes == nullptr) {
-        device_cache->page_sizes = new std::uint32_t [num_device_cache_pages];
+    if (_device_cache->page_sizes == nullptr) {
+        _device_cache->page_sizes = new std::uint32_t [num_device_cache_pages];
     }
     for (std::size_t i = 0; i < num_device_cache_pages; i++) {
-        device_cache->cache_buffer[i] = reinterpret_cast<std::uint8_t*>(malloc(bytes_per_page));
-        if (i == 0 && *device_cache->cache_buffer == nullptr) {
-            *device_cache->page_sizes = bytes_per_page;
+        _device_cache->cache_buffer[i] = reinterpret_cast<std::uint8_t*>(malloc(bytes_per_page));
+        if (i == 0 && *_device_cache->cache_buffer == nullptr) {
+            *_device_cache->page_sizes = bytes_per_page;
             success = 0;
         }
-        if (device_cache->cache_buffer[i] != nullptr) {
-            device_cache->size += bytes_per_page;
-            device_cache->page_sizes[i] = bytes_per_page;
+        if (_device_cache->cache_buffer[i] != nullptr) {
+            _device_cache->size += bytes_per_page;
+            _device_cache->page_sizes[i] = bytes_per_page;
         }
     }
     return success;
@@ -257,10 +261,7 @@ int DataAccess::DropDevice(VirtualDataDevice* device, int force_delete) {
     VirtualDataFile* current_file = nullptr;
     char* current_key = nullptr;
 
-    int has_next_value = 1;
-    file_list->GetNextValue(&node, &current_key, &current_file);
-    do {
-        has_next_value = file_list->GetNextValue(&node, &current_key, &current_file);
+    while (file_list->GetNextValue(&node, &current_key, &current_file) != 0) {
         if (current_file != nullptr) {
             if (current_file->device_id == device->id) {
                 if (!force_delete && (current_file->resource_data != nullptr || (current_file->flag_data & 4) != 0)) {
@@ -271,7 +272,8 @@ int DataAccess::DropDevice(VirtualDataDevice* device, int force_delete) {
                 }
             }
         }
-    } while (has_next_value != 0);
+    }
+
     if (free_device_slot) {
         FreeDevice(device);
         return 1;
@@ -502,15 +504,11 @@ int DataAccess::FRead(int resource_handle, void* dst, int size)
     }
 
     if ((file->flag_data & 0x4000) != 0) {
-        panic("Flag 0x4000 was set!");
-    }
-    /*
-    if ((file->flag_data & 0x4000) != 0) { 
+        // WHAT IN THE UB IS THIS
         std::memcpy(dst, reinterpret_cast<const void*>(device->primary_data_offset + file->start_offset + file->current_offset), size_to_read);
         file->current_offset += size_to_read;
         return size_to_read;
     }
-    */
 
     int size_read = ReadData(device, file, dst, size_to_read);
     file->current_offset += size_read;
@@ -527,19 +525,19 @@ int DataAccess::FRead(int resource_handle, void* dst, int size, int count) {
 }
 
 // OFFSET: 0x005812f0
-int DataAccess::FREADDeviceCache(VirtualDeviceCache* device_cache, int len, FILE* fp)
+int DataAccess::FREADDeviceCache(VirtualDeviceCache* _device_cache, int len, FILE* fp)
 {
     int bytes_read = 0;
     int bytes_remaining = 0;
 
     for (std::size_t i = 0; i < num_device_cache_pages; i++) {
-        if (device_cache->cache_buffer[i] != nullptr) {
+        if (_device_cache->cache_buffer[i] != nullptr) {
             bytes_remaining = len - bytes_read;
-            if (device_cache->page_sizes[i] < len - bytes_read) {
-                bytes_remaining = device_cache->page_sizes[i];
+            if (_device_cache->page_sizes[i] < len - bytes_read) {
+                bytes_remaining = _device_cache->page_sizes[i];
             }
             if (0 < bytes_remaining) {
-                bytes_remaining = fread(device_cache->cache_buffer[i], 1, bytes_remaining, fp);
+                bytes_remaining = fread(_device_cache->cache_buffer[i], 1, bytes_remaining, fp);
                 bytes_read = bytes_read + bytes_remaining;
             }
         }
@@ -564,23 +562,146 @@ void DataAccess::FreeAllFiles() {
 }
 
 // OFFSET: 0x005a9360
-void DataAccess::FreeDevice(VirtualDataDevice*)
-{
+void DataAccess::FreeDevice(VirtualDataDevice* device) {
+    bool found_device = false;
+    if ((device->flag_data & 0x4000U) == 0) {
+        int* current_device_ptr = this->first_device_stow;
+
+        do {
+            if (*current_device_ptr == device->id) {
+                int* last_device_ptr = this->last_device_stow;
+                if (*last_device_ptr == -1) {
+                    do {
+                        int* device_ptr = last_device_ptr - 1;
+                        last_device_ptr--;
+
+                        if (*device_ptr != -1) {
+                            *current_device_ptr = *device_ptr;
+                            *last_device_ptr = -1;
+                            found_device = true;
+                        }
+                    } while ((last_device_ptr != current_device_ptr) && (!found_device));
+                }
+                else {
+                    *current_device_ptr = *last_device_ptr;
+                    *this->last_device_stow = -1;
+                    found_device = true;
+                }
+            }
+            current_device_ptr++;
+        } while ((current_device_ptr <= this->last_device_stow) && (!found_device));
+    }
+    if (device->id == device_cache.device_id) {
+        device_cache.first_sector = -1;
+        device_cache.last_sector = -1;
+        device_cache.device_id = -1;
+    }
+    next_available_device = device->id;
+    if (device->file_pointer != nullptr) {
+        fclose(device->file_pointer);
+        device->file_pointer = nullptr;
+    }
+    if (device->file_name != nullptr) {
+        string_block_allocator->FreeString(device->file_name);
+        device->file_name = nullptr;
+    }
+    device->file_pointer = nullptr;
+    device->flag_data = 1;
+    device->offset = 0;
+    device->size = 0;
+    device->primary_data_offset = 0;
+    device->size_of_sector_list = 0;
+    device->sector_list_offset = 0;
+    device->original_key = 0;
+    return;
 }
 
 // OFFSET: 0x005494c0
-void DataAccess::FreeDeviceCache(VirtualDeviceCache*)
-{
+void DataAccess::FreeDeviceCache(VirtualDeviceCache* _device_cache) {
+    if (_device_cache->cache_buffer != nullptr) {
+        for (std::size_t i = 0; i < num_device_cache_pages; i++) {
+            if (_device_cache->cache_buffer[i] != nullptr) {
+                free(_device_cache->cache_buffer[i]);
+                _device_cache->cache_buffer[i] = nullptr;
+            }
+        }
+        free(_device_cache->cache_buffer);
+        _device_cache->cache_buffer = nullptr;
+        free(_device_cache->page_sizes);
+        _device_cache->page_sizes = nullptr;
+        _device_cache->size = 0;
+    }
 }
 
 // OFFSET: 0x005a9260
-void DataAccess::FreeFile(int)
-{
+void DataAccess::FreeFile(int resource_handle) {
+    VirtualDataFile* file = file_lookup_list[resource_handle];
+    file_list->CHTRemove(file->file_name);
+    file_lookup_list[resource_handle] = nullptr;
+    if (file->cache_id != -1) {
+        if (file_cache_list[file->cache_id].resource_handle == resource_handle) {
+            file_cache_list[file->cache_id].resource_handle = -1;
+            next_available_file_cache_id = file->cache_id;
+        }
+    }
+    if (file->file_name != nullptr) {
+        string_block_allocator->FreeString(file->file_name);
+        file->file_name = nullptr;
+    }
+    lpVirtualFileAllocator->FreeBlock(file);
 }
 
 // OFFSET: 0x005d2cc0
-void DataAccess::FreeSystemResources()
-{
+void DataAccess::FreeSystemResources() {
+    if (device_list != nullptr) {
+        DropAllDevices(1);
+    }
+
+    if (active_device != nullptr) {
+        ResetStow();
+    }
+
+    if (device_list != nullptr) {
+        for (std::size_t i = 0; i < number_of_devices_in_list; i++) {
+            FreeDevice(&device_list[i]);
+        }
+        free(device_list);
+        device_list = nullptr;
+        number_of_devices_in_list = 0;
+        next_available_device = -1;
+    }
+
+    if (file_list != nullptr) {
+        FreeAllFiles();
+        delete file_list;
+        file_list = nullptr;
+    }
+
+    if (file_lookup_list != nullptr) {
+        free(file_lookup_list);
+    }
+    file_lookup_list = nullptr;
+    file_lookup_list_num_slots = 0;
+
+    FreeDeviceCache(&device_cache);
+    if (device_cache.sector_size_list != nullptr) {
+        free(device_cache.sector_size_list);
+        device_cache.sector_size_list = nullptr;
+    }
+
+    for (std::size_t i = 0; i < 8; i++) {
+        if (file_cache_list[i].cache_data != nullptr) {
+            free(file_cache_list[i].cache_data);
+            file_cache_list[i].cache_data = nullptr;
+        }
+        file_cache_list[i].resource_handle = -2;
+        file_cache_list[i].offset = -VirtualSectorSize;
+    }
+
+    if (string_block_allocator != nullptr) {
+        delete string_block_allocator;
+        string_block_allocator = nullptr;
+    }
 }
 
 // OFFSET: 0x005492d0
@@ -601,20 +722,99 @@ int DataAccess::UNK_00549770()
 }
 
 // OFFSET: 0x005d3be0
-int DataAccess::GetDataOrFileHandle(char*, char*, int*, int*, int)
-{
-    return 0;
+int DataAccess::GetDataOrFileHandle(char* path, char* mode, int* resource_handle, void** resource_data, int always_return_handle) {
+    
+    int disk_file_loaded = 0;
+    int* last_handle_ptr = &last_get_data_or_file_handle;
+
+    int file_found = FindVirtualFile(path);
+    *last_handle_ptr = file_found;
+
+    if (file_found == -1 || (((flags & 0x800) != 0) && ((device_list[file_lookup_list[file_found]->device_id].flag_data & 2) != 0))) {
+        disk_file_loaded = LoadDiskFile(path, mode, last_handle_ptr);
+        if (disk_file_loaded == 0 && file_found == -1) {
+            return false;
+        }
+    }
+
+    VirtualDataFile*  virtual_file = file_lookup_list[*last_handle_ptr];
+
+    if (disk_file_loaded != 0 && virtual_file->resource_data != 0) {
+        virtual_file->resource_data = 0;
+    }
+
+    *resource_handle = *last_handle_ptr;
+    *resource_data = virtual_file->resource_data;
+
+    if (virtual_file->resource_data == 0 || always_return_handle != 0) {
+        OpenVirtualFile(*last_handle_ptr);
+    }
+    else if ((flags & 0x2000) != 0) {
+        virtual_file->flag_data |= 8;
+        return true;
+    }
+
+    return true;
 }
 
 // OFFSET: 0x00549040
-void DataAccess::GetDeviceSlot(int)
-{
+int DataAccess::GetDeviceSlot() {
+    int initial_slot = next_available_device;
+
+    if (initial_slot == -1) {
+        initial_slot = GrowDeviceList(4);
+    }
+
+    int current_slot = initial_slot;
+
+    while (true) {
+        current_slot += 1;
+
+        if (current_slot >= number_of_devices_in_list) {
+            current_slot = 0;
+        }
+
+        if (current_slot == initial_slot) {
+            break;
+        }
+
+        if ((device_list[current_slot].flag_data & 1) != 0) {
+            next_available_device = current_slot;
+            return initial_slot;
+        }
+    }
+
+    next_available_device = -1;
+
+    return initial_slot;
 }
 
 // OFFSET: 0x00548f90
-int DataAccess::GrowDeviceList(int)
-{
-    return 0;
+int DataAccess::GrowDeviceList(int capacity_add) {
+    if (capacity_add <= 0) {
+        return -1;
+    }
+
+    std::size_t old_len = number_of_devices_in_list;
+    device_list = reinterpret_cast<VirtualDataDevice*>(realloc(device_list, (old_len + capacity_add) * sizeof(VirtualDataDevice)));
+    number_of_devices_in_list += capacity_add;
+    if (device_list != nullptr) {
+        for (std::size_t i = old_len; i < number_of_devices_in_list; i++) {
+            device_list[i].flag_data = 1;
+            device_list[i].file_name = 0;
+            device_list[i].offset = 0;
+            device_list[i].size = 0;
+            device_list[i].file_pointer = 0;
+            device_list[i].id = i;
+            device_list[i].primary_data_offset = 0;
+            device_list[i].size_of_sector_list = 0;
+            device_list[i].sector_list_offset = 0;
+            device_list[i].original_key = 0;
+        }
+        return old_len;
+    }
+
+    return -1;
 }
 
 // OFFSET: 0x00549090
@@ -638,9 +838,43 @@ int DataAccess::GrowFileLookupList() {
 }
 
 // OFFSET: 0x005d2e10
-int DataAccess::Initialize(int, std::size_t, int, int, int)
-{
-    return 0;
+int DataAccess::Initialize(int initial_device_count, std::size_t initial_file_lookup_capacity, int default_device_cache_size, int initial_file_cache_len, int _flags) {
+    if (-1 < _flags) {
+        flags = _flags;
+    }
+    
+    UNK_00549770();
+    
+    FreeSystemResources();
+    
+    string_block_allocator = new StringBlockAllocator(0x2000, 0x2000);
+    
+    next_available_device = GrowDeviceList(initial_device_count);
+    
+    file_list = new ContainerHashTable<char*, VirtualDataFile*>();
+    file_list->CHTCreateFull(503, 150, StringHashValueFunction, StringHashCompareFunction);
+    
+    file_lookup_list_num_slots = initial_file_lookup_capacity;
+    file_lookup_list = reinterpret_cast<VirtualDataFile**>(calloc(initial_file_lookup_capacity, sizeof(VirtualDataFile*)));
+    
+    last_get_data_or_file_handle = -1;
+
+    int return_value = AllocateDeviceCache(&device_cache, default_device_cache_size);
+    next_available_file_cache_id = -1;
+    for (std::size_t i = 0; i < 8; i++) {
+        if (i < initial_file_cache_len) {
+            file_cache_list[i].cache_data = reinterpret_cast<std::uint8_t*>(malloc(VirtualSectorSize));
+            file_cache_list[i].resource_handle = -1;
+        }
+        else {
+            file_cache_list[i].resource_handle = -2;
+        }
+        file_cache_list[i].offset = -VirtualSectorSize;
+    }
+
+    ResetStow();
+
+    return return_value;
 }
 
 // OFFSET: 0x005d3270
