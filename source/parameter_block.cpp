@@ -340,7 +340,7 @@ int ParameterBlock::OpenFile(const char* name, int load_from_memory_or_not, int 
 	if (load_from_memory_or_not == 0) {
 		if (in_resource_handle == -1) {
 			if (buffer == nullptr) {
-				resource_handle = lpDataAccess->FOpen(name, "rb");
+				resource_handle = lpDataAccess->FOpen(const_cast<char*>(name), "rb");
 				if (resource_handle == -1) {
 					return 0;
 				}
@@ -425,7 +425,7 @@ int ParameterBlock::OpenFile(const char* name, int load_from_memory_or_not, int 
 		return 1;
 	}
 	else if (load_from_memory_or_not == 1) {
-		resource_handle = lpDataAccess->FOpen(name, "rb");
+		resource_handle = lpDataAccess->FOpen(const_cast<char*>(name), "rb");
 		if (resource_handle != -1) {
 			successfully_loaded_from_memory = 1;
 			OpenFromMemory(resource_handle);
