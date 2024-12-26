@@ -8,8 +8,9 @@ Looks like devices can be marked with flag 0x4000 to denote that an entire .res 
 
 DataAccess* lpDataAccess = nullptr;
 BlockAllocator* lpVirtualFileAllocator = nullptr;
-
 constexpr auto VirtualSectorSize = 0x6000;
+
+extern int g_EnableEndianSwapping;
 
 // OFFSET: 0x005ec450
 DataAccess::DataAccess() : BaseObject() {
@@ -465,8 +466,7 @@ int DataAccess::FindVirtualFile(const char* path)
 }
 
 // OFFSET: 0x005d34f0
-int DataAccess::FOpen(const char* file_name, const char* mode)
-{
+int DataAccess::FOpen(char* file_name, const char* mode) {
     int* last_resource_handle = &this->last_get_data_or_file_handle;
     int resource_handle = FindVirtualFile(file_name);
     *last_resource_handle = resource_handle;
@@ -878,8 +878,48 @@ int DataAccess::Initialize(int initial_device_count, std::size_t initial_file_lo
 }
 
 // OFFSET: 0x005d3270
-int DataAccess::LoadDiskFile(const char*, const char*, int*)
-{
+int DataAccess::LoadDiskFile(char* file_name, const char* mode, int* out_handle) {
+    if ((flags & 0x1000) != 0) {
+        return 0;
+    }
+
+    int device_id = GetDeviceSlot();
+
+    char mode_cpy[12]{};
+    std::size_t len = strlen(mode);
+    std::memcpy(mode_cpy, mode, len);
+    // Unless 't' is passed, force binary mode.
+    if (strchr(mode, 't') == nullptr && strchr(mode, 'b') == nullptr) {
+        mode_cpy[len] = 'b';
+    }
+
+    FILE* fp = FOPEN(file_name, mode);
+    if (fp != nullptr) {
+        fseek(fp, 0, SEEK_END);
+        std::size_t file_size = ftell(fp);
+        if (AddFile(file_name, device_id, 0, file_size, out_handle) != 0) {
+            VirtualDataDevice* device = &device_list[device_id];
+            device->size = file_size;
+            device->file_pointer = fp;
+            device->flag_data = 4;
+            device->offset = 0;
+            device->file_name = string_block_allocator->StringBlockAllocator_AllocStringByString(file_name, 0);
+            strcpy(device->file_name, file_name);
+            if (strchr(mode, 'w') || strchr(mode, 'a') || strchr(mode, '+')) {
+                device->flag_data |= 0x10;
+            }
+            device->primary_data_offset = 0;
+            device->size_of_sector_list = 0;
+            device->sector_list_offset = 0;
+            device->original_key = 0;
+            device->id = device_id;
+            return 1;
+        }
+        fclose(fp);
+        return 0;
+    }
+    FreeDevice(&device_list[device_id]);
+    next_available_device = device_id;
     return 0;
 }
 
@@ -900,19 +940,84 @@ void DataAccess::LoadResourceFromFile(char*, unsigned int*, unsigned int, int, u
 }
 
 // OFFSET: 0x00549580
-int DataAccess::MemcpyDeviceCache(VirtualDeviceCache*, int, void*)
-{
-    return 0;
+int DataAccess::MemcpyDeviceCache(VirtualDeviceCache* _device_cache, int len, void* src) {
+    int bytes_read = 0;
+    int bytes_remaining = 0;
+
+    for (std::size_t i = 0; i < num_device_cache_pages; i++) {
+        if (_device_cache->cache_buffer[i] != nullptr) {
+            bytes_remaining = len - bytes_read;
+            if (_device_cache->page_sizes[i] < len - bytes_read) {
+                bytes_remaining = _device_cache->page_sizes[i];
+            }
+            if (0 < bytes_remaining) {
+                std::memcpy(_device_cache->cache_buffer[i], reinterpret_cast<const void*>(reinterpret_cast<std::uintptr_t>(src) + bytes_read), bytes_remaining);
+                bytes_read = bytes_read + bytes_remaining;
+            }
+        }
+    }
+
+    return bytes_read;
 }
 
 // OFFSET: 0x005491c0
-void DataAccess::OpenVirtualFile(int)
-{
+void DataAccess::OpenVirtualFile(int resource_handle) {
+    if (resource_handle < 0) {
+        return;
+    }
+
+    VirtualDataFile* file = file_lookup_list[resource_handle];
+    file->flag_data |= 4;
+    file->current_offset = 0;
+
+    if (!(device_list[file->device_id].flag_data & 0x4000U)) {
+        int cache_id = file->cache_id;
+
+        if (cache_id < 0 || file_cache_list[cache_id].resource_handle != resource_handle) {
+            if (next_available_file_cache_id == -1) {
+                bool cache_allocated = false;
+                int* cache_entry_ptr = &file_cache_list[0].resource_handle;
+
+                for (std::size_t i = 0; i < 8; i++) {
+                    if ((file_cache_list[i].resource_handle == -2) || (file_cache_list[i].resource_handle == -1)) {
+                        file->cache_id = i;
+                        file_cache_list[i].offset = -0x6000;
+                        file_cache_list[i].resource_handle = resource_handle;
+                        cache_allocated = true;
+                        break;
+                    }
+                    if ((file_lookup_list[file_cache_list[i].resource_handle]->flag_data & 4) == 0) {
+                        file->cache_id = i;
+                        file_cache_list[i].offset = -0x6000;
+                        file_cache_list[i].resource_handle = resource_handle;
+                        cache_allocated = true;
+                        break;
+                    }
+                }
+
+                if (!cache_allocated) {
+                    file->cache_id = -1;
+                }
+            }
+            else {
+                file->cache_id = next_available_file_cache_id;
+                file_cache_list[next_available_file_cache_id].resource_handle = resource_handle;
+                file_cache_list[next_available_file_cache_id].offset = -0x6000;
+                next_available_file_cache_id = -1;
+            }
+        }
+        else if (next_available_file_cache_id == cache_id) {
+            next_available_file_cache_id = -1;
+        }
+
+        if ((flags & 0x2000) != 0) {
+            file->flag_data |= 8;
+        }
+    }
 }
 
 // OFFSET: 0x005a96a0
-unsigned int DataAccess::ReadData(VirtualDataDevice*, void*, void*, unsigned int)
-{
+unsigned int DataAccess::ReadData(VirtualDataDevice*, void*, void*, unsigned int) {
     return 0;
 }
 
@@ -927,9 +1032,32 @@ void DataAccess::ResetStow()
 }
 
 // OFFSET: 0x00581290
-int DataAccess::ResizeDeviceCache(unsigned int)
-{
-    return 0;
+int DataAccess::ResizeDeviceCache(unsigned int new_size) {
+    std::uint32_t current_size = device_cache.size;
+
+    if (current_size <= new_size && (new_size <= num_device_cache_pages + current_size)) {
+        return 1;
+    }
+
+    int* device_stow_ptr = first_device_stow;
+    device_cache.first_sector = -1;
+    device_cache.last_sector = -1;
+    device_cache.device_id = -1;
+
+    while (device_stow_ptr <= last_device_stow) {
+        *device_stow_ptr = -1;
+        device_stow_ptr++;
+    }
+
+    FreeDeviceCache(&device_cache);
+
+    int allocation_result = AllocateDeviceCache(&device_cache, new_size);
+
+    if (allocation_result == 0) {
+        device_cache.size = 0;
+    }
+
+    return allocation_result;
 }
 
 // OFFSET: 0x005d3570
@@ -966,6 +1094,101 @@ int DataAccess::SetNumberOfDeviceCachePages(int new_device_cache_page_count)
 }
 
 // OFFSET: 0x005a9450
-void DataAccess::UpdateDeviceCache(VirtualDataDevice*, int, int, int)
-{
+void DataAccess::UpdateDeviceCache(VirtualDataDevice* device, int virtual_sector_needed, std::uint8_t* buffer, int max_read_len) {
+    if (buffer == nullptr) {
+        UNK_00549770();
+        return;
+    }
+    
+    bool should_clear_cache = (device->flag_data & 0x200) != 0;
+    bool should_update_sector_list = (device->flag_data & 0x40) != 0;
+    std::uint8_t* buffer_position = buffer;
+
+    if (device_cache.first_sector == -1 && should_update_sector_list) {
+        short* sector_size_list = device_cache.sector_size_list;
+        if (sector_size_list != nullptr) {
+            free(sector_size_list);
+        }
+
+        sector_size_list = reinterpret_cast<short*>(malloc(device->size_of_sector_list));
+        device_cache.sector_size_list = sector_size_list;
+
+        if (buffer == nullptr) {
+            fseek(device->file_pointer, device->sector_list_offset, SEEK_SET);
+            fread(sector_size_list, 1, device->size_of_sector_list, device->file_pointer);
+        }
+        else {
+            buffer_position += device->sector_list_offset;
+            std::memcpy(sector_size_list, buffer_position, device->size_of_sector_list);
+            buffer_position += device->size_of_sector_list;
+        }
+        
+        if (g_EnableEndianSwapping != 0 && device->size_of_sector_list > 0) {
+            for (std::size_t offset = 0; offset < device->size_of_sector_list; offset += 2) {
+                std::uint16_t* entry = reinterpret_cast<std::uint16_t*>(reinterpret_cast<uintptr_t>(sector_size_list) + offset);
+                *entry = std::byteswap(*entry);
+            }
+        }
+    }
+
+    if (should_clear_cache) {
+        ClearDeviceCache(&device_cache);
+    }
+
+    std::intptr_t offset = device->primary_data_offset;
+    if (!should_update_sector_list || virtual_sector_needed < 1) {
+        offset += virtual_sector_needed * VirtualSectorSize;
+    }
+    else {
+        for (std::size_t i = 0; i < virtual_sector_needed; ++i) {
+            offset += device_cache.sector_size_list[i];
+        }
+    }
+
+    if (buffer == 0) {
+        fseek(device->file_pointer, offset, SEEK_SET);
+        max_read_len = INT_MAX;
+    }
+    else {
+        buffer_position = offset + buffer;
+        max_read_len = reinterpret_cast<uintptr_t>(buffer) - reinterpret_cast<uintptr_t>(buffer_position) + max_read_len;
+    }
+
+    std::size_t remaining_size = device->size - offset;
+    if (remaining_size > device_cache.size) {
+        remaining_size = device_cache.size;
+    }
+    if (remaining_size > max_read_len) {
+        remaining_size = max_read_len;
+    }
+
+    if (buffer == nullptr) {
+        remaining_size = FREADDeviceCache(&device_cache, remaining_size, device->file_pointer);
+    }
+    else {
+        remaining_size = MemcpyDeviceCache(&device_cache, remaining_size, buffer_position);
+    }
+
+    unsigned int sector_count = 0;
+    if (should_update_sector_list) {
+        std::int16_t* sector_sizes = device_cache.sector_size_list + virtual_sector_needed;
+        int total_remaining_bytes = 0;
+        while (remaining_size >= total_remaining_bytes) {
+            total_remaining_bytes += *sector_sizes;
+            sector_count++;
+            sector_sizes++;
+        }
+    }
+    else {
+        sector_count = remaining_size / VirtualSectorSize;
+    }
+
+    if (sector_count > 0) {
+        device_cache.first_sector = virtual_sector_needed;
+        device_cache.last_sector = virtual_sector_needed + sector_count - 1;
+    }
+    else {
+        device_cache.first_sector = -1;
+        device_cache.last_sector = -1;
+    }
 }

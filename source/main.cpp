@@ -32,6 +32,7 @@ char g_LocalizedMovieDirectory[260]{};
 char g_NTSCOrPal = 0;
 int g_GameInitialized = 0;
 int g_TickGame = 1;
+int g_EnableEndianSwapping = 0;
 
 // OFFSET: 0x005497e0
 void GetPlatformIDAndD3DVersion(unsigned int* direct3dVersion, DWORD* outPlatformId, unsigned int* canUseSoftwareRenderer) {

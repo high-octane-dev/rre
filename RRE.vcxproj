@@ -158,9 +158,6 @@
     <ClInclude Include="source\string_block_allocator.hpp" />
     <ClInclude Include="source\x360_game.hpp" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="globals.hpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

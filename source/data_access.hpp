@@ -105,7 +105,7 @@ public:
     char* FGets(int, char*, int);
     int FileExists(char*);
     int FindVirtualFile(const char*);
-    int FOpen(const char*, const char*);
+    int FOpen(char*, const char*);
     int FRead(int, void*, int);
     int FRead(int, void*, int, int);
     int FREADDeviceCache(VirtualDeviceCache*, int, FILE*);
@@ -124,7 +124,7 @@ public:
     int GrowDeviceList(int);
     int GrowFileLookupList();
     int Initialize(int, std::size_t, int, int, int);
-    int LoadDiskFile(const char*, const char*, int*);
+    int LoadDiskFile(char*, const char*, int*);
     int LoadResourceFile(char*, int, unsigned int*, int, int, unsigned int*, unsigned int*, int**, int**, int);
     void LoadResourceFromBuffer(unsigned int*, int, char*, int**, unsigned int, int, unsigned char*, int**, int**, int**, unsigned int*, int**, int*, int, int, long*);
     void LoadResourceFromFile(char*, unsigned int*, unsigned int, int, unsigned char*, unsigned int**, long*, unsigned int, unsigned int*, unsigned int*, int*, int, int, long*);
@@ -136,7 +136,7 @@ public:
     void SaveResourceFile(char*, int, int, int, int, void*, size_t, int);
     void SaveResourceFileList(char*, char*);
     int SetNumberOfDeviceCachePages(int);
-    void UpdateDeviceCache(VirtualDataDevice*, int, int, int);
+    void UpdateDeviceCache(VirtualDataDevice*, int, std::uint8_t*, int);
 };
 
 extern DataAccess* lpDataAccess;
