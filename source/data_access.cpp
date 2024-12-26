@@ -232,6 +232,14 @@ void DataAccess::ClearDeviceCache(VirtualDeviceCache* cache)
     }
 }
 
+// OFFSET: 0x00549610
+void DataAccess::CopyDeviceCache(VirtualDeviceCache* deviceCache, void* dst, std::ptrdiff_t byte_offset) {
+}
+
+// OFFSET: 0x005813b0
+void DataAccess::DecompressDeviceCache(VirtualDeviceCache* deviceCache, void* uncompressed, std::size_t compressed_len, std::ptrdiff_t byte_offset) {
+}
+
 // OFFSET: 0x005d3460
 int DataAccess::DropDevice(char* name, int force_delete)
 {
@@ -1017,7 +1025,75 @@ void DataAccess::OpenVirtualFile(int resource_handle) {
 }
 
 // OFFSET: 0x005a96a0
-unsigned int DataAccess::ReadData(VirtualDataDevice*, void*, void*, unsigned int) {
+unsigned int DataAccess::ReadData(VirtualDataDevice* device, VirtualDataFile* file, void* dst, unsigned int dst_len) {
+    // I AM LAZY AND JUST WANT SOMETHING WORKING RAAAAAAAH
+    if ((device->flag_data & 0x100) == 0) {
+        if (file->cache_id == -1 || dst_len >= VirtualSectorSize) {
+            fseek(device->file_pointer, device->primary_data_offset + device->offset, 0);
+            std::size_t bytes_read = fread(dst, 1, dst_len, device->file_pointer);
+            if (bytes_read != dst_len) {
+                return 0;
+            }
+            device->offset = device->offset + dst_len;
+            return dst_len;
+        }
+        else {
+            panic("Ooopsie poopsie you didnt actually implement DataAccess::ReadData >=(");
+        }
+    }
+    else {
+        panic("Ooopsie poopsie you didnt actually implement DataAccess::ReadData >=(");
+    }
+
+    /*
+    if ((device->flag_data & 0x4000) != 0) {
+        std::memcpy(dst, reinterpret_cast<const void*>(device->primary_data_offset + file->current_offset + file->start_offset), dst_len);
+        return dst_len;
+    }
+    UNK_00549770();
+    if ((device->flag_data & 0x100) == 0) {
+        if (file->cache_id == -1 || dst_len >= VirtualSectorSize) {
+            fseek(device->file_pointer, device->primary_data_offset + device->offset, 0);
+            std::size_t bytes_read = fread(dst, 1, dst_len, device->file_pointer);
+            if (bytes_read != dst_len) {
+                return 0;
+            }
+            device->offset = device->offset + dst_len;
+            return dst_len;
+        }
+        std::ptrdiff_t cache_offset = device->offset - file_cache_list[file->cache_id].offset;
+        if (cache_offset < 0 || cache_offset >= VirtualSectorSize) {
+            file_cache_list[file->cache_id].offset = device->offset;
+            std::ptrdiff_t remainder = (device->size - device->offset) - device->primary_data_offset;
+            std::size_t bytes_to_read = 0x6000;
+            if (remainder < 0x6000) {
+                bytes_to_read = remainder;
+            }
+            fseek(device->file_pointer, device->offset + device->primary_data_offset, SEEK_SET);
+            std::size_t bytes_read = fread(file_cache_list[file->cache_id].cache_data, 1, bytes_to_read, device->file_pointer);
+            if (bytes_read != bytes_to_read) {
+                return 0;
+            }
+            cache_offset = 0;
+        }
+        std::size_t bytes_to_read = dst_len;
+        if (0x6000U - cache_offset < dst_len) {
+            bytes_to_read = 0x6000U - cache_offset;
+        }
+        std::memcpy(dst, file_cache_list[file->cache_id].cache_data + cache_offset, bytes_to_read);
+        device->offset = device->offset + bytes_to_read;
+        if (bytes_to_read != dst_len) {
+            file_cache_list[file->cache_id].offset = device->offset;
+            std::ptrdiff_t remainder = (device->size - device->offset) - device->primary_data_offset;
+            std::size_t bytes_to_read = 0x6000;
+            if (remainder < 0x6000) {
+                bytes_to_read = remainder;
+            }
+            fseek(device->file_pointer, device->offset + device->primary_data_offset, SEEK_SET);
+            std::size_t bytes_read = fread(file_cache_list[file->cache_id].cache_data, 1, bytes_to_read, device->file_pointer);
+        }
+    }
+    */
     return 0;
 }
 

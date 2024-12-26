@@ -98,6 +98,8 @@ public:
     int AllowBundledAccessOnly(int);
     int AttachObject(int, void*);
     void ClearDeviceCache(VirtualDeviceCache*);
+    void CopyDeviceCache(VirtualDeviceCache* deviceCache, void* dst, std::ptrdiff_t byte_offset);
+    void DecompressDeviceCache(VirtualDeviceCache* deviceCache, void* uncompressed, std::size_t compressed_len, std::ptrdiff_t byte_offset);
     int DropDevice(char*, int);
     int DropDevice(VirtualDataDevice*, int);
     int DropAllDevices(int);
@@ -130,7 +132,7 @@ public:
     void LoadResourceFromFile(char*, unsigned int*, unsigned int, int, unsigned char*, unsigned int**, long*, unsigned int, unsigned int*, unsigned int*, int*, int, int, long*);
     int MemcpyDeviceCache(VirtualDeviceCache*, int, void*);
     void OpenVirtualFile(int);
-    unsigned int ReadData(VirtualDataDevice*, void*, void*, unsigned int);
+    unsigned int ReadData(VirtualDataDevice*, VirtualDataFile*, void*, unsigned int);
     void ResetStow();
     int ResizeDeviceCache(unsigned int);
     void SaveResourceFile(char*, int, int, int, int, void*, size_t, int);
