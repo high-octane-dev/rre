@@ -345,7 +345,7 @@ int ParameterBlock::OpenFile(const char* name, int load_from_memory_or_not, int 
 					return 0;
 				}
 				string_buffer_len = lpDataAccess->FSize(resource_handle);
-				file_data = reinterpret_cast<char*>(malloc(string_buffer_len + 2));
+				file_data = reinterpret_cast<char*>(malloc(string_buffer_len + 3));
 				lpDataAccess->FRead(resource_handle, file_data, string_buffer_len, 1);
 			}
 			else {
@@ -366,6 +366,7 @@ int ParameterBlock::OpenFile(const char* name, int load_from_memory_or_not, int 
 
 		file_data[string_buffer_len] = '\r';
 		file_data[string_buffer_len + 1] = '\n';
+		file_data[string_buffer_len + 2] = 0;
 
 		if (headers == nullptr) {
 			int header_count = 0;
@@ -528,7 +529,7 @@ int ParameterBlock::GetParameter(const char* parameter, float default_value, flo
 
 // OFFSET: 0x005881a0
 int ParameterBlock::GetParameter(const char* parameter, const char* default_value, char* dest, std::size_t dest_len) {
-	if (search.GetParameter(parameter, dest) != 0) {
+	if (search.GetParameter(parameter, dest, dest_len) != 0) {
 		return 1;
 	}
 	snprintf(dest, dest_len, "%s", default_value);
@@ -1040,9 +1041,11 @@ int ParameterBlock::PBSearch::GetParameter(const char* parameter, char* dest, st
 			}
 			if (start_index < parameter_count) {
 				snprintf(dest, dest_len, "%s", parent->headers[current_header_index].parameters[start_index].value);
+				strcpy_s(current_parameter_name, parameter);
 				current_parameter_index = start_index;
 				return 1;
 			}
+			strcpy_s(current_parameter_name, parameter);
 			current_parameter_index = -1;
 			return 0;
 		}

@@ -151,7 +151,7 @@ void Game::RemoveTimeIntervalCallback(void (**callback)(int, float, void*), void
 }
 
 int Game::PreWindowInitialize() {
-    return 0;
+    return 1;
 }
 
 // OFFSET: 0x006170c0

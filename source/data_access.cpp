@@ -168,6 +168,9 @@ int DataAccess::AddFile(char* file_name, int device_id, int start_offset, int si
     file->cache_id = new_cache_id;
     file->resource_data = new_resource_data;
     file->resource_handle = new_resource_handle;
+    if (handle != nullptr) {
+        *handle = new_resource_handle;
+    }
     return 1;
 }
 
@@ -1027,24 +1030,13 @@ void DataAccess::OpenVirtualFile(int resource_handle) {
 // OFFSET: 0x005a96a0
 unsigned int DataAccess::ReadData(VirtualDataDevice* device, VirtualDataFile* file, void* dst, unsigned int dst_len) {
     // I AM LAZY AND JUST WANT SOMETHING WORKING RAAAAAAAH
-    if ((device->flag_data & 0x100) == 0) {
-        if (file->cache_id == -1 || dst_len >= VirtualSectorSize) {
-            fseek(device->file_pointer, device->primary_data_offset + device->offset, 0);
-            std::size_t bytes_read = fread(dst, 1, dst_len, device->file_pointer);
-            if (bytes_read != dst_len) {
-                return 0;
-            }
-            device->offset = device->offset + dst_len;
-            return dst_len;
-        }
-        else {
-            panic("Ooopsie poopsie you didnt actually implement DataAccess::ReadData >=(");
-        }
+    fseek(device->file_pointer, device->primary_data_offset + device->offset, 0);
+    std::size_t bytes_read = fread(dst, 1, dst_len, device->file_pointer);
+    if (bytes_read != dst_len) {
+        return 0;
     }
-    else {
-        panic("Ooopsie poopsie you didnt actually implement DataAccess::ReadData >=(");
-    }
-
+    device->offset = device->offset + dst_len;
+    return dst_len;
     /*
     if ((device->flag_data & 0x4000) != 0) {
         std::memcpy(dst, reinterpret_cast<const void*>(device->primary_data_offset + file->current_offset + file->start_offset), dst_len);

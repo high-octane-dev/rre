@@ -112,54 +112,61 @@ void ReadConfigIni() {
             g_NTSCOrPal = 'N';
         }
         config.ReadParameterBlock("LanguageDefinition");
-        int iVar5 = config.GetNumberOfParameterValues("Definition");
-        if (0 < iVar5) {
+        int definition_count = config.GetNumberOfParameterValues("Definition");
+        if (definition_count > 0) {
             config.search.SetResetParameterSearch(0);
             char Definition[32]{};
-            iVar5 = config.GetParameter("Definition", "", Definition, 0x20);
-            while (iVar5 != 0) {
-                LanguageDefinition* language_definition = new LanguageDefinition();
-                snprintf(language_definition->name, 0x20, "%s", Definition);
-                lpGame->lang_defs.CLAddItem(language_definition);
-                iVar5 = config.GetParameter("Definition", "", Definition, 0x20);
+
+            for (std::size_t i = 0; i < definition_count; i++) {
+                if (config.GetParameter("Definition", "", Definition, 0x20) != 0) {
+                    LanguageDefinition* language_definition = new LanguageDefinition();
+                    snprintf(language_definition->name, 0x20, "%s", Definition);
+                    lpGame->lang_defs.CLAddItem(language_definition);
+                }
+                else {
+                    break;
+                }
             }
+
             config.search.SetResetParameterSearch(1);
-            iVar5 = 0;
-            if (0 < lpGame->lang_defs.Length()) {
-                do {
-                    lpGame->lang_defs[iVar5]->Read(&config);
-                    iVar5 = iVar5 + 1;
-                } while (iVar5 < lpGame->lang_defs.Length());
+
+            for (std::size_t i = 0; i < lpGame->lang_defs.Length(); i++) {
+                lpGame->lang_defs[i]->Read(&config);
             }
         }
+
         config.ReadParameterBlock("LanguageConfiguration");
-        iVar5 = config.GetNumberOfParameterValues("Configuration");
-        if (0 < iVar5) {
+        int configuration_count = config.GetNumberOfParameterValues("Configuration");
+        if (configuration_count > 0) {
             config.search.SetResetParameterSearch(0);
             char Configuration[32]{};
-            iVar5 = config.GetParameter("Configuration", "", Configuration, 0x20);
-            while (iVar5 != 0) {
-                LanguageConfiguration* language_configuration = new LanguageConfiguration();
-                snprintf(language_configuration->Name, 0x20, "%s", Configuration);
-                lpGame->lang_confs.CLAddItem(language_configuration);
-                iVar5 = config.GetParameter("Configuration", "", Configuration, 0x20);
+            configuration_count = config.GetParameter("Configuration", "", Configuration, 0x20);
+            
+            for (std::size_t i = 0; i < definition_count; i++) {
+                if (config.GetParameter("Configuration", "", Configuration, 0x20) != 0) {
+                    LanguageConfiguration* language_configuration = new LanguageConfiguration();
+                    snprintf(language_configuration->Name, 0x20, "%s", Configuration);
+                    lpGame->lang_confs.CLAddItem(language_configuration);
+                }
+                else {
+                    break;
+                }
             }
+
             config.search.SetResetParameterSearch(1);
             config.GetParameter("DefaultConfiguration", "English", lpGame->selected_language_configuration_name, 0x20);
             lpGame->GetLanguageConfiguration(lpGame->selected_language_configuration_name);
-            iVar5 = 0;
-            if (0 < lpGame->lang_confs.Length()) {
-                do {
-                    lpGame->lang_confs[iVar5]->Read(&config);
-                    iVar5 = iVar5 + 1;
-                } while (iVar5 < lpGame->lang_confs.Length());
+            
+            for (std::size_t i = 0; i < lpGame->lang_confs.Length(); i++) {
+                lpGame->lang_confs[i]->Read(&config);
             }
+
             config.ReadParameterBlock("LanguageGeneral");
             config.GetParameter("UseDashboardLocale", 0, &lpGame->use_dashboard_locale);
             config.ReadParameterBlock("LanguageTitles");
             config.GetParameter(g_LanguageName, "Cars Mater-National", g_Caption, 0x80);
             
-            for (auto i = 0; i < sizeof(g_Caption); i++) {
+            for (std::size_t i = 0; i < sizeof(g_Caption); i++) {
                 if (g_Caption[i] == '_') {
                     g_Caption[i] = ' ';
                 }
@@ -397,4 +404,8 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
         return_value = message.wParam;
     }
     return return_value;
+}
+
+int main() {
+    return WinMain(GetModuleHandle(NULL), NULL, GetCommandLineA(), SW_SHOWNORMAL);
 }

@@ -1,4 +1,5 @@
 dependencies/*.dll
+[Dd]ata[Pp][Cc]/
 dependencies/*.lib
 [Pp]rogress.txt
 RRE/
