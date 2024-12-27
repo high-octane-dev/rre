@@ -156,7 +156,16 @@ int Game::PreWindowInitialize() {
 
 // OFFSET: 0x006170c0
 int Game::PreGameInitialize(struct DisplayMode*) {
-    return 0;
+    /*
+    if (control_interface == nullptr) {
+        control_interface = new X360ControlInterface();
+        if (control_interface->Create() == 0) {
+            return 0;
+        }
+    }
+    */
+    CreateStringTables();
+    return 1;
 }
 
 // OFFSET: INLINE

@@ -22,7 +22,7 @@ HANDLE g_GameMutex;
 int g_IsWindowed = 1;
 int g_WindowWidth = 1280;
 int g_WindowHeight = 720;
-float g_TargetFrameRate = 0.0;
+float g_TargetFrameRate = 60.0;
 char g_ClassName[256]{};
 char g_Caption[256]{};
 char g_DataPCDirectory[256] = {"e:\\dev_Cars2\\DataPC\\"};
@@ -367,7 +367,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
             if ((lpGame->flags & 2) != 0) {
                 ShowCursor(1);
             }
-            MessageBoxA(nullptr, quit_message + 4, g_Caption, 0x10);
+            MessageBoxA(nullptr, quit_message, g_Caption, 0x10);
             PostQuitMessage(0);
         }
         if (lpGame->Initialize() == 0) {

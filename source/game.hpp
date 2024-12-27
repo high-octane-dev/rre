@@ -14,6 +14,9 @@ struct Camera {};
 struct X360Camera : public Camera {};
 struct RenderTarget;
 struct DisplayMode {
+    int field0_0x0;
+    int screen_mode;
+    float fps;
 };
 
 class Game {
