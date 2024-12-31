@@ -110,6 +110,7 @@
     <ClCompile Include="source\action_sequence.cpp" />
     <ClCompile Include="source\base_object.cpp" />
     <ClCompile Include="source\block_allocator.cpp" />
+    <ClCompile Include="source\containers\string_table.cpp" />
     <ClCompile Include="source\data_access.cpp" />
     <ClCompile Include="source\file_io.cpp" />
     <ClCompile Include="source\gfx\cache.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="source\containers\container_linked_list.hpp" />
     <ClInclude Include="source\containers\container_list.hpp" />
     <ClInclude Include="source\containers\dynamic_array.hpp" />
+    <ClInclude Include="source\containers\string_table.hpp" />
     <ClInclude Include="source\data_access.hpp" />
     <ClInclude Include="source\file_io.hpp" />
     <ClInclude Include="source\game.hpp" />
@@ -158,6 +160,7 @@
     <ClInclude Include="source\panic.hpp" />
     <ClInclude Include="source\parameter_block.hpp" />
     <ClInclude Include="source\string_block_allocator.hpp" />
+    <ClInclude Include="source\util\token_string.hpp" />
     <ClInclude Include="source\x360_game.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
