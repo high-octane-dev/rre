@@ -1,5 +1,95 @@
 #pragma once
+#include <memory>
 #include "x360_game.hpp"
+
+enum class XboxLocale {
+    None = 0,
+    Australia = 1, // UNUSED
+    Austria = 2, // UNUSED
+    Belgium = 3, // UNUSED
+    Brazil = 4, // UNUSED
+    Canada = 5, // UNUSED
+    Chile = 6, // UNUSED
+    China = 7, // UNUSED
+    Colombia = 8, // UNUSED
+    CzechRepublic = 9, // UNUSED
+    Denmark = 10,
+    Finland = 11, // UNUSED
+    France = 12, // UNUSED
+    Germany = 13, // UNUSED
+    Greece = 14, // UNUSED
+    HongKong = 15, // UNUSED
+    Hungary = 16, // UNUSED
+    India = 17, // UNUSED
+    Ireland = 18, // UNUSED
+    Italy = 19, // UNUSED
+    Japan = 20, // UNUSED
+    Korea = 21, // UNUSED
+    Mexico = 22, // UNUSED
+    Netherlands = 23,
+    NewZealand = 24, // UNUSED
+    Norway = 25,
+    Poland = 26, // UNUSED
+    Portugal = 27, // UNUSED
+    Singapore = 28, // UNUSED
+    SlovakRepublic = 29, // UNUSED
+    SouthAfrica = 30, // UNUSED
+    Spain = 31, // UNUSED
+    Sweden = 32,
+    Switzerland = 33, // UNUSED
+    Taiwan = 34, // UNUSED
+    GreatBritain = 35, // UNUSED
+    UnitedStates = 36, // UNUSED
+    RussianFederation = 37 // UNUSED
+};
+
+enum class XboxLanguage {
+    None,
+    English = 1,
+    Japanese = 2, // UNUSED
+    German = 3,
+    French = 4,
+    Spanish = 5,
+    Italian = 6,
+    Korean = 7, // UNUSED
+    TraditionalChinese = 8, // UNUSED
+    Portuguese = 9, // UNUSED
+    SimplifiedChinese = 10, // UNUSED
+    Polish = 11, // UNUSED
+    Russian = 12, // UNUSED
+};
+
+// OFFSET: 0x00427420
+inline XboxLanguage TryGetLanguage(const std::string_view& str) {
+    if (str == "English") return XboxLanguage::English;
+    if (str == "German") return XboxLanguage::German;
+    if (str == "French") return XboxLanguage::French;
+    if (str == "Spanish") return XboxLanguage::Spanish;
+    if (str == "Italian") return XboxLanguage::Italian;
+    return XboxLanguage::None;
+}
+
+// OFFSET: 0x004274b0
+inline XboxLocale TryGetLocale(const std::string_view& str) {
+    if (str == "Danish") return XboxLocale::Denmark;
+    if (str == "Dutch") return XboxLocale::Netherlands;
+    if (str == "Norwegian") return XboxLocale::Norway;
+    if (str == "Swedish") return XboxLocale::Sweden;
+    return XboxLocale::None;
+}
+
+#ifdef _WIN32
+#define GetSystemLanguage() TryGetLanguage(g_LanguageName)
+#define GetSystemLocale() TryGetLocale(g_LanguageName)
+#endif // _WIN32
+
+enum DeferredLoad {
+    Unk0,
+    Unk1,
+    Unk2,
+    Unk3,
+    Unk4
+};
 
 struct CheatCode {
     int index;
@@ -12,8 +102,8 @@ public:
     char unk[128];
     struct CarsProfile* profile;
     struct CarsGlobalProfile* global_profile;
-    struct CarsRecordLibrary* record_library;
-    struct CarsRecordLibrary* record_library_2;
+    struct CarsRecordLibrary* hall_of_fame;
+    struct CarsRecordLibrary* personal_records;
     struct CarsAudioManager* audio_manager;
     struct CarsActivityManager* activity_manager;
     struct CarsWorld* world;
@@ -34,17 +124,17 @@ public:
     struct Cars2StoryManager* story_manager;
     struct Cars2EventJoinPointManager* event_join_point_manager;
     struct Cars2UIResourceManager* ui_resource_manager;
-    // GameObject* unused;
+    GameObject* unused22;
     char scene[64];
     char scene_name[64];
     char activity[64];
     char start[64];
-    // char unused2[64];
+    char unused23[64];
     char splash_screen[64];
     char player_start[64];
     char ai_names[64];
-    // int unused3;
-    // int unused4;
+    int unused24;
+    int unused25;
     int no_321;
     int total_laps;
     int use_vehicle_engine_sound;
@@ -61,24 +151,24 @@ public:
     int vehicle_manual_transmission;
     int number_of_players;
     int number_of_ai;
-    // int unused5;
+    int unused26;
     int load_ai;
     unsigned int viewport_type;
     int analog_gas;
     int show_coords;
     int dump_results;
-    // int unused6;
+    int unused27;
     unsigned int control_type;
     unsigned int camera_type;
-    struct Cars2Launcher* launcher;
+    DeferredLoad deferred_load;
     int world_paused;
     int unlock_all;
     int force_stub_mode;
     int unlock_all_abilities;
     int unlock_all_bonus_content;
-    // int unused7;
+    int unused28;
     int enforce_free_camera_speed;
-    // int unused8;
+    int unused29;
     int cinema_mode;
     struct X360LoadingIcon* loading_icon;
     char loading_screen_name[260];
@@ -93,9 +183,9 @@ public:
     int always_show_gps;
     int show_lap_timer;
     CheatCode cheatCodes[11];
-    // int unused9;
+    int unused30;
 public:
-    virtual int InitializeRenderer(const char*) override;
+    virtual int InitializeRenderer(char*) override;
     virtual int Initialize() override;
     virtual int PreGameInitialize(DisplayMode*) override;
     virtual void LoadConfigFile(ParameterBlock*) override;
@@ -111,8 +201,43 @@ public:
     virtual void ReloadMaterials();
     virtual void ReloadMaterialsAndTextures();
 	
+    void AddVisibilitySearchList(ContainerList<GameObject*>*);
+    void ClearCheatCodes();
+    void CreateActivityDatabase();
+    void CreateActivityManager();
+    void CreateBoltManager(int);
+    void CreateBonusContentManager();
+    void CreateBonusPointManager();
+    void CreateControllerSettings();
+    void CreateEventDatabase();
+    void CreateLoadingIcon(char* name);
+    void CreateLoadingScreen(char* name);
+    void CreatePickupManager();
+    void CreateProfileManager();
+    void CreateRecordLibraries();
+    void CreateScavengerHuntManager();
+    void CreateStoryManager();
+    void CreateStreamManager();
+    void CreateUI();
+    void CreateUIResourceManager();
+    void CreateVideoFXManager(int);
+    void CreateVirtualNetwork();
+
+    void UNK_00422c80(int, int);
+    void UNK_00487470();
+    void LoadWorld();
+    void MapAllGameKeys();
+    void PrepareDeferredLoad(DeferredLoad);
     void PresentFrame(int);
+    bool ReleaseVideoFXManager();
+    int ResetLoadingScreenAndIcon();
+    void SetConfigArguments();
+    void SetLanguageToDefault();
+    int ShowLoadingScreen(char*, char*, int);
+    void UnkRegistryGetValue(char*, unsigned int);
+    void UnloadStringTables();
+    void UnloadWorld();
 };
 
 
-extern CarsGame* lpCarsGame;
+extern std::unique_ptr<CarsGame> lpCarsGame;

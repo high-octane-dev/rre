@@ -119,6 +119,7 @@ IDirect3DVertexShader9* X360ShaderManager::LoadVertexShader(const char* name)
 
     IDirect3DVertexShader9* shdr = nullptr;
     g_D3DDevice9->CreateVertexShader(reinterpret_cast<DWORD*>(buffer->GetBufferPointer()), &shdr);
+    buffer->Release();
 
     return shdr;
 }
@@ -143,6 +144,7 @@ IDirect3DPixelShader9* X360ShaderManager::LoadPixelShader(const char* name)
 
     IDirect3DPixelShader9* shdr = nullptr;
     g_D3DDevice9->CreatePixelShader(reinterpret_cast<DWORD*>(buffer->GetBufferPointer()), &shdr);
+    buffer->Release();
 
     return shdr;
 }

@@ -7,8 +7,13 @@
 
 Game* lpGame = nullptr;
 
+// OFFSET: 0x00618220
+void Game::DestroyStatisticsLog()
+{
+}
+
 // OFFSET: 0x006182c0
-LanguageConfiguration* Game::GetLanguageConfiguration(char* name)
+LanguageConfiguration* Game::GetLanguageConfiguration(const char* name)
 {
     for (auto& elem : lang_confs) {
         if (_stricmp(elem->Name, name) == 0) {
@@ -19,7 +24,7 @@ LanguageConfiguration* Game::GetLanguageConfiguration(char* name)
 }
 
 // OFFSET: 0x00618310
-void Game::SetLanguageConfiguration(char* name)
+void Game::SetLanguageConfiguration(const char* name)
 {
     auto conf = GetLanguageConfiguration(name);
     if (conf != nullptr && selected_language_configuration != conf) {
@@ -32,6 +37,11 @@ void Game::SetLanguageConfiguration(char* name)
 int Game::GetLanguageDefinitionIndex(char* name)
 {
     return 0;
+}
+
+// OFFSET: 0x00618ce0
+void Game::HandleClick(unsigned int u_msg, unsigned int button, int x, int y)
+{
 }
 
 // OFFSET: 0x00618580
@@ -119,8 +129,7 @@ Game::~Game()
 }
 
 // OFFSET: INLINE
-int Game::InitializeRenderer(const char*)
-{
+int Game::InitializeRenderer(char*) {
     return 0;
 }
 

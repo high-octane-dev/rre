@@ -1,5 +1,3 @@
-// Cars2Renderer.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
 #include <cstdio>
 #include <clocale>
 #include <algorithm>
@@ -407,5 +405,6 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 }
 
 int main() {
+    CoInitialize(nullptr);
     return WinMain(GetModuleHandle(NULL), NULL, GetCommandLineA(), SW_SHOWNORMAL);
 }

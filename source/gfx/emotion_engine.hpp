@@ -19,6 +19,52 @@ namespace EE {
 		}
 	};
 
+	template <class T, typename = std::enable_if_t<std::is_base_of_v<RefObject, std::remove_pointer_t<T>>>> class RefObjectList {
+	public:
+		T* data;
+		std::size_t capacity;
+		std::size_t len;
+	public:
+		RefObjectList(std::size_t initial_capacity) {
+			capacity = initial_capacity;
+			data = reinterpret_cast<T*>(malloc(initial_capacity * sizeof(T)));
+			std::memset(data, 0, initial_capacity);
+		}
+		RefObjectList(RefObjectList&) = delete;
+		RefObjectList& operator=(const RefObjectList&) = delete;
+		~RefObjectList() {
+			for (std::size_t i = 0; i < len; i++) {
+				reinterpret_cast<RefObject*>(data[i])->Release();
+			}
+			free(data);
+		}
+		void Insert(std::size_t index, T* element) {
+			if (index < len) {
+				if (data[index] != nullptr) {
+					reinterpret_cast<RefObject*>(data[index])->Release();
+				}
+				data[index] = *element;
+				return;
+			}
+			if (index + 1 > capacity) {
+				std::size_t new_capacity = capacity;
+				do {
+					new_capacity = new_capacity * 2 + 1;
+				} while (new_capacity < index + 1);
+				data = reinterpret_cast<T*>(realloc(data, new_capacity * sizeof(T)));
+				capacity = new_capacity;
+			}
+			while (index + 1 > len) {
+				data[len] = nullptr;
+				len++;
+			}
+			data[index] = *element;
+			if (*element != nullptr) {
+				reinterpret_cast<RefObject*>(*element)->AddRef();
+			}
+		}
+	};
+
 	template <class T> class List {
 	public:
 		T* data;
@@ -27,17 +73,32 @@ namespace EE {
 	public:
 		List(std::size_t initial_capacity) {
 			capacity = initial_capacity;
-			data = reinterpret_cast<T*>(malloc(initial_capacity));
+			data = reinterpret_cast<T*>(malloc(initial_capacity * sizeof(T)));
+			std::memset(data, 0, initial_capacity);
 		}
-		void InsertRaw(std::size_t index, T element) {
-		}
-		void InsertRefObject(std::size_t index, T element) {
-		}
-		inline ~List() {
-			for (std::size_t i = 0; i < len; i++) {
-				reinterpret_cast<RefObject*>(data[i])->Release();
-			}
+		List(List&) = delete;
+		List& operator=(const List&) = delete;
+		~List() {
 			free(data);
+		}
+		void InsertRaw(std::size_t index, T* element) {
+			if (index < len) {
+				data[index] = *element;
+				return;
+			}
+			if (index + 1 > capacity) {
+				std::size_t new_capacity = capacity;
+				do {
+					new_capacity = new_capacity * 2 + 1;
+				} while (new_capacity < index + 1);
+				data = reinterpret_cast<T*>(realloc(data, new_capacity * sizeof(T)));
+				capacity = new_capacity;
+			}
+			while (index + 1 > len) {
+				data[len] = T();
+				len++;
+			}
+			data[index] = *element;
 		}
 	};
 
@@ -51,7 +112,7 @@ namespace EE {
 		unsigned int fullscreen_quality_level;
 		unsigned int unk_bitfield_fullscreen;
 	public:
-		void ResolveQualityLevel(IDirect3D9* d3d9, D3DDEVTYPE dev_type, D3DFORMAT fmt, int windowed);
+		void ResolveQualityLevel(IDirect3D9* d3d9, unsigned int adapter, D3DDEVTYPE device_type, D3DFORMAT depth_stencil_format);
 	};
 
 	static_assert(sizeof(D3DDepthStencil) == 0x20);
@@ -59,8 +120,13 @@ namespace EE {
 	class D3DRenderTarget : public RefObject {
 	private:
 		D3DFORMAT format;
-		List<D3DDepthStencil*> depth_stencils;
+		RefObjectList<D3DDepthStencil*> depth_stencils;
+	public:
 		int unused;
+	public:
+		D3DRenderTarget(D3DFORMAT _format);
+		virtual ~D3DRenderTarget() override;
+		void CreateDepthStencils(IDirect3D9* d3d9, unsigned int adapter, D3DDEVTYPE device_type, D3DFORMAT render_target_format, D3DFORMAT surface_format, bool fullscreen, bool windowed);
 	};
 
 	static_assert(sizeof(D3DRenderTarget) == 0x1C);
@@ -70,8 +136,12 @@ namespace EE {
 		D3DFORMAT surface_format;
 		bool fullscreen;
 		bool windowed;
-		List<D3DRenderTarget*> render_target_list;
+		RefObjectList<D3DRenderTarget*> render_target_list;
 		int unused;
+	public:
+		D3DBackBuffer(D3DFORMAT _format, bool _fullscreen, bool _windowed);
+		virtual ~D3DBackBuffer() override;
+		void CreateRenderTargets(IDirect3D9* d3d9, unsigned int adapter, D3DFORMAT render_target_format, D3DDEVTYPE device_type);
 	};
 
 	static_assert(sizeof(D3DBackBuffer) == 0x20);
@@ -82,6 +152,9 @@ namespace EE {
 		int width;
 		int height;
 		List<unsigned int> refresh_rate_list;
+	public:
+		D3DDisplayMode();
+		virtual ~D3DDisplayMode() override;
 	};
 
 	static_assert(sizeof(D3DDisplayMode) == 0x20);
@@ -92,12 +165,14 @@ namespace EE {
 		D3DADAPTER_IDENTIFIER9 identifier;
 		D3DDISPLAYMODE display_mode;
 		D3DCAPS9 capabilities;
-		List<D3DDisplayMode*> display_mode_list;
-		List<D3DBackBuffer*> back_buffer_list;
+		RefObjectList<D3DDisplayMode*> display_mode_list;
+		RefObjectList<D3DBackBuffer*> back_buffer_list;
 		int unused;
 	public:
 		D3DAdapter(unsigned int index);
+		virtual ~D3DAdapter() override;
 		bool CreateBackBuffers(IDirect3D9* d3d9, D3DDEVTYPE device_type);
+		void AddDisplayMode(D3DDISPLAYMODE* display_modes);
 	};
 
 	static_assert(sizeof(D3DAdapter) == 0x5b4);
@@ -105,7 +180,7 @@ namespace EE {
 	class D3DDeviceManager : public RefObject {
 	public:
 		IDirect3D9* d3d9;
-		List<D3DAdapter*> adapter_list;
+		RefObjectList<D3DAdapter*> adapter_list;
 		unsigned int adapter_index;
 		D3DPRESENT_PARAMETERS presentation_params;
 		D3DFORMAT surface_format;
@@ -135,10 +210,10 @@ namespace EE {
 		void SetMultiSampleType(bool enable);
 		int SetPresentationParams(HWND hwnd, D3DAdapter* adapter);
 		void SetBackBufferResolution(int w, int h);
-		int SetBehaviorFlag(HWND hwnd, int adapter_index);
-		void ResolveFrameBuffer(IDirect3DTexture9* texture);
+		int CreateDeviceForAdapter(HWND hwnd, int adapter_index);
+		bool ResolveFrameBuffer(IDirect3DTexture9* texture);
 		void ResetBackBufferAndDepthStencilSurface();
-		void Reset();
+		bool Reset();
 		void ReleaseResources();
 		int IsResolutionAvailable(int w, int h);
 		int IsMultiSamplingEnabled();

@@ -5,16 +5,16 @@
 
 class X360Game : public Game {
 public:
-	// int unused3;
-	// int unused4;
-	// int unused1;
-	// int unused2;
+	int unused19;
+	int unused20;
+	int unused17;
+	int unused18;
 	HWND hwnd;
-	// char unused5[16];
+	char unused21[16];
 	IDirect3D9* d3d9;
 public:
 	virtual ~X360Game() override;
-	virtual int InitializeRenderer(const char*) override;
+	virtual int InitializeRenderer(char*) override;
 	virtual int PreGameInitialize(DisplayMode*) override;
 	virtual int SetBasicRenderStates() override;
 	virtual void PrepareFrame() override;

@@ -1,11 +1,19 @@
 #include "cars_game.hpp"
+#include <globals.hpp>
 
-CarsGame* lpCarsGame = new CarsGame();
+// Since I'm not sure how this gets freed in the original game, I'm just going to use a std::unique_ptr.
+std::unique_ptr<CarsGame> lpCarsGame = std::make_unique<CarsGame>();
 
 // OFFSET: 0x004f50a0
-int CarsGame::InitializeRenderer(const char*)
+int CarsGame::InitializeRenderer(char* message)
 {
-    return 0;
+    SetLanguageToDefault();
+    if (X360Game::InitializeRenderer(message) == 0) {
+        snprintf(message, 260, "Failed to initialize renderer!");
+        return 0;
+    }
+    unk_game_state = 1;
+    return 1;
 }
 
 // OFFSET: 0x0051c130
@@ -107,4 +115,53 @@ void CarsGame::ReloadMaterialsAndTextures()
 // OFFSET: 0x004237a0
 void CarsGame::PresentFrame(int)
 {
+}
+
+void CarsGame::SetLanguageToDefault() {
+    XboxLanguage selected_dash_lang = GetSystemLanguage();
+    if (selected_dash_lang == XboxLanguage::None) {
+        XboxLocale selected_locale = GetSystemLocale();
+        if (selected_locale == XboxLocale::None) {
+            SetLanguageConfiguration("English");
+            return;
+        }
+        switch (selected_locale) {
+        case XboxLocale::Denmark:
+            SetLanguageConfiguration("Danish");
+            return;
+        case XboxLocale::Netherlands:
+            SetLanguageConfiguration("Dutch");
+            return;
+        case XboxLocale::Norway:
+            SetLanguageConfiguration("Norwegian");
+            return;
+        case XboxLocale::Sweden:
+            SetLanguageConfiguration("Swedish");
+            return;
+        default:
+            SetLanguageConfiguration("English");
+            return;
+        }
+    }
+    switch (selected_dash_lang)
+    {
+    case XboxLanguage::English:
+        SetLanguageConfiguration("English");
+        return;
+    case XboxLanguage::German:
+        SetLanguageConfiguration("German");
+        return;
+    case XboxLanguage::French:
+        SetLanguageConfiguration("French");
+        return;
+    case XboxLanguage::Spanish:
+        SetLanguageConfiguration("Spanish");
+        return;
+    case XboxLanguage::Italian:
+        SetLanguageConfiguration("Italian");
+        return;
+    default:
+        SetLanguageConfiguration("English");
+        break;
+    }
 }

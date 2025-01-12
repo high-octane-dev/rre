@@ -68,7 +68,7 @@ X360Game::~X360Game()
 }
 
 // OFFSET: 0x00421ee0
-int X360Game::InitializeRenderer(const char*)
+int X360Game::InitializeRenderer(char*)
 {
     d3d9 = Direct3DCreate9(D3D_SDK_VERSION);
     if (d3d9 != nullptr) {
@@ -93,7 +93,6 @@ int X360Game::PreGameInitialize(DisplayMode* desired_display_mode) {
     UpdateLocalizedPaths();
     if (desired_display_mode == nullptr) {
         DisplayMode display_mode{ .field0_0x0 = 0, .screen_mode = 1, .fps = 60.0 };
-        // (*(this->Game).vtable[0x20])(&DStack_c);
         SetDisplayModeGlobal(&display_mode);
         g_ViewportWidth = g_WindowWidth;
         g_ViewportHeight = g_WindowHeight;
@@ -114,7 +113,6 @@ int X360Game::PreGameInitialize(DisplayMode* desired_display_mode) {
         g_UIScaleY = g_WindowHeight / 720.0;
     }
     else {
-        // (*(this->Game).vtable[0x20])(param_1);
         SetDisplayModeGlobal(desired_display_mode);
     }
     if (g_ScreenMode == 2) {
