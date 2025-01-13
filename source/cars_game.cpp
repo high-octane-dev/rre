@@ -221,5 +221,11 @@ int CarsGame::ShowLoadingScreen(char* a1, const char* a2, int a3)
     {
         return 1;
     }
+    if (a2 == NULL)
+    {
+        loading_icon_name[0] = '\0';
+        return 1;
+    }
+    snprintf(loading_icon_name, 260, "%s", a2);
     return 1;
 }
