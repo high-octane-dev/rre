@@ -19,6 +19,12 @@ int CarsGame::InitializeRenderer(char* message)
 // OFFSET: 0x0051c130
 int CarsGame::Initialize()
 {
+    if (splash_screen[0] != '\0')
+    {
+        ShowLoadingScreen(splash_screen, "ld_mcq", 1);
+    }
+
+    SetConfigArguments();
     return 0;
 }
 
@@ -117,6 +123,49 @@ void CarsGame::PresentFrame(int)
 {
 }
 
+void CarsGame::SetConfigArguments()
+{
+    strncpy(activity, "FrontEndUI", 11);
+    start[0] = '\0';
+    scene[0] = '\0';
+    scene_name[0] = '\0';
+    snprintf(splash_screen, 260, "load_logo");
+    unused24 = 0;
+    char_number = 0;
+    strncpy(char_name, "McQ", 4);
+    char_paint_type = 1;
+    char_color1[0] = 0.0f;
+    char_color1[1] = 0.0f;
+    char_color1[2] = 0.0f;
+    char_color1[3] = 1.0f;
+    char_color2[0] = 0.0f;
+    char_color2[1] = 0.0f;
+    char_color2[2] = 0.0f;
+    char_color2[3] = 1.0f;
+    vehicle_manual_transmission = 0;
+    no_321 = 0;
+    build_spline_mode = 0;
+    brake_when_resting_threshold = 5.0f;
+	brake_when_resting = 0;
+    analog_gas = 0;
+    camera_type = 0;
+    unlock_all = 0;
+    unlock_all_abilities = 0;
+	game_mode = 0;
+	time_of_day = 0;
+	show_lap_timer = 0;
+	starting_bolt_banners = 0;
+	starting_bonus_points = 0;
+	number_of_players = 1;
+	load_ai = 1;
+	total_laps = 3;
+	use_vehicle_engine_sound = 1;
+	play_music = 1;
+	control_type = 1;
+	difficulty = 1;
+	always_show_gps = 1;
+}
+
 void CarsGame::SetLanguageToDefault() {
     XboxLanguage selected_dash_lang = GetSystemLanguage();
     if (selected_dash_lang == XboxLanguage::None) {
@@ -164,4 +213,13 @@ void CarsGame::SetLanguageToDefault() {
         SetLanguageConfiguration("English");
         break;
     }
+}
+
+int CarsGame::ShowLoadingScreen(char* a1, const char* a2, int a3)
+{
+    if ((((a3 == 0) && (a1 != NULL)) && (_stricmp(a1, loading_screen_name) == 0)) && ((a2 != NULL && (_stricmp(a2, loading_icon_name) == 0))))
+    {
+        return 1;
+    }
+    return 1;
 }

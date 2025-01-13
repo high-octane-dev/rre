@@ -233,7 +233,7 @@ public:
     int ResetLoadingScreenAndIcon();
     void SetConfigArguments();
     void SetLanguageToDefault();
-    int ShowLoadingScreen(char*, char*, int);
+    int ShowLoadingScreen(char*, const char*, int);
     void UnkRegistryGetValue(char*, unsigned int);
     void UnloadStringTables();
     void UnloadWorld();

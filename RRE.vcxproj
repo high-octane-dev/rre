@@ -121,6 +121,7 @@
     <ClCompile Include="source\gfx\x360_video_card.cpp" />
     <ClCompile Include="source\language_configuration.cpp" />
     <ClCompile Include="source\language_definition.cpp" />
+    <ClCompile Include="source\loading_icon.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\cars_game.cpp" />
     <ClCompile Include="source\game.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="source\gfx\x360_video_card.hpp" />
     <ClInclude Include="source\language_configuration.hpp" />
     <ClInclude Include="source\language_definition.hpp" />
+    <ClInclude Include="source\loading_icon.hpp" />
     <ClInclude Include="source\math\vector4.hpp" />
     <ClInclude Include="source\panic.hpp" />
     <ClInclude Include="source\parameter_block.hpp" />
