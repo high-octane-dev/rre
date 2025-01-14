@@ -9,6 +9,7 @@ extern HANDLE g_GameMutex;
 extern int g_IsWindowed;
 extern int g_WindowWidth;
 extern int g_WindowHeight;
+extern int g_ScreenMode;
 extern float g_TargetFrameRate;
 extern char g_ClassName[256];
 extern char g_Caption[256];

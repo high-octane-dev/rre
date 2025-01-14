@@ -94,7 +94,7 @@ enum DeferredLoad {
 struct CheatCode {
     int index;
     char name[20];
-    int unk;
+    int active;
 };
 
 class CarsGame : public X360Game {
@@ -182,7 +182,7 @@ public:
     int starting_bonus_points;
     int always_show_gps;
     int show_lap_timer;
-    CheatCode cheatCodes[11];
+    CheatCode cheat_codes[11];
     int unused30;
 public:
     virtual int InitializeRenderer(char*) override;
@@ -210,8 +210,8 @@ public:
     void CreateBonusPointManager();
     void CreateControllerSettings();
     void CreateEventDatabase();
-    void CreateLoadingIcon(char* name);
-    void CreateLoadingScreen(char* name);
+    void CreateLoadingIcon(const char* name);
+    void CreateLoadingScreen(const char* name);
     void CreatePickupManager();
     void CreateProfileManager();
     void CreateRecordLibraries();
@@ -233,7 +233,7 @@ public:
     int ResetLoadingScreenAndIcon();
     void SetConfigArguments();
     void SetLanguageToDefault();
-    int ShowLoadingScreen(char*, const char*, int);
+    int ShowLoadingScreen(const char*, const char*, int);
     void UnkRegistryGetValue(char*, unsigned int);
     void UnloadStringTables();
     void UnloadWorld();
@@ -241,3 +241,24 @@ public:
 
 
 extern std::unique_ptr<CarsGame> lpCarsGame;
+
+// E\UI\Tex_HD
+extern char g_UILocalizedTextureContentDirectory[260];
+
+// E\UI
+extern char g_LocalizedUIContentDirectory[260];
+
+// C\UI\Tex_HD
+extern char g_UITextureContentDirectory[260];
+
+// C\UI
+extern char g_BaseUIContentDirectory[260];
+
+// E\Loc
+extern char g_LocalizationContentDirectory[260];
+
+// E\Font
+extern char g_FontTextureContentDirectory[260];
+
+// E\Audio
+extern char g_AudioDialogueDirectory[260];

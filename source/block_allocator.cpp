@@ -129,7 +129,7 @@ void* BlockAllocator::AllocBlockComplex() {
 // OFFSET: INLINE
 void BlockAllocator::FreeBlock(void* memory)
 {
-    if (4 < used_size_per_block) {
+    if (sizeof(void*) < used_size_per_block) {
         // WHAT IN THE UNSAFE IS THIS?!?! AAAAAAHHHHHHH
         auto* block = reinterpret_cast<Block*>(memory);
         block->next = free_block;

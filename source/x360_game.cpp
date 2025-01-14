@@ -20,7 +20,7 @@ int PlatformGraphics_BackBufferViewport_OffsetX = 0;
 int PlatformGraphics_BackBufferViewport_OffsetY = 0;
 float g_UIScaleX = 1.0;
 float g_UIScaleY = 1.0;
-float g_ViewportFadeWidth = 1080.0;
+float g_ViewportFadeWidth = 1280.0;
 float g_ViewportFadeHeight = 720.0;
 float g_CameraAspect = 1.0;
 float g_CameraAspect2 = 1.0;
@@ -79,7 +79,7 @@ int X360Game::InitializeRenderer(char*)
             lpX360ShaderManager = new X360ShaderManager();
             if (lpX360ShaderManager != nullptr) {
                 lpX360ShaderManager->Create();
-                this->SetDisplayMode(nullptr);
+                SetDisplayMode(nullptr);
                 return 1;
             }
         }

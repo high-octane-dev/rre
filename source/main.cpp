@@ -380,7 +380,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
         bool should_exit = false;
         MSG message{};
         do {
-            BOOL message_available = PeekMessageA(&message, (HWND)0x0, 0, 0, 1);
+            BOOL message_available = PeekMessageA(&message, nullptr, 0, 0, 1);
             while (message_available != 0) {
                 if (message.message == 0x12) {
                     should_exit = true;
