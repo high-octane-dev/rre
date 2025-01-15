@@ -118,6 +118,8 @@
     <ClCompile Include="source\gfx\emotion_engine.cpp" />
     <ClCompile Include="source\gfx\texture_map_manager.cpp" />
     <ClCompile Include="source\gfx\video_card.cpp" />
+    <ClCompile Include="source\gfx\x360_material_template.cpp" />
+    <ClCompile Include="source\gfx\x360_parse.cpp" />
     <ClCompile Include="source\gfx\x360_shader_manager.cpp" />
     <ClCompile Include="source\gfx\x360_texture_map.cpp" />
     <ClCompile Include="source\gfx\x360_texture_map_manager.cpp" />
@@ -133,6 +135,7 @@
     <ClCompile Include="source\panic.cpp" />
     <ClCompile Include="source\parameter_block.cpp" />
     <ClCompile Include="source\string_block_allocator.cpp" />
+    <ClCompile Include="source\util\rsstring_util.cpp" />
     <ClCompile Include="source\x360_game.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +161,8 @@
     <ClInclude Include="source\gfx\texture_map_manager.hpp" />
     <ClInclude Include="source\gfx\vertex_buffer.hpp" />
     <ClInclude Include="source\gfx\video_card.hpp" />
+    <ClInclude Include="source\gfx\x360_material_template.hpp" />
+    <ClInclude Include="source\gfx\x360_parse.hpp" />
     <ClInclude Include="source\gfx\x360_shader_manager.hpp" />
     <ClInclude Include="source\gfx\x360_texture_map.hpp" />
     <ClInclude Include="source\gfx\x360_texture_map_manager.hpp" />
@@ -170,6 +175,7 @@
     <ClInclude Include="source\panic.hpp" />
     <ClInclude Include="source\parameter_block.hpp" />
     <ClInclude Include="source\string_block_allocator.hpp" />
+    <ClInclude Include="source\util\rsstring_util.hpp" />
     <ClInclude Include="source\util\token_string.hpp" />
     <ClInclude Include="source\x360_game.hpp" />
   </ItemGroup>

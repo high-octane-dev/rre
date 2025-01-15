@@ -2,6 +2,7 @@
 #include "util/token_string.hpp"
 #include <data_access.hpp>
 
+// OFFSET: 0x00563e90
 StringTable::StringTable(std::size_t user_data_stride, std::size_t generate_lut, std::size_t initial_string_entry_count, std::size_t string_entries_increment, std::size_t string_heap_capacity, int unk3, std::size_t max_table_markers) {
     this->unk = 1;
     this->user_data_stride = user_data_stride;
@@ -30,6 +31,7 @@ StringTable::StringTable(std::size_t user_data_stride, std::size_t generate_lut,
     this->table_marker_index = 0;
 }
 
+// OFFSET: 0x005b6910
 StringTable::~StringTable() {
     if (this->unused_base_entries != nullptr) {
         for (std::size_t i = 0; i < this->unused_base_entries_len; i++) {
@@ -109,6 +111,7 @@ int StringTable::Load(char* path) {
     return this->len;
 }
 
+// OFFSET: 0x00563f60
 void StringTable::Unload(int release)
 {
     if (this->string_entries != nullptr) {
@@ -148,16 +151,19 @@ void StringTable::Unload(int release)
     return;
 }
 
+// OFFSET: 0x00564500
 int StringTable::Request(int index) {
     string_entries[index].requested++;
 	return string_entries[index].requested;
 }
 
+// OFFSET: 0x005860e0
 void StringTable::Request(int index, void* user_data)
 {
     this->string_entries[index].data[1] = user_data;
 }
 
+// OFFSET: 0x005642d0
 int StringTable::AddItem(char* string, void* user_data, int use_string_heap) {
     if (this->string_entries == nullptr) {
         this->string_entries_count = this->initial_string_entry_count;
@@ -235,10 +241,12 @@ int StringTable::AddItem(char* string, void* user_data, int use_string_heap) {
     return this->len - 1;
 }
 
+// OFFSET: 0x00564540
 void StringTable::Report()
 {
 }
 
+// OFFSET: 0x00564550
 void StringTable::RemoveItem(int index)
 {
     this->string_entries[index].string = nullptr;
@@ -253,15 +261,18 @@ void StringTable::RemoveItem(int index)
     return;
 }
 
+// OFFSET: 0x005645b0
 void StringTable::PlaceTableMarker() {
     this->table_markers[this->table_marker_index] = this->len;
     this->table_marker_index++;
 }
 
+// OFFSET: 0x005645d0
 void StringTable::RemoveTableMarker() {
     table_marker_index--;
 }
 
+// OFFSET: 0x005645e0
 void StringTable::RemoveAllMarkers()
 {
     while (this->table_marker_index != 0) {
@@ -269,6 +280,7 @@ void StringTable::RemoveAllMarkers()
     }
 }
 
+// OFFSET: 0x00564610
 void StringTable::RemoveAllAfterMarker(int index) {
     for (std::size_t i = this->table_markers[index]; i < this->len; i++) {
         RemoveItem(i);
@@ -285,6 +297,7 @@ int StringTable::GetVariableValue(char*, char*)
     return 0;
 }
 
+// OFFSET: 0x00595420
 void StringTable::DestroyFastLookupTable() {
     if (this->lut != nullptr) {
         delete this->lut;
@@ -292,6 +305,7 @@ void StringTable::DestroyFastLookupTable() {
     }
 }
 
+// OFFSET: 0x005e4700
 void StringTable::GenerateFastLookupTable() {
     DestroyFastLookupTable();
     this->lut = new ContainerHashTable<char*, int>();
@@ -301,6 +315,7 @@ void StringTable::GenerateFastLookupTable() {
     }
 }
 
+// OFFSET: 0x00595360
 int StringTable::GetIndex(char* string) {
     int found_index = -1;
 
@@ -335,6 +350,7 @@ int StringTable::GetIndex(char* string) {
     return found_index;
 }
 
+// OFFSET: 0x005e43f0
 int StringTable::LoadStringsBufferFromFile(char* path) {
     char normalized_filename[260]{};
     char lowercase_filename[260]{};
@@ -409,6 +425,7 @@ int StringTable::LoadStringsBufferFromFile(char* path) {
     return 1;
 }
 
+// OFFSET: 0x005e45b0
 char* StringTable::ParseThisBlock(char* input_block) {
     char* current_token;
     char* token_end;
@@ -481,6 +498,7 @@ void StringTable::ResolveString(char* string) {
     }
 }
 
+// OFFSET: 0x00564170
 int StringTable::StoreThisLine(char* line) {
     char current_char;
     bool has_dollar = false;
