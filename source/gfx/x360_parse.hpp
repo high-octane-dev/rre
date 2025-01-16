@@ -1,7 +1,6 @@
 #pragma once
+#include <d3d9.h>
 #include "parameter_block.hpp"
-
-#include "d3d9types.h"
 
 namespace X360Parse {
 	void GetAddressMode(ParameterBlock* parameter_block, const char* parameter, const D3DTEXTUREADDRESS fallback,

@@ -118,6 +118,7 @@
     <ClCompile Include="source\gfx\emotion_engine.cpp" />
     <ClCompile Include="source\gfx\texture_map_manager.cpp" />
     <ClCompile Include="source\gfx\video_card.cpp" />
+    <ClCompile Include="source\gfx\x360_full_screen_texture_render.cpp" />
     <ClCompile Include="source\gfx\x360_material_template.cpp" />
     <ClCompile Include="source\gfx\x360_parse.cpp" />
     <ClCompile Include="source\gfx\x360_shader_manager.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="source\gfx\texture_map_manager.hpp" />
     <ClInclude Include="source\gfx\vertex_buffer.hpp" />
     <ClInclude Include="source\gfx\video_card.hpp" />
+    <ClInclude Include="source\gfx\x360_full_screen_texture_render.hpp" />
     <ClInclude Include="source\gfx\x360_material_template.hpp" />
     <ClInclude Include="source\gfx\x360_parse.hpp" />
     <ClInclude Include="source\gfx\x360_shader_manager.hpp" />

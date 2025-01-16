@@ -1,7 +1,6 @@
 #pragma once
 
-#include <d3d9types.h>
-
+#include <d3d9.h>
 
 class X360MaterialTemplate {
 	static constexpr int material_template_array_size = 16;
