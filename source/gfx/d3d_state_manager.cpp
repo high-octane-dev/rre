@@ -40,7 +40,7 @@ void D3DStateManager::Reset() {
 	min_render_state = MAX_RENDER_STATE_TYPE;
 	max_render_state = 0;
 	min_sampler_used = max_samplers;
-	max_sampler_state_type_used = 0;
+	max_sampler_used = 0;
 	for (std::size_t i = 0; i < max_samplers; i++) {
 		min_sampler_state_type_used[i] = MAX_SAMPLER_STATE_TYPE;
 		max_sampler_state_type_used[i] = 0;

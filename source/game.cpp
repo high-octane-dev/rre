@@ -26,7 +26,7 @@ LanguageConfiguration* Game::GetLanguageConfiguration(const char* name)
 // OFFSET: 0x00618310
 void Game::SetLanguageConfiguration(const char* name)
 {
-    auto conf = GetLanguageConfiguration(name);
+    LanguageConfiguration* conf = GetLanguageConfiguration(name);
     if (conf != nullptr && selected_language_configuration != conf) {
         selected_language_configuration = conf;
         UpdateLocalizedPaths();

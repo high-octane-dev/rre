@@ -113,12 +113,12 @@ void ReadConfigIni() {
         int definition_count = config.GetNumberOfParameterValues("Definition");
         if (definition_count > 0) {
             config.search.SetResetParameterSearch(0);
-            char Definition[32]{};
+            char definition_name[32]{};
 
             for (std::size_t i = 0; i < definition_count; i++) {
-                if (config.GetParameter("Definition", "", Definition, 0x20) != 0) {
+                if (config.GetParameter("Definition", "", definition_name, 0x20) != 0) {
                     LanguageDefinition* language_definition = new LanguageDefinition();
-                    snprintf(language_definition->name, 0x20, "%s", Definition);
+                    snprintf(language_definition->name, 0x20, "%s", definition_name);
                     lpGame->lang_defs.CLAddItem(language_definition);
                 }
                 else {
@@ -137,13 +137,12 @@ void ReadConfigIni() {
         int configuration_count = config.GetNumberOfParameterValues("Configuration");
         if (configuration_count > 0) {
             config.search.SetResetParameterSearch(0);
-            char Configuration[32]{};
-            configuration_count = config.GetParameter("Configuration", "", Configuration, 0x20);
+            char configuration_name[32]{};
             
             for (std::size_t i = 0; i < definition_count; i++) {
-                if (config.GetParameter("Configuration", "", Configuration, 0x20) != 0) {
+                if (config.GetParameter("Configuration", "", configuration_name, 0x20) != 0) {
                     LanguageConfiguration* language_configuration = new LanguageConfiguration();
-                    snprintf(language_configuration->Name, 0x20, "%s", Configuration);
+                    snprintf(language_configuration->Name, 0x20, "%s", configuration_name);
                     lpGame->lang_confs.CLAddItem(language_configuration);
                 }
                 else {
