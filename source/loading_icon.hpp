@@ -5,10 +5,10 @@ class LoadingIcon
 {
 public:
 	LoadingIcon();
-	void Create(char*);
-	void Enable();
-	void Disable();
-	int Load(ParameterBlock *);
+	virtual void Create(char*);
+	virtual void Enable();
+	virtual void Disable();
+	virtual int Load(ParameterBlock *);
 	int unk1;
 	int unk2;
 	int unk3;
