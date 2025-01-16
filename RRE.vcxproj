@@ -133,6 +133,7 @@
     <ClCompile Include="source\cars_game.cpp" />
     <ClCompile Include="source\game.cpp" />
     <ClCompile Include="source\game_object.cpp" />
+    <ClCompile Include="source\material_string_table.cpp" />
     <ClCompile Include="source\panic.cpp" />
     <ClCompile Include="source\parameter_block.cpp" />
     <ClCompile Include="source\string_block_allocator.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="source\language_configuration.hpp" />
     <ClInclude Include="source\language_definition.hpp" />
     <ClInclude Include="source\loading_icon.hpp" />
+    <ClInclude Include="source\material_string_table.hpp" />
     <ClInclude Include="source\math\vector4.hpp" />
     <ClInclude Include="source\panic.hpp" />
     <ClInclude Include="source\parameter_block.hpp" />
