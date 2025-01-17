@@ -2,7 +2,6 @@
 #include <iostream>
 #include <cstdint>
 #include <string>
-#include "bind.hpp"
 #include "block_allocator.hpp"
 
 typedef void (*HashEnumCallBack)(void* val, void* userData);
