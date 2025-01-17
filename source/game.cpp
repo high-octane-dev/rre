@@ -6,6 +6,9 @@
 #include "gfx/x360_video_card.hpp"
 
 Game* lpGame = nullptr;
+X360MaterialTemplate* lpSceneObjectMaterialTemplate = nullptr;
+X360MaterialTemplate* lpIconMaterialTemplate = nullptr;
+StringTable* lpMaterialStringTable = nullptr;
 
 // OFFSET: 0x00618220
 void Game::DestroyStatisticsLog()
@@ -54,9 +57,11 @@ Game::Game()
     
     lpDataAccess = new DataAccess();
     lpVirtualFileAllocator = new BlockAllocator(sizeof(VirtualDataFile), 1024 * sizeof(VirtualDataFile));
-    /*
+
     lpSceneObjectMaterialTemplate = new X360MaterialTemplate();
     lpIconMaterialTemplate = new X360MaterialTemplate();
+
+    /* 
     lpMotionLibrary = new MotionLibrary();
     g_RenderTarget = nullptr;
     */
@@ -277,6 +282,10 @@ void Game::GetCameras(Camera* dest[4]) {
 
 // OFFSET: 0x00617ff0
 int Game::Terminate() {
+    // TODO: Not completely implemented
+
+    delete lpSceneObjectMaterialTemplate;
+    delete lpIconMaterialTemplate;
     return 0;
 }
 

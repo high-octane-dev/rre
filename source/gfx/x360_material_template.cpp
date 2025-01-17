@@ -68,8 +68,8 @@ void X360MaterialTemplate::LoadFromFile(const char* file_name) {
 	int result = 0;
 
 	// originally it probably used strcpy
-	strncpy(file_name_with_extension, file_name, sizeof(file_name_with_extension) - 1);
-	strncat(file_name_with_extension, ".xnm", sizeof(file_name_with_extension) - 1);
+	strncpy_s(file_name_with_extension, file_name, sizeof(file_name_with_extension) - 1);
+	strncat_s(file_name_with_extension, ".xnm", sizeof(file_name_with_extension) - 1);
 
 	if (parameter_block.OpenFile(file_name_with_extension, 0, -1, nullptr, 0xffffffff) == 0) {
 		return;

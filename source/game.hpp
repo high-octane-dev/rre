@@ -3,7 +3,9 @@
 #include "language_configuration.hpp"
 #include "containers/container_list.hpp"
 #include "game_object.hpp"
+#include "gfx/x360_material_template.hpp"
 #include "containers/container_linked_list.hpp"
+#include "containers/string_table.hpp"
 
 struct TimeIntervalCallback {
     void (**callback)(int, float, void*);
@@ -141,3 +143,6 @@ public:
 };
 
 extern Game* lpGame;
+extern X360MaterialTemplate* lpSceneObjectMaterialTemplate;
+extern X360MaterialTemplate* lpIconMaterialTemplate;
+extern StringTable* lpMaterialStringTable;

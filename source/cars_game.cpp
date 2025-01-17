@@ -1,6 +1,7 @@
 #include "cars_game.hpp"
 #include <globals.hpp>
 #include "gfx/x360_tex_map.hpp"
+#include "util/rsstring_util.hpp"
 
 // Since I'm not sure how this gets freed in the original game, I'm just going to use a std::unique_ptr.
 std::unique_ptr<CarsGame> lpCarsGame = std::make_unique<CarsGame>();
@@ -42,7 +43,11 @@ int CarsGame::Initialize() {
 
 // OFFSET: 0x0043fe80
 int CarsGame::PreGameInitialize(DisplayMode*) {
+    // TODO: Not completely implemented
+    char material_file_content[260];
+
     X360Game::PreGameInitialize(nullptr);
+
     /*
     _timeGameInit = timeGetTime();
     RSStringUtil::Ssnprintf(%sDebugStr.mst,0x104,"%sDebugStr.mst",s_C\Debug\_006f4970);
@@ -52,10 +57,14 @@ int CarsGame::PreGameInitialize(DisplayMode*) {
     if (bVar2) {
         ResourceSetup::ResourceSetup(%s%sMaterialTemplate.%s.res,0xffffffff,1,8,0,0,-1,1,0);
     }
-    RSStringUtil::Ssnprintf(&stack0xfffffdf0,0x104,"%sDfltMT",s_C\AppStart\_006f6da8);
-    X360MaterialTemplate::LoadFromFile(lpSceneObjectMaterialTemplate,&stack0xfffffdf0);
-    RSStringUtil::Ssnprintf(&stack0xfffffdf0,0x104,"%sIconMT",s_C\AppStart\_006f6da8);
-    X360MaterialTemplate::LoadFromFile(lpIconMaterialTemplate,&stack0xfffffdf0);
+	*/
+
+    RSStringUtil::Ssnprintf(material_file_content, sizeof(material_file_content), "%sDfltMT", "C:\\AppStart\\");
+    lpSceneObjectMaterialTemplate->LoadFromFile(material_file_content);
+    RSStringUtil::Ssnprintf(material_file_content, sizeof(material_file_content), "%sIconMT", "C:\\AppStart\\");
+    lpIconMaterialTemplate->LoadFromFile(material_file_content);
+
+	/*
     if (bVar2) {
         ResourceSetup::ResourceFinish(%s%sMaterialTemplate.%s.res,1);
     }
