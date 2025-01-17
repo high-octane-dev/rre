@@ -18,9 +18,9 @@ LoadingIcon::LoadingIcon()
 void LoadingIcon::Create(char* a1)
 {
 	ParameterBlock local_960;
-	char filename[260];
+	char filename[260]{};
 
-	snprintf(filename, 260, "%s.%s.lsi", a1, "x360");
+	snprintf(filename, sizeof(filename), "%s.%s.lsi", a1, "x360");
 	if ((lpDataAccess->flags & 0x2000) != 0)
 	{
 		lpDataAccess->flags = lpDataAccess->flags & 0xffffdfff;

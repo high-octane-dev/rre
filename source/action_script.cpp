@@ -34,24 +34,24 @@ void ActionScript::ReadActionScript(char* param_1, char* param_2)
 }
 
 // OFFSET: 0x005cdf10
-void ActionScript::ReadActionScript(char* param_1, ParameterBlock* param_2)
+void ActionScript::ReadActionScript(char* param_1, ParameterBlock* file)
 {
-    char local_50[64];
+    char temp[64];
 
-    snprintf(local_50, 64, "%sPreAction", param_1);
-    ReadNonBodySequence(param_2, local_50);
-    snprintf(local_50, 64, "%sPostAction", param_1);
-    ReadNonBodySequence(param_2, local_50);
+    snprintf(temp, sizeof(temp), "%sPreAction", param_1);
+    ReadNonBodySequence(file, temp);
+    snprintf(temp, sizeof(temp), "%sPostAction", param_1);
+    ReadNonBodySequence(file, temp);
 }
 
 // OFFSET: 0x005cdd80
 void ActionScript::ReadNonBodySequence(ParameterBlock* param_1, char* param_2)
 {
-    char local_30[32];
+    char temp[32];
 
-    snprintf(local_30, 32, "%s1", param_2);
+    snprintf(temp, sizeof(temp), "%s1", param_2);
 
-    if (param_1->ReadParameterBlock(local_30) != 0)
+    if (param_1->ReadParameterBlock(temp) != 0)
     {
     }
 }

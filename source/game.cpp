@@ -134,7 +134,7 @@ Game::~Game()
 }
 
 // OFFSET: INLINE
-int Game::InitializeRenderer(char*) {
+int Game::InitializeRenderer(char (&quit_message)[260]) {
     return 0;
 }
 

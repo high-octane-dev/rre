@@ -185,7 +185,7 @@ public:
     CheatCode cheat_codes[11];
     int unused30;
 public:
-    virtual int InitializeRenderer(char*) override;
+    virtual int InitializeRenderer(char(&quit_message)[260]) override;
     virtual int Initialize() override;
     virtual int PreGameInitialize(DisplayMode*) override;
     virtual void LoadConfigFile(ParameterBlock*) override;

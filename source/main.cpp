@@ -100,10 +100,10 @@ void ReadConfigIni() {
     ParameterBlock config{};
     if (config.OpenFile("config.ini", 0, -1, nullptr, 0xffffffff) != 0) {
         config.ReadParameterBlock("Boot Config");
-        char VideoName[260]{};
-        config.GetParameter("VideoMode", "NTSC", VideoName, 0x104);
-        if (_strnicmp(VideoName, "PAL", 0x104) == 0) {
-            strncpy(g_LocalizedMovieDirectory, "C\\Movies\\2500\\", 0x104);
+        char video_mode[260]{};
+        config.GetParameter("VideoMode", "NTSC", video_mode, sizeof(video_mode));
+        if (_strnicmp(video_mode, "PAL", sizeof(video_mode)) == 0) {
+            strncpy(g_LocalizedMovieDirectory, "C\\Movies\\2500\\", sizeof(g_LocalizedMovieDirectory));
             g_NTSCOrPal = 'P';
         }
         else {
@@ -116,9 +116,9 @@ void ReadConfigIni() {
             char definition_name[32]{};
 
             for (std::size_t i = 0; i < definition_count; i++) {
-                if (config.GetParameter("Definition", "", definition_name, 0x20) != 0) {
+                if (config.GetParameter("Definition", "", definition_name, sizeof(definition_name)) != 0) {
                     LanguageDefinition* language_definition = new LanguageDefinition();
-                    snprintf(language_definition->name, 0x20, "%s", definition_name);
+                    snprintf(language_definition->name, sizeof(language_definition->name), "%s", definition_name);
                     lpGame->lang_defs.CLAddItem(language_definition);
                 }
                 else {
@@ -140,9 +140,9 @@ void ReadConfigIni() {
             char configuration_name[32]{};
             
             for (std::size_t i = 0; i < definition_count; i++) {
-                if (config.GetParameter("Configuration", "", configuration_name, 0x20) != 0) {
+                if (config.GetParameter("Configuration", "", configuration_name, sizeof(configuration_name)) != 0) {
                     LanguageConfiguration* language_configuration = new LanguageConfiguration();
-                    snprintf(language_configuration->Name, 0x20, "%s", configuration_name);
+                    snprintf(language_configuration->Name, sizeof(language_configuration->Name), "%s", configuration_name);
                     lpGame->lang_confs.CLAddItem(language_configuration);
                 }
                 else {
@@ -323,9 +323,9 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
     strcpy(g_ClassName, "Rainbow Studios");
     strcpy(g_Caption, "Cars");
     setlocale(0, "English");
-    GetCurrentDirectoryA(0x104, lpGame->install_dir);
+    GetCurrentDirectoryA(sizeof(lpGame->install_dir), lpGame->install_dir);
 
-    snprintf(g_DataPCDirectory, 256, "%s\\DataPC\\", lpGame->install_dir);
+    snprintf(g_DataPCDirectory, sizeof(g_DataPCDirectory), "%s\\DataPC\\", lpGame->install_dir);
     strcpy(g_StreamingDataPCDirectory, g_DataPCDirectory);
 
     ReadConfigIni();

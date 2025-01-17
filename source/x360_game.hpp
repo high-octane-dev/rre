@@ -14,7 +14,7 @@ public:
 	IDirect3D9* d3d9;
 public:
 	virtual ~X360Game() override;
-	virtual int InitializeRenderer(char*) override;
+	virtual int InitializeRenderer(char (&quit_message)[260]) override;
 	virtual int PreGameInitialize(DisplayMode*) override;
 	virtual int SetBasicRenderStates() override;
 	virtual void PrepareFrame() override;

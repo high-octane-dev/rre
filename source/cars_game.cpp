@@ -15,10 +15,10 @@ char g_FontTextureContentDirectory[260] = "E\\Font\\";
 char g_AudioDialogueDirectory[260] = "E\\Audio\\";
 
 // OFFSET: 0x004f50a0
-int CarsGame::InitializeRenderer(char* message) {
+int CarsGame::InitializeRenderer(char (&quit_message)[260]) {
     SetLanguageToDefault();
-    if (X360Game::InitializeRenderer(message) == 0) {
-        snprintf(message, 260, "Failed to initialize renderer!");
+    if (X360Game::InitializeRenderer(quit_message) == 0) {
+        snprintf(quit_message, sizeof(quit_message), "Failed to initialize renderer!");
         return 0;
     }
     unk_game_state = 1;
@@ -44,7 +44,7 @@ int CarsGame::Initialize() {
 // OFFSET: 0x0043fe80
 int CarsGame::PreGameInitialize(DisplayMode*) {
     // TODO: Not completely implemented
-    char material_file_content[260];
+    char material_file_content[260]{};
 
     X360Game::PreGameInitialize(nullptr);
 
@@ -59,9 +59,9 @@ int CarsGame::PreGameInitialize(DisplayMode*) {
     }
 	*/
 
-    RSStringUtil::Ssnprintf(material_file_content, sizeof(material_file_content), "%sDfltMT", "C:\\AppStart\\");
+    RSStringUtil::Ssnprintf(material_file_content, sizeof(material_file_content), "%sDfltMT", "C\\AppStart\\");
     lpSceneObjectMaterialTemplate->LoadFromFile(material_file_content);
-    RSStringUtil::Ssnprintf(material_file_content, sizeof(material_file_content), "%sIconMT", "C:\\AppStart\\");
+    RSStringUtil::Ssnprintf(material_file_content, sizeof(material_file_content), "%sIconMT", "C\\AppStart\\");
     lpIconMaterialTemplate->LoadFromFile(material_file_content);
 
 	/*
@@ -121,12 +121,12 @@ void CarsGame::UpdateLocalizedPaths() {
 // OFFSET: 0x00441d80
 void CarsGame::UpdateTextureContentDirectories() {
     if (g_ScreenMode == 2) {
-        snprintf(g_UILocalizedTextureContentDirectory, 260, "%s%s", g_LocalizedUIContentDirectory, "Tex_HD\\");
-        snprintf(g_UITextureContentDirectory, 260, "%s%s", g_BaseUIContentDirectory, "Tex_HD\\");
+        snprintf(g_UILocalizedTextureContentDirectory, sizeof(g_UILocalizedTextureContentDirectory), "%s%s", g_LocalizedUIContentDirectory, "Tex_HD\\");
+        snprintf(g_UITextureContentDirectory, sizeof(g_UITextureContentDirectory), "%s%s", g_BaseUIContentDirectory, "Tex_HD\\");
     }
     else {
-        snprintf(g_UILocalizedTextureContentDirectory, 260, "%s%s", g_LocalizedUIContentDirectory, "Tex\\");
-        snprintf(g_UITextureContentDirectory, 260, "%s%s", g_BaseUIContentDirectory, "Tex\\");
+        snprintf(g_UILocalizedTextureContentDirectory, sizeof(g_UILocalizedTextureContentDirectory), "%s%s", g_LocalizedUIContentDirectory, "Tex\\");
+        snprintf(g_UITextureContentDirectory, sizeof(g_UITextureContentDirectory), "%s%s", g_BaseUIContentDirectory, "Tex\\");
     }
 }
 
@@ -191,7 +191,7 @@ void CarsGame::CreateLoadingScreen(const char* name) {
     ResourceSetup::ResourceSetup(local_20c,0xffffffff,1,8,0,0,-1,1,0);
     */
     char texture_name[260]{};
-    snprintf(texture_name, 0x104,"%s%s", g_UILocalizedTextureContentDirectory, name);
+    snprintf(texture_name, sizeof(texture_name), "%s%s", g_UILocalizedTextureContentDirectory, name);
     TextureMap* texture_map = X360TexMap::GetTextureMapFromResourceName(texture_name, 555, 0);
     if (texture_map != nullptr) {
         /*
@@ -294,7 +294,7 @@ void CarsGame::SetConfigArguments() {
     start[0] = '\0';
     scene[0] = '\0';
     scene_name[0] = '\0';
-    snprintf(splash_screen, 260, "load_logo");
+    snprintf(splash_screen, sizeof(splash_screen), "load_logo");
     unused24 = 0;
     char_number = 0;
     strncpy(char_name, "McQ", 4);
@@ -400,14 +400,14 @@ int CarsGame::ShowLoadingScreen(const char* _loading_screen, const char* _loadin
     }
     else {
         CreateLoadingScreen(_loading_screen);
-        snprintf(loading_screen_name, 0x104, "%s", _loading_screen);
+        snprintf(loading_screen_name, sizeof(loading_screen_name), "%s", _loading_screen);
     }
     if (_loading_icon == nullptr) {
         loading_icon_name[0] = '\0';
         return 1;
     }
     CreateLoadingIcon(_loading_icon);
-    snprintf(loading_icon_name, 0x104, "%s", _loading_icon);
+    snprintf(loading_icon_name, sizeof(loading_screen_name), "%s", _loading_icon);
     return 1;
 }
 

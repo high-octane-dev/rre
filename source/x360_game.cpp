@@ -68,7 +68,7 @@ X360Game::~X360Game()
 }
 
 // OFFSET: 0x00421ee0
-int X360Game::InitializeRenderer(char*)
+int X360Game::InitializeRenderer(char(&quit_message)[260])
 {
     d3d9 = Direct3DCreate9(D3D_SDK_VERSION);
     if (d3d9 != nullptr) {

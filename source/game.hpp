@@ -95,7 +95,7 @@ public:
     Game();
 
 	virtual ~Game();
-	virtual int InitializeRenderer(char*);
+	virtual int InitializeRenderer(char (&quit_message)[260]);
 	virtual int Initialize();
 	virtual void CreateStringTables();
 	virtual void AddTimeIntervalCallback(void (**)(int, float, void*), void*);
