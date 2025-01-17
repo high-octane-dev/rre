@@ -21,13 +21,17 @@ X360VideoCard::X360VideoCard() : VideoCard()
 
 // OFFSET: 0x00673260
 void free_device_manager() {
-    delete lpD3DDeviceManager;
+    if (lpD3DDeviceManager != nullptr) {
+        lpD3DDeviceManager->Release();
+        lpD3DDeviceManager = nullptr;
+    }
 }
 
 // OFFSET: 0x00414fc0
 void X360VideoCard::Create()
 {
     lpD3DDeviceManager = new EE::D3DDeviceManager(lpCarsGame->d3d9);
+    lpD3DDeviceManager->AddRef();
     lpD3DDeviceManager->behavior_flag_1 = lpD3DDeviceManager->behavior_flag_1 | 4;
     lpD3DDeviceManager->windowed = g_IsWindowed;
     lpD3DDeviceManager->back_buffer_width = g_WindowWidth;
@@ -61,9 +65,13 @@ X360VideoCard::~X360VideoCard()
 
     if (lpD3DStateManager != nullptr) {
         delete lpD3DStateManager;
+        lpD3DDeviceManager = nullptr;
     }
 
-    lpD3DDeviceManager->ReleaseResources();
+    if (lpD3DDeviceManager != nullptr) {
+        lpD3DDeviceManager->ReleaseResources();
+    }
+
     if (unused != nullptr) {
         unused->Release();
     }

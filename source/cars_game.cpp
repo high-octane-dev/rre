@@ -3,7 +3,7 @@
 #include "gfx/x360_tex_map.hpp"
 #include "util/rsstring_util.hpp"
 
-// Since I'm not sure how this gets freed in the original game, I'm just going to use a std::unique_ptr.
+// In the original game, this just gets leaked. For now, we'll use std::unique_ptr for portability.
 std::unique_ptr<CarsGame> lpCarsGame = std::make_unique<CarsGame>();
 
 char g_UILocalizedTextureContentDirectory[260] = "E\\UI\\Tex\\";

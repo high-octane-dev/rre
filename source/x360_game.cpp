@@ -148,8 +148,26 @@ int X360Game::KeyDownHandler(ProcessNode*, KeyInfo*)
 }
 
 // OFFSET: 0x00422fd0
-int X360Game::Terminate()
-{
+int X360Game::Terminate() {
+    int return_value = Game::Terminate();
+    /*
+    if (g_RenderTarget != nullptr) {
+        delete g_RenderTarget;
+        g_RenderTarget = nullptr;
+    }
+    */
+    if (g_VideoCard != nullptr) {
+        g_VideoCard->FreeCursor();
+        delete g_VideoCard;
+        g_VideoCard = nullptr;
+    }
+    if (lpX360ShaderManager != nullptr) {
+        delete lpX360ShaderManager;
+        lpX360ShaderManager = nullptr;
+    }
+    if (d3d9 != nullptr) {
+        d3d9->Release();
+    }
     return 0;
 }
 

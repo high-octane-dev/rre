@@ -127,10 +127,46 @@ Game::Game()
 }
 
 // OFFSET: 0x00618a50
-Game::~Game()
-{
+Game::~Game() {
+    if (statistics_log != nullptr) {
+        DestroyStatisticsLog();
+    }
+    /*
+    if (g_RenderTarget != nullptr) {
+        delete g_RenderTarget;
+        g_RenderTarget = nullptr;
+    }
+    */
+    if (g_VideoCard != nullptr) {
+        g_VideoCard->FreeCursor();
+        delete g_VideoCard;
+        g_VideoCard = nullptr;
+    }
+    /*
+    if (DAT_0071af90 != nullptr) {
+        fclose(DAT_0071af90);
+    }
+    */
     lpDataAccess->Release();
     lpVirtualFileAllocator->Release();
+
+    for (auto& elem : time_interval_callbacks) {
+        if (elem != nullptr) {
+            delete elem;
+        }
+    }
+
+    for (auto& elem : lang_confs) {
+        if (elem != nullptr) {
+            delete elem;
+        }
+    }
+    
+    for (auto& elem : lang_defs) {
+        if (elem != nullptr) {
+            delete elem;
+        }
+    }
 }
 
 // OFFSET: INLINE
@@ -283,7 +319,17 @@ void Game::GetCameras(Camera* dest[4]) {
 // OFFSET: 0x00617ff0
 int Game::Terminate() {
     // TODO: Not completely implemented
-
+    /*
+    if (g_RenderTarget != nullptr) {
+        delete g_RenderTarget;
+        g_RenderTarget = nullptr;
+    }
+    */
+    if (g_VideoCard != nullptr) {
+        g_VideoCard->FreeCursor();
+        delete g_VideoCard;
+        g_VideoCard = nullptr;
+    }
     delete lpSceneObjectMaterialTemplate;
     delete lpIconMaterialTemplate;
     return 0;
