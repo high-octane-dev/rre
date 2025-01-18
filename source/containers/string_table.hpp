@@ -9,7 +9,11 @@ public:
 		void** data;
 		int requested;
 	};
-private:
+	enum class LookupType {
+		LinearSearch,
+		Hashmap,
+	};
+protected:
 	int unk;
 	std::size_t len;
 	std::size_t string_entries_count;
@@ -24,14 +28,14 @@ private:
 	int unk3;
 	StringEntry* string_entries;
 	ContainerHashTable<char*, int>* lut;
-	int generate_lut;
+	LookupType lookup_type;
 	StringEntry* unused_base_entries;
 	std::size_t unused_base_entries_len;
 	int* table_markers;
 	std::size_t max_table_markers;
 	std::size_t table_marker_index;
 public:
-	StringTable(std::size_t user_data_stride, std::size_t generate_lut, std::size_t initial_string_entry_count, std::size_t string_entries_increment, std::size_t string_heap_capacity, int unk3, std::size_t max_table_markers);
+	StringTable(std::size_t user_data_stride, LookupType lookup_type, std::size_t initial_string_entry_count, std::size_t string_entries_increment, std::size_t string_heap_capacity, int unk3, std::size_t max_table_markers);
 	StringTable(const StringTable&) = delete;
 	StringTable& operator=(const StringTable&) = delete;
 	virtual ~StringTable() override;

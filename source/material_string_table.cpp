@@ -2,44 +2,43 @@
 #include "util/rsstring_util.hpp"
 #include "cars_game.hpp"
 
-void MaterialStringTable::ModifyFilename(char* a1)
-{
-	char local_18[20];
-	RSStringUtil::Ssnprintf(local_18, sizeof(local_18), ".%s.mst", "x360");
-	strcat(a1, local_18);
+// OFFSET: 0x005c3070
+MaterialStringTable::MaterialStringTable(std::size_t user_data_stride, LookupType lookup_type, std::size_t initial_string_entry_count, std::size_t string_entries_increment, std::size_t string_heap_capacity, int unk3, std::size_t max_table_markers) : StringTable(user_data_stride, lookup_type, initial_string_entry_count, string_entries_increment, string_heap_capacity, unk3, max_table_markers) {
+	flags = 0;
 }
 
-int MaterialStringTable::GetVariableValue(char* a1, char* a2)
-{
-	char* pcVar1;
-	char cVar2;
+// OFFSET: 0x00585fa0
+void MaterialStringTable::AddItem(char const*, int) {
+	// TODO: Implement This!
+}
 
-	if (_stricmp(a2, "FontTextureContentDirectory") == 0)
-	{
-		strncpy(a1, g_FontTextureContentDirectory, sizeof(g_FontTextureContentDirectory));
-	}
-	else
-	{
-		if (_stricmp(a2, "UITextureContentDirectory") == 0)
-		{
-			strncpy(a1, g_UITextureContentDirectory, sizeof(g_UITextureContentDirectory));
+// OFFSET: 0x00586140
+void MaterialStringTable::ModifyFilename(char* file_name) {
+	char platform_extension[20];
+	RSStringUtil::Ssnprintf(platform_extension, sizeof(platform_extension), ".%s.mst", "x360");
+	strcat(file_name, platform_extension);
+}
+
+// OFFSET: 0x00550e60
+int MaterialStringTable::GetVariableValue(char* dest, char* variable_name) {
+	if (dest != nullptr && variable_name != nullptr) {
+		if (_stricmp(variable_name, "FontTextureContentDirectory") == 0) {
+			strncpy(dest, g_FontTextureContentDirectory, sizeof(g_FontTextureContentDirectory));
 		}
-		else
-		{
-			if (_stricmp(a2, "UILocalizedTextureContentDirectory") == 0)
-			{
-				strncpy(a1, g_UILocalizedTextureContentDirectory, sizeof(g_UILocalizedTextureContentDirectory));
+		else {
+			if (_stricmp(variable_name, "UITextureContentDirectory") == 0) {
+				strncpy(dest, g_UITextureContentDirectory, sizeof(g_UITextureContentDirectory));
 			}
-			else
-			{
-				*a1 = '\0';
+			else {
+				if (_stricmp(variable_name, "UILocalizedTextureContentDirectory") == 0) {
+					strncpy(dest, g_UILocalizedTextureContentDirectory, sizeof(g_UILocalizedTextureContentDirectory));
+				}
+				else {
+					*dest = '\0';
+				}
 			}
 		}
+		return strlen(dest);
 	}
-	pcVar1 = a1 + 1;
-	do {
-		cVar2 = *a1;
-		a1 = a1 + 1;
-	} while (cVar2 != '\0');
-	return a1 - pcVar1;
+	return 0;
 }

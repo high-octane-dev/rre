@@ -3,11 +3,11 @@
 #include <data_access.hpp>
 
 // OFFSET: 0x00563e90
-StringTable::StringTable(std::size_t user_data_stride, std::size_t generate_lut, std::size_t initial_string_entry_count, std::size_t string_entries_increment, std::size_t string_heap_capacity, int unk3, std::size_t max_table_markers) {
+StringTable::StringTable(std::size_t user_data_stride, LookupType lookup_type, std::size_t initial_string_entry_count, std::size_t string_entries_increment, std::size_t string_heap_capacity, int unk3, std::size_t max_table_markers) {
     this->unk = 1;
     this->user_data_stride = user_data_stride;
     this->string_entries_increment = string_entries_increment;
-    this->generate_lut = generate_lut;
+    this->lookup_type = lookup_type;
     this->initial_string_entry_count = initial_string_entry_count;
     this->len = 0;
     this->string_entries_count = 0;
@@ -104,7 +104,7 @@ int StringTable::Load(char* path) {
         }
     }
 
-    if (this->generate_lut != 0) {
+    if (this->lookup_type == LookupType::Hashmap) {
         GenerateFastLookupTable();
     }
 
