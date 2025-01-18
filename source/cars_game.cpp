@@ -2,6 +2,7 @@
 #include <globals.hpp>
 #include "gfx/x360_tex_map.hpp"
 #include "util/rsstring_util.hpp"
+#include "util/resource_setup.hpp"
 
 // In the original game, this just gets leaked. For now, we'll use std::unique_ptr for portability.
 std::unique_ptr<CarsGame> lpCarsGame = std::make_unique<CarsGame>();
@@ -55,10 +56,11 @@ int CarsGame::Initialize() {
     if (splash_screen[0] != '\0') {
         ShowLoadingScreen(splash_screen, "ld_mcq", 1);
     }
-    /*
+
     char game_info_path[260];
-    snprintf(game_info_path, sizeof(game_info_path), "%s%sGameInfo.%s.res", "Res\\Data\\", "C\\Appstart\\", "x360");
-    ResourceSetup(game_info_path, 0xffffffff, 1, 8, 0, 0, -1, 1, 0);
+    RSStringUtil::Ssnprintf(game_info_path, sizeof(game_info_path), "%s%sGameInfo.%s.res", "Res\\Data\\", "C\\Appstart\\", "x360");
+    ResourceSetup::ResourceSetup(game_info_path, -1, 1, 8, 0, 0, -1, 1, 0);
+    /*
     cars_settings = new CarsSettings();
     cars_settings->Create();
     */
@@ -70,30 +72,36 @@ int CarsGame::Initialize() {
 int CarsGame::PreGameInitialize(DisplayMode*) {
     // TODO: Not completely implemented
     char material_file_content[260]{};
+    char debug_str_file[260];
+    char material_template_file[260];
 
     X360Game::PreGameInitialize(nullptr);
 
     /*
     _timeGameInit = timeGetTime();
-    RSStringUtil::Ssnprintf(%sDebugStr.mst,0x104,"%sDebugStr.mst",s_C\Debug\_006f4970);
+    */
+    RSStringUtil::Ssnprintf(debug_str_file,sizeof(debug_str_file),"%sDebugStr.mst","C\\Debug\\");
+    /*
     (*((lpMaterialStringTable->StringTable).vtable)->Load)(%sDebugStr.mst);
-    RSStringUtil::Ssnprintf(%s%sMaterialTemplate.%s.res,0x104,"%s%sMaterialTemplate.%s.res",s_Res\Data\_006f73d8,s_C\AppStart\_006f6da8,"x360");
-    bVar2 = g_ResBuilding == 0;
-    if (bVar2) {
-        ResourceSetup::ResourceSetup(%s%sMaterialTemplate.%s.res,0xffffffff,1,8,0,0,-1,1,0);
+    */
+    RSStringUtil::Ssnprintf(material_template_file,sizeof(material_template_file),"%s%sMaterialTemplate.%s.res", "Res\\Data\\", "C\\Appstart\\","x360");
+
+    bool bVar2 = g_ResBuilding == 0;
+    if (bVar2)
+    {
+        ResourceSetup::ResourceSetup(material_template_file,0xffffffff,1,8,0,0,-1,1,0);
     }
-	*/
 
     RSStringUtil::Ssnprintf(material_file_content, sizeof(material_file_content), "%sDfltMT", "C\\AppStart\\");
     lpSceneObjectMaterialTemplate->LoadFromFile(material_file_content);
     RSStringUtil::Ssnprintf(material_file_content, sizeof(material_file_content), "%sIconMT", "C\\AppStart\\");
     lpIconMaterialTemplate->LoadFromFile(material_file_content);
-
-	/*
-    if (bVar2) {
-        ResourceSetup::ResourceFinish(%s%sMaterialTemplate.%s.res,1);
+	
+    if (bVar2)
+    {
+        ResourceSetup::ResourceFinish(material_template_file,1);
     }
-    */
+
     return 1;
 }
 
@@ -304,12 +312,12 @@ void CarsGame::UpdateLocalizedPaths() {
 // OFFSET: 0x00441d80
 void CarsGame::UpdateTextureContentDirectories() {
     if (g_ScreenMode == 2) {
-        snprintf(g_UILocalizedTextureContentDirectory, sizeof(g_UILocalizedTextureContentDirectory), "%s%s", g_LocalizedUIContentDirectory, "Tex_HD\\");
-        snprintf(g_UITextureContentDirectory, sizeof(g_UITextureContentDirectory), "%s%s", g_BaseUIContentDirectory, "Tex_HD\\");
+        RSStringUtil::Ssnprintf(g_UILocalizedTextureContentDirectory, sizeof(g_UILocalizedTextureContentDirectory), "%s%s", g_LocalizedUIContentDirectory, "Tex_HD\\");
+        RSStringUtil::Ssnprintf(g_UITextureContentDirectory, sizeof(g_UITextureContentDirectory), "%s%s", g_BaseUIContentDirectory, "Tex_HD\\");
     }
     else {
-        snprintf(g_UILocalizedTextureContentDirectory, sizeof(g_UILocalizedTextureContentDirectory), "%s%s", g_LocalizedUIContentDirectory, "Tex\\");
-        snprintf(g_UITextureContentDirectory, sizeof(g_UITextureContentDirectory), "%s%s", g_BaseUIContentDirectory, "Tex\\");
+        RSStringUtil::Ssnprintf(g_UILocalizedTextureContentDirectory, sizeof(g_UILocalizedTextureContentDirectory), "%s%s", g_LocalizedUIContentDirectory, "Tex\\");
+        RSStringUtil::Ssnprintf(g_UITextureContentDirectory, sizeof(g_UITextureContentDirectory), "%s%s", g_BaseUIContentDirectory, "Tex\\");
     }
 }
 
@@ -368,11 +376,11 @@ void CarsGame::CreateLoadingIcon(const char* name) {
 
 // OFFSET: 0x00441370
 void CarsGame::CreateLoadingScreen(const char* name) {
-    /*
+
     char package_name[260]{};
-    snprintf(package_name,0x104,"%s%s%s.%s.res","Res\\Data\\", g_UILocalizedTextureContentDirectory, name,"x360");
-    ResourceSetup::ResourceSetup(local_20c,0xffffffff,1,8,0,0,-1,1,0);
-    */
+    RSStringUtil::Ssnprintf(package_name,0x104,"%s%s%s.%s.res","Res\\Data\\", g_UILocalizedTextureContentDirectory, name,"x360");
+    ResourceSetup::ResourceSetup(package_name,-1,1,8,0,0,-1,1,0);
+
     char texture_name[260]{};
     snprintf(texture_name, sizeof(texture_name), "%s%s", g_UILocalizedTextureContentDirectory, name);
     TextureMap* texture_map = X360TexMap::GetTextureMapFromResourceName(texture_name, 555, 0);

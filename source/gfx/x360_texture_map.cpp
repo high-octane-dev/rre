@@ -119,7 +119,7 @@ int X360TextureMap::Unk11(int, int, int*)
 // OFFSET: 0x0040fe30
 int X360TextureMap::Unk12()
 {
-	return 0;
+	return texture->UnlockRect(0) == 0;
 }
 
 // OFFSET: 0x0040fcb0

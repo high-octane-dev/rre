@@ -140,6 +140,7 @@
     <ClCompile Include="source\panic.cpp" />
     <ClCompile Include="source\parameter_block.cpp" />
     <ClCompile Include="source\string_block_allocator.cpp" />
+    <ClCompile Include="source\util\resource_setup.cpp" />
     <ClCompile Include="source\util\rsstring_util.cpp" />
     <ClCompile Include="source\x360_game.cpp" />
   </ItemGroup>
@@ -185,6 +186,7 @@
     <ClInclude Include="source\panic.hpp" />
     <ClInclude Include="source\parameter_block.hpp" />
     <ClInclude Include="source\string_block_allocator.hpp" />
+    <ClInclude Include="source\util\resource_setup.hpp" />
     <ClInclude Include="source\util\rsstring_util.hpp" />
     <ClInclude Include="source\util\token_string.hpp" />
     <ClInclude Include="source\x360_game.hpp" />
