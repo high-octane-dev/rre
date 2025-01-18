@@ -537,7 +537,7 @@ int ParameterBlock::GetParameter(const char* parameter, const char* default_valu
 }
 
 // OFFSET: 0x005882e0
-int ParameterBlock::GetParameter(const char* parameter, Vector4* default_value, Vector4* dest) {
+int ParameterBlock::GetParameter(const char* parameter, const Vector4* default_value, Vector4* dest) {
 	return search.GetParameter(parameter, default_value, dest);
 }
 
@@ -1058,7 +1058,7 @@ int ParameterBlock::PBSearch::GetParameter(const char* parameter, char* dest, st
 }
 
 // OFFSET: 0x00587a90
-int ParameterBlock::PBSearch::GetParameter(const char* parameter, Vector4* default_value, Vector4* dest) {
+int ParameterBlock::PBSearch::GetParameter(const char* parameter, const Vector4* default_value, Vector4* dest) {
 	char buffer[256]{};
 	if (GetParameter(parameter, buffer, 256) == 0) {
 		if (default_value != nullptr) {

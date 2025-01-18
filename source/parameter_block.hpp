@@ -59,7 +59,7 @@ public:
 		int GetParameter(const char* parameter, int* dest, std::size_t dest_len);
 		int GetParameter(const char* parameter, char* dest, std::size_t dest_len);
 
-		int GetParameter(const char* parameter, Vector4* default_value, Vector4* dest);
+		int GetParameter(const char* parameter, const Vector4* default_value, Vector4* dest);
 	};
 private:
 	int loaded_from_memory;
@@ -106,7 +106,7 @@ public:
 	int GetParameter(const char* parameter, short default_value, short* dest);
 	int GetParameter(const char* parameter, char default_value, char* dest);
 	int GetParameter(const char* parameter, const char* default_value, char* dest, std::size_t dest_len);
-	int GetParameter(const char* parameter, Vector4* default_value, Vector4* dest);
+	int GetParameter(const char* parameter, const Vector4* default_value, Vector4* dest);
 
 	int GetParameter(const char* parameter, float* dest);
 	int GetParameter(const char* parameter, int* dest);

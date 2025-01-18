@@ -2,6 +2,7 @@
 
 #include <cstdio>
 #include <cstdarg>
+#include <cstring>
 
 // OFFSET: 0x0055f230
 int RSStringUtil::Ssnprintf(char* buf, std::size_t len, const char* format, ...) {
@@ -22,4 +23,11 @@ int RSStringUtil::Ssnprintf(char* buf, std::size_t len, const char* format, ...)
 // OFFSET: 0x0055e600
 void RSStringUtil::Svformatter(int (*format_function)(char**), char* buf, const char* format, const void* format_args) {
 	// TODO: Not yet implemented
+}
+
+// OFFSET: 0x0055f320
+const char* RSStringUtil::stristr(const char* string, const char* sub_string) {
+	// not the real implementation, refer to the comment in Ssnprintf
+
+	return strstr(string, sub_string);
 }

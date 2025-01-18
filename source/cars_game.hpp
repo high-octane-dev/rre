@@ -173,8 +173,8 @@ public:
     struct X360LoadingIcon* loading_icon;
     char loading_screen_name[260];
     char loading_icon_name[260];
-    float char_color1[4];
-    float char_color2[4];
+    Vector4 char_color1;
+    Vector4 char_color2;
     int game_mode;
     unsigned int difficulty;
     unsigned int time_of_day;
@@ -262,3 +262,28 @@ extern char g_FontTextureContentDirectory[260];
 
 // E\Audio
 extern char g_AudioDialogueDirectory[260];
+
+extern int g_GetActivityTypeFromActivityFile;
+extern int g_FixMcqueensHeadquartersStage;
+extern int g_McqueensHeadquartersStage;
+extern int g_StartOnTitleScreenOnFirstBoot;
+extern int g_Boost_Lvl;
+extern int g_SuspensionLoadType;
+extern int g_EnableVehicleAudio;
+extern int g_EnableVehicleMotionBlurOverlay;
+extern int g_EnableAllResFiles;
+extern int g_EnableActivityStreaming;
+extern int g_EnableDialogueMotionStreaming;
+extern int g_EnableNonStreamingResFiles;
+extern int g_EnableResourceBuilding;
+extern int g_ResBuilding;
+extern int g_BuildNewResourcesOnly;
+extern char g_IniFileOutputDirectory[260];
+extern int g_NotInAnimViewer;
+extern int g_UseConstantAfterEventTutorial;
+extern char g_ConstantAfterEventTutorial[40];
+extern int g_ShowMetalDetectorOverlayInExploreHub;
+extern int g_ShowScavengerHuntOverlayInExploreHub;
+extern int g_ScavengerHuntPartGroupInExploreHub;
+extern int g_CheckForXbox360TextureMipMaps;
+extern int g_OnlyLoadXbox360LightMapsFromResourceFile;
