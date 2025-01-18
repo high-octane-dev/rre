@@ -23,3 +23,8 @@ int RSStringUtil::Ssnprintf(char* buf, std::size_t len, const char* format, ...)
 void RSStringUtil::Svformatter(int (*format_function)(char**), char* buf, const char* format, const void* format_args) {
 	// TODO: Not yet implemented
 }
+// OFFSET: INLINE
+int RSStringUtil::snprintf_flush()
+{
+	return -1;
+}

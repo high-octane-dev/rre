@@ -1,0 +1,4 @@
+{
+	"name": "rre",
+	"dependencies": ["dxsdk-d3dx"]
+}
