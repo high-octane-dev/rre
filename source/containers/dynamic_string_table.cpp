@@ -1,7 +1,7 @@
 #include "dynamic_string_table.hpp"
 
 // OFFSET: 0x005e47a0
-DynamicStringTable::DynamicStringTable(std::size_t user_data_stride, LookupType lookup_type, std::size_t initial_string_entry_count, std::size_t string_entries_increment, std::size_t string_heap_capacity, int unk3, std::size_t max_table_markers) : StringTable(user_data_stride, lookup_type, initial_string_entry_count, string_entries_increment, string_heap_capacity, unk3, max_table_markers) {
+DynamicStringTable::DynamicStringTable(std::size_t user_data_stride, LookupType lookup_type, std::size_t initial_string_entry_count, std::size_t string_entries_increment) : StringTable(user_data_stride, lookup_type, initial_string_entry_count, string_entries_increment, 0, 0, 4) {
     string_entries_count = initial_string_entry_count;
     string_entries = new StringEntry[initial_string_entry_count];
     user_data_heap = new void* [this->string_entries_count * this->user_data_stride];

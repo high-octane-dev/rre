@@ -129,6 +129,7 @@
     <ClCompile Include="source\gfx\x360_texture_map.cpp" />
     <ClCompile Include="source\gfx\x360_texture_map_manager.cpp" />
     <ClCompile Include="source\gfx\x360_tex_map.cpp" />
+    <ClCompile Include="source\gfx\x360_vertex_attribute_format_string_table.cpp" />
     <ClCompile Include="source\gfx\x360_video_card.cpp" />
     <ClCompile Include="source\language_configuration.cpp" />
     <ClCompile Include="source\language_definition.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="source\gfx\x360_texture_map.hpp" />
     <ClInclude Include="source\gfx\x360_texture_map_manager.hpp" />
     <ClInclude Include="source\gfx\x360_tex_map.hpp" />
+    <ClInclude Include="source\gfx\x360_vertex_attribute_format_string_table.hpp" />
     <ClInclude Include="source\gfx\x360_video_card.hpp" />
     <ClInclude Include="source\language_configuration.hpp" />
     <ClInclude Include="source\language_definition.hpp" />
