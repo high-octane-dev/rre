@@ -1,8 +1,0 @@
-Package: dxsdk-d3dx
-Version: 9.29.952.8
-Port-Version: 7
-Architecture: x86-windows
-Multi-Arch: same
-Abi: b5689b397b7d0fcf84a4d4f8e56d20ccacc75f675637f1a795678cd9fd2c5d6c
-Description: Redistributable package for the legacy DirectX SDK's D3DX9, D3DX10, and/or D3DX11 utility libraries.
-Status: install ok half-installed

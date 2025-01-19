@@ -1,4 +1,0 @@
-CRTLinkage: dynamic
-LibraryLinkage: dynamic
-PolicyDLLsInStaticLibrary: enabled
-PolicyAllowObsoleteMsvcrt: enabled
