@@ -40,6 +40,20 @@ private:
     bool device_lost;
 public:
 	X360RenderTarget();
+    void ApplyViewportImpl();
+    bool CheckDeviceFormatImpl(D3DFORMAT);
+    void Clear();
+    int DrawCursorImpl();
+    int DrawFullscreenEffects();
+    int EndFrame();
+    void IncrementFrameCount();
+    D3DFORMAT MapToD3DFormat(UnkPixelFormat);
+    int Recreate();
+    void Reset();
+    void SetCamera(Camera*);
+    void SetUnkViewportIndex(int);
+    bool StartFrame();
+
 	virtual ~X360RenderTarget() override;
     virtual void Create(int unused) override;
     virtual void SetDimensions(int unused0, int unused1) override;
@@ -56,4 +70,4 @@ public:
     virtual void SetFogDistances(float min, float max) override;
 };
 
-extern X360RenderTarget* g_RenderTarget;
+// extern X360RenderTarget* g_RenderTarget;

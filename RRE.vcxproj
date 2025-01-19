@@ -110,6 +110,7 @@
     <ClCompile Include="source\action_sequence.cpp" />
     <ClCompile Include="source\base_object.cpp" />
     <ClCompile Include="source\block_allocator.cpp" />
+    <ClCompile Include="source\containers\dynamic_string_table.cpp" />
     <ClCompile Include="source\containers\string_table.cpp" />
     <ClCompile Include="source\data_access.cpp" />
     <ClCompile Include="source\file_io.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="source\containers\container_linked_list.hpp" />
     <ClInclude Include="source\containers\container_list.hpp" />
     <ClInclude Include="source\containers\dynamic_array.hpp" />
+    <ClInclude Include="source\containers\dynamic_string_table.hpp" />
     <ClInclude Include="source\containers\string_table.hpp" />
     <ClInclude Include="source\data_access.hpp" />
     <ClInclude Include="source\file_io.hpp" />
