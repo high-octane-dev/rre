@@ -60,4 +60,6 @@ public:
 	char* ParseThisBlock(char* block);
 	void ResolveString(char* string);
 	int StoreThisLine(char* line);
+
+	void* GetUserDataAt(int index);
 };

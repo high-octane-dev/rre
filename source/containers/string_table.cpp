@@ -544,3 +544,14 @@ int StringTable::StoreThisLine(char* line) {
     this->len++;
     return 1;
 }
+
+// OFFSET: INLINE, STATUS: COMPLETE
+void* StringTable::GetUserDataAt(int index) {
+    if (index >= len) {
+        return nullptr;
+    }
+    if (string_entries[index].data == nullptr) {
+        return nullptr;
+    }
+    return *string_entries[index].data;
+}
