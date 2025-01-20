@@ -301,7 +301,7 @@ void CarsGame::ReportMemoryUsage(char*) {
 
 // OFFSET: 0x00487b80, STATUS: COMPLETE
 void CarsGame::UpdateLocalizedPaths() {
-    char* prefix = language_prefixes[lang_defs[selected_language_configuration->TextLanguageIndex]->prefix_index];
+    char* prefix = language_prefixes[lang_defs[selected_language_configuration->text_language_index]->prefix_index];
     g_LocalizationContentDirectory[0] = *prefix;
     g_FontTextureContentDirectory[0] = *prefix;
     g_LocalizedUIContentDirectory[0] = *prefix;

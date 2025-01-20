@@ -10,25 +10,22 @@ X360MaterialTemplate* lpSceneObjectMaterialTemplate = nullptr;
 X360MaterialTemplate* lpIconMaterialTemplate = nullptr;
 StringTable* lpMaterialStringTable = nullptr;
 
-// OFFSET: 0x00618220
-void Game::DestroyStatisticsLog()
-{
+// OFFSET: 0x00618220, STATUS: TODO
+void Game::DestroyStatisticsLog() {
 }
 
-// OFFSET: 0x006182c0
-LanguageConfiguration* Game::GetLanguageConfiguration(const char* name)
-{
+// OFFSET: 0x006182c0, STATUS: COMPLETE
+LanguageConfiguration* Game::GetLanguageConfiguration(const char* name) {
     for (auto& elem : lang_confs) {
-        if (_stricmp(elem->Name, name) == 0) {
+        if (_stricmp(elem->name, name) == 0) {
             return elem;
         }
     }
     return nullptr;
 }
 
-// OFFSET: 0x00618310
-void Game::SetLanguageConfiguration(const char* name)
-{
+// OFFSET: 0x00618310, STATUS: COMPLETE
+void Game::SetLanguageConfiguration(const char* name) {
     LanguageConfiguration* conf = GetLanguageConfiguration(name);
     if (conf != nullptr && selected_language_configuration != conf) {
         selected_language_configuration = conf;
@@ -36,20 +33,22 @@ void Game::SetLanguageConfiguration(const char* name)
     }
 }
 
-// OFFSET: 0x00618270
-int Game::GetLanguageDefinitionIndex(char* name)
-{
-    return 0;
+// OFFSET: 0x00618270, STATUS: COMPLETE
+int Game::GetLanguageDefinitionIndex(char* name) {
+    for (std::size_t i = 0; i < lang_defs.Length(); i++) {
+        if (_stricmp(lang_defs[i]->name, name) == 0) {
+            return i;
+        }
+    }
+    return -1;
 }
 
-// OFFSET: 0x00618ce0
-void Game::HandleClick(unsigned int u_msg, unsigned int button, int x, int y)
-{
+// OFFSET: 0x00618ce0, STATUS: TODO
+void Game::HandleClick(unsigned int u_msg, unsigned int button, int x, int y) {
 }
 
-// OFFSET: 0x00618580
-Game::Game()
-{
+// OFFSET: 0x00618580, STATUS: WIP
+Game::Game() {
     lpGame = this;
     this->unk = 0;
     this->screen_fade_complete = 0;
@@ -126,7 +125,7 @@ Game::Game()
     this->use_dashboard_locale = 0;
 }
 
-// OFFSET: 0x00618a50
+// OFFSET: 0x00618a50, STATUS: WIP
 Game::~Game() {
     if (statistics_log != nullptr) {
         DestroyStatisticsLog();
@@ -169,26 +168,27 @@ Game::~Game() {
     }
 }
 
-// OFFSET: INLINE
-int Game::InitializeRenderer(char (&quit_message)[260]) {
-    return 0;
-}
-
-// OFFSET: 0x00617d30
+// OFFSET: 0x00617d30, STATUS: TODO
 int Game::Initialize() {
     return 0;
 }
 
-// OFFSET: 0x00616ee0
-void Game::CreateStringTables() {}
+// OFFSET: INLINE, STATUS: COMPLETE
+int Game::InitializeRenderer(char(&quit_message)[260]) {
+    return 0;
+}
 
-// OFFSET: 0x00618980
+// OFFSET: 0x00616ee0, STATUS: TODO
+void Game::CreateStringTables() {
+}
+
+// OFFSET: 0x00618980, STATUS: COMPLETE
 void Game::AddTimeIntervalCallback(void (**callback)(int, float, void*), void* time_interval) {
     TimeIntervalCallback* time_interval_callback = new TimeIntervalCallback{callback, time_interval};
     time_interval_callbacks.Append(time_interval_callback);
 }
 
-// OFFSET: 0x006189c0
+// OFFSET: 0x006189c0, STATUS: COMPLETE
 void Game::RemoveTimeIntervalCallback(void (**callback)(int, float, void*), void* time_interval) {
     TimeIntervalCallback* data = nullptr;
     for (auto& elem : time_interval_callbacks) {
@@ -200,11 +200,12 @@ void Game::RemoveTimeIntervalCallback(void (**callback)(int, float, void*), void
     delete data;
 }
 
+// OFFSET: INLINE, STATUS: COMPLETE
 int Game::PreWindowInitialize() {
     return 1;
 }
 
-// OFFSET: 0x006170c0
+// OFFSET: 0x006170c0, STATUS: WIP
 int Game::PreGameInitialize(struct DisplayMode*) {
     /*
     if (control_interface == nullptr) {
@@ -218,66 +219,66 @@ int Game::PreGameInitialize(struct DisplayMode*) {
     return 1;
 }
 
-// OFFSET: INLINE
+// OFFSET: INLINE, STATUS: COMPLETE
 int Game::LoadResources() {
     return 0;
 }
 
-// OFFSET: 0x00617ac0
-void Game::LoadConfigFile(ParameterBlock*) {}
+// OFFSET: 0x00617ac0, STATUS: TODO
+void Game::LoadConfigFile(ParameterBlock*) {
+}
 
-// OFFSET: INLINE
-void Game::BeginAutoTest() {}
+// OFFSET: INLINE, STATUS: COMPLETE
+void Game::BeginAutoTest() {
+}
 
-// OFFSET: 0x00617990
+// OFFSET: 0x00617990, STATUS: COMPLETE
 void Game::EndAutoTest(int) {
     std::abort();
 }
 
-// OFFSET: 0x00617180
+// OFFSET: 0x00617180, STATUS: TODO
 int Game::CreateMaterialPropertyManager() {
     return 0;
 }
 
-// OFFSET: 0x006171b0
+// OFFSET: 0x006171b0, STATUS: COMPLETE
 int Game::Activate() {
     BASS_Start();
     return 1;
 }
 
-// OFFSET: 0x006171c0
+// OFFSET: 0x006171c0, STATUS: COMPLETE
 int Game::Deactivate() {
     BASS_Pause();
     return 1;
 }
 
-// OFFSET: INLINE
-int Game::SetBasicRenderStates() {
+// OFFSET: INLINE, STATUS: COMPLETE
+void Game::PrepareFrame() {
+}
+
+// OFFSET: 0x00617370, STATUS: TODO
+int Game::UpdateScreen() {
     return 0;
 }
 
-// OFFSET: INLINE
-void Game::PrepareFrame() {}
-
-// OFFSET: 0x00617370
-int Game::UpdateScreen() { return 0; }
-
-// OFFSET: 0x006173c0
+// OFFSET: 0x006173c0, STATUS: TODO
 int Game::Tick() {
     return 0;
 }
 
-// OFFSET: 0x006177d0
+// OFFSET: 0x006177d0, STATUS: TODO
 int Game::PauseGame(int) {
     return 0;
 }
 
-// OFFSET: 0x00617810
+// OFFSET: 0x00617810, STATUS: COMPLETE
 int Game::EventHandler(int event) {
     return parent_game_object->EventHandler(event) != 0;
 }
 
-// OFFSET: 0x00617830
+// OFFSET: 0x00617830, STATUS: COMPLETE
 int Game::KeyUpHandler(ProcessNode* node, KeyInfo* key) {
     if ((this->flags & 8) != 0) {
         return 1;
@@ -285,7 +286,7 @@ int Game::KeyUpHandler(ProcessNode* node, KeyInfo* key) {
     return parent_game_object->KeyUpHandler(node, key) != 0;
 }
 
-// OFFSET: 0x00617870
+// OFFSET: 0x00617870, STATUS: COMPLETE
 int Game::KeyDownHandler(ProcessNode* node, KeyInfo* key) {
     if ((this->flags & 8) != 0) {
         return 1;
@@ -293,22 +294,27 @@ int Game::KeyDownHandler(ProcessNode* node, KeyInfo* key) {
     return parent_game_object->KeyDownHandler(node, key) != 0;
 }
 
-// OFFSET: 0x006178b0
-void Game::LoadMaterials(int, int) {}
+// OFFSET: 0x006178b0, STATUS: TODO
+void Game::LoadMaterials(int, int) {
+}
 
-// OFFSET: 0x00617900
-void Game::ReloadMaterials(int) {}
+// OFFSET: 0x00617900, STATUS: TODO
+void Game::ReloadMaterials(int) {
+}
 
-// OFFSET: 0x00617930
-void Game::ReloadMaterialsAndTextures(int) {}
+// OFFSET: 0x00617930, STATUS: TODO
+void Game::ReloadMaterialsAndTextures(int) {
+}
 
-// OFFSET: 0x00617970
-void Game::LoadShaders() {}
+// OFFSET: 0x00617970, STATUS: TODO
+void Game::LoadShaders() {
+}
 
-// OFFSET: 0x00617200
-void Game::SetCameras(Camera*, Camera*, Camera*, Camera*) {}
+// OFFSET: 0x00617200, STATUS: TODO
+void Game::SetCameras(Camera*, Camera*, Camera*, Camera*) {
+}
 
-// OFFSET: 0x00617280
+// OFFSET: 0x00617280, STATUS: COMPLETE
 void Game::GetCameras(Camera* dest[4]) {
     dest[0] = this->cameras[0];
     dest[1] = this->cameras[1];
@@ -316,7 +322,7 @@ void Game::GetCameras(Camera* dest[4]) {
     dest[3] = this->cameras[3];
 }
 
-// OFFSET: 0x00617ff0
+// OFFSET: 0x00617ff0, STATUS: WIP
 int Game::Terminate() {
     // TODO: Not completely implemented
     /*
@@ -335,47 +341,40 @@ int Game::Terminate() {
     return 0;
 }
 
-// OFFSET: 0x006179a0
+// OFFSET: 0x006179a0, STATUS: TODO
 int Game::GetFullPathToContentFile(const char*, char*) {
     return 0;
 }
 
-// OFFSET: INLINE
-int Game::SetDisplayMode(struct DisplayMode*) {
-    return 0;
+// OFFSET: INLINE, STATUS: COMPLETE
+void Game::InitPlatformGraphicsCallback(DisplayMode*) {
 }
 
-// OFFSET: INLINE
-void Game::InitPlatformGraphicsCallback(DisplayMode*) {}
-
-// OFFSET: 0x00617a20
+// OFFSET: 0x00617a20, STATUS: COMPLETE
 int Game::GetResourceString(const char*, char* dest) {
     static char Default[] = "No Strings Available";
     std::memcpy(dest, Default, 21);
     return 0;
 }
 
-// OFFSET: 0x00617a60
+// OFFSET: 0x00617a60, STATUS: TODO
 int Game::Timeout(int) {
     return 0;
 }
 
-// OFFSET: INLINE
-void Game::ReportMemoryUsage(char*) {}
-
-// OFFSET: INLINE
-void Game::UpdateLocalizedPaths() {}
-
-// OFFSET: INLINE
-void Game::UpdateTextureContentDirectories() {}
-
-// OFFSET: INLINE
-RenderTarget* Game::CreateRenderTarget()
-{
-    return nullptr;
+// OFFSET: INLINE, STATUS: COMPLETE
+void Game::ReportMemoryUsage(char*) {
 }
 
-// OFFSET: 0x006171d0
+// OFFSET: INLINE, STATUS: COMPLETE
+void Game::UpdateLocalizedPaths() {
+}
+
+// OFFSET: INLINE, STATUS: COMPLETE
+void Game::UpdateTextureContentDirectories() {
+}
+
+// OFFSET: 0x006171d0, STATUS: TODO
 int Game::PostDisplayModeChange() {
     return 0;
 }

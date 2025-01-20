@@ -4,7 +4,7 @@
 #include <cstdarg>
 #include <cstring>
 
-// OFFSET: 0x0055f230
+// OFFSET: 0x0055f230, STATUS: TODO
 int RSStringUtil::Ssnprintf(char* buf, std::size_t len, const char* format, ...) {
 	// ft said something about if it walks like a duck its a duck or some shit.
 	// I really don't want to reverse the Svformatter function.
@@ -20,12 +20,12 @@ int RSStringUtil::Ssnprintf(char* buf, std::size_t len, const char* format, ...)
 }
 
 // I am so unsure about this signature...
-// OFFSET: 0x0055e600
+// OFFSET: 0x0055e600, STATUS: TODO
 void RSStringUtil::Svformatter(int (*format_function)(char**), char* buf, const char* format, const void* format_args) {
 	// TODO: Not yet implemented
 }
 
-// OFFSET: 0x0055f320
+// OFFSET: 0x0055f320, STATUS: TODO
 const char* RSStringUtil::stristr(const char* string, const char* sub_string) {
 	// not the real implementation, refer to the comment in Ssnprintf
 

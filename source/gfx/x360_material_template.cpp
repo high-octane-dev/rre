@@ -6,6 +6,7 @@
 #include "x360_parse.hpp"
 #include "util/rsstring_util.hpp"
 
+// OFFSET: 0x0040ba30, STATUS: COMPLETE
 X360MaterialTemplate::X360MaterialTemplate() {
 	memset(VertexShaderName, 0, sizeof(VertexShaderName));
 	memset(PixelShaderName, 0, sizeof(PixelShaderName));
@@ -59,6 +60,7 @@ X360MaterialTemplate::X360MaterialTemplate() {
 	BlendOp = D3DBLENDOP_ADD;
 }
 
+// OFFSET: 0x0040bb50, STATUS: COMPLETE
 void X360MaterialTemplate::LoadFromFile(const char* file_name) {
 	char* format_arg;
 	ParameterBlock parameter_block;

@@ -26,6 +26,7 @@ float g_ViewportFadeHeight = 720.0;
 float g_CameraAspect = 1.0;
 float g_CameraAspect2 = 1.0;
 
+// OFFSET: 0x00559f20, STATUS: COMPLETE
 void SetDisplayModeGlobal(DisplayMode* display_mode) {
     g_TargetFrameRate = display_mode->fps;
     if (display_mode->field0_0x0 == 0 && display_mode->screen_mode != 2) {
@@ -63,14 +64,12 @@ void SetDisplayModeGlobal(DisplayMode* display_mode) {
     return;
 }
 
-// OFFSET: 0x00421d10
-X360Game::~X360Game()
-{
+// OFFSET: 0x00421d10, STATUS: TODO
+X360Game::~X360Game() {
 }
 
-// OFFSET: 0x00421ee0
-int X360Game::InitializeRenderer(char(&quit_message)[260])
-{
+// OFFSET: 0x00421ee0, STATUS: COMPLETE
+int X360Game::InitializeRenderer(char(&quit_message)[260]) {
     d3d9 = Direct3DCreate9(D3D_SDK_VERSION);
     if (d3d9 != nullptr) {
         g_VideoCard = new X360VideoCard();
@@ -88,7 +87,7 @@ int X360Game::InitializeRenderer(char(&quit_message)[260])
     return 0;
 }
 
-// OFFSET: 0x00421d90
+// OFFSET: 0x00421d90, STATUS: COMPLETE
 int X360Game::PreGameInitialize(DisplayMode* desired_display_mode) {
     hwnd = g_HWNDReal;
     UpdateLocalizedPaths();
@@ -125,30 +124,26 @@ int X360Game::PreGameInitialize(DisplayMode* desired_display_mode) {
     return 1;
 }
 
-// OFFSET: 0x004221c0
-int X360Game::SetBasicRenderStates()
-{
+// OFFSET: 0x004221c0, STATUS: TODO
+int X360Game::SetBasicRenderStates() {
     return 0;
 }
 
-// OFFSET: 0x00423060
-void X360Game::PrepareFrame()
-{
+// OFFSET: 0x00423060, STATUS: TODO
+void X360Game::PrepareFrame() {
 }
 
-// OFFSET: 0x00422010
-int X360Game::KeyUpHandler(ProcessNode*, KeyInfo*)
-{
+// OFFSET: 0x00422010, STATUS: TODO
+int X360Game::KeyUpHandler(ProcessNode*, KeyInfo*) {
     return 0;
 }
 
-// OFFSET: 0x00422030
-int X360Game::KeyDownHandler(ProcessNode*, KeyInfo*)
-{
+// OFFSET: 0x00422030, STATUS: TODO
+int X360Game::KeyDownHandler(ProcessNode*, KeyInfo*) {
     return 0;
 }
 
-// OFFSET: 0x00422fd0
+// OFFSET: 0x00422fd0, STATUS: WIP
 int X360Game::Terminate() {
     int return_value = Game::Terminate();
     /*
@@ -184,8 +179,7 @@ int X360Game::SetDisplayMode(DisplayMode* mode) {
     return PostDisplayModeChange() != 0;
 }
 
-// OFFSET: 0x00422110
-RenderTarget* X360Game::CreateRenderTarget()
-{
+// OFFSET: 0x00422110, STATUS: TODO
+RenderTarget* X360Game::CreateRenderTarget() {
     return nullptr;
 }

@@ -1,11 +1,11 @@
 #include "x360_vertex_attribute_format_string_table.hpp"
 #include "x360_video_card.hpp"
 
-// OFFSET: INLINE
+// OFFSET: INLINE, STATUS: COMPLETE
 X360VertexAttributeFormatStringTable::X360VertexAttributeFormatStringTable(std::size_t user_data_stride, LookupType lookup_type, std::size_t initial_string_entry_count, std::size_t string_entries_increment) : DynamicStringTable(user_data_stride, lookup_type, initial_string_entry_count, string_entries_increment) {
 }
 
-// OFFSET: 0x004125d0
+// OFFSET: 0x004125d0, STATUS: COMPLETE
 X360VertexAttributeFormatStringTable::~X360VertexAttributeFormatStringTable() {
 	for (std::size_t i = 0; i < len; i++) {
 		if (string_entries[i].data != nullptr) {
@@ -24,7 +24,7 @@ X360VertexAttributeFormatStringTable::~X360VertexAttributeFormatStringTable() {
 	len = 0;
 }
 
-// OFFSET: 0x00412640
+// OFFSET: 0x00412640, STATUS: COMPLETE
 int X360VertexAttributeFormatStringTable::AddItem(char const* label, D3DVERTEXELEMENT9* elements) {
 	int index = DynamicStringTable::AddItem(label, nullptr);
 	if (*string_entries[index].data == nullptr) {

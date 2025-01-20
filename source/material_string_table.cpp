@@ -2,24 +2,24 @@
 #include "util/rsstring_util.hpp"
 #include "cars_game.hpp"
 
-// OFFSET: 0x005c3070
+// OFFSET: 0x005c3070, STATUS: COMPLETE
 MaterialStringTable::MaterialStringTable(std::size_t user_data_stride, LookupType lookup_type, std::size_t initial_string_entry_count, std::size_t string_entries_increment, std::size_t string_heap_capacity, int unk3, std::size_t max_table_markers) : StringTable(user_data_stride, lookup_type, initial_string_entry_count, string_entries_increment, string_heap_capacity, unk3, max_table_markers) {
 	flags = 0;
 }
 
-// OFFSET: 0x00585fa0
+// OFFSET: 0x00585fa0, STATUS: TODO
 void MaterialStringTable::AddItem(char const*, int) {
 	// TODO: Implement This!
 }
 
-// OFFSET: 0x00586140
+// OFFSET: 0x00586140, STATUS: COMPLETE
 void MaterialStringTable::ModifyFilename(char* file_name) {
 	char platform_extension[20];
 	RSStringUtil::Ssnprintf(platform_extension, sizeof(platform_extension), ".%s.mst", "x360");
 	strcat(file_name, platform_extension);
 }
 
-// OFFSET: 0x00550e60
+// OFFSET: 0x00550e60, STATUS: COMPLETE
 int MaterialStringTable::GetVariableValue(char* dest, char* variable_name) {
 	if (dest != nullptr && variable_name != nullptr) {
 		if (_stricmp(variable_name, "FontTextureContentDirectory") == 0) {

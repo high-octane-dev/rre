@@ -6,9 +6,8 @@
 
 #include "BASS.h"
 
-// OFFSET: 0x00424070
-void X360Parse::GetAddressMode(ParameterBlock* parameter_block, const char* parameter, const D3DTEXTUREADDRESS fallback,
-                               D3DTEXTUREADDRESS* dest) {
+// OFFSET: 0x00424070, STATUS: COMPLETE
+void X360Parse::GetAddressMode(ParameterBlock* parameter_block, const char* parameter, const D3DTEXTUREADDRESS fallback, D3DTEXTUREADDRESS* dest) {
 	char parameter_content[64];
 
 	parameter_block->GetParameter(parameter, "undefined", parameter_content, sizeof(parameter_content));
@@ -49,9 +48,8 @@ void X360Parse::GetAddressMode(ParameterBlock* parameter_block, const char* para
 	}
 }
 
-// OFFSET: 0x00424200
-void X360Parse::GetFilter(ParameterBlock* parameter_block, const char* parameter, const D3DTEXTUREFILTERTYPE fallback,
-                          D3DTEXTUREFILTERTYPE* dest) {
+// OFFSET: 0x00424200, STATUS: COMPLETE
+void X360Parse::GetFilter(ParameterBlock* parameter_block, const char* parameter, const D3DTEXTUREFILTERTYPE fallback, D3DTEXTUREFILTERTYPE* dest) {
 	char parameter_content[64];
 
 	parameter_block->GetParameter(parameter, "undefined", parameter_content, sizeof(parameter_content));
@@ -80,7 +78,7 @@ void X360Parse::GetFilter(ParameterBlock* parameter_block, const char* parameter
 	}
 }
 
-// OFFSET: 0x00423c40
+// OFFSET: 0x00423c40, STATUS: COMPLETE
 void X360Parse::GetFloat(ParameterBlock* parameter_block, const char* parameter, const float fallback, float* dest) {
 	char parameter_content[64];
 	char* end_ptr = nullptr;
@@ -94,7 +92,7 @@ void X360Parse::GetFloat(ParameterBlock* parameter_block, const char* parameter,
 	*dest = static_cast<float>(std::strtod(parameter_content, &end_ptr));
 }
 
-// OFFSET: 0x00423cd0
+// OFFSET: 0x00423cd0, STATUS: COMPLETE
 void X360Parse::GetLong(ParameterBlock* parameter_block, const char* parameter, const long fallback, long* dest) {
 	char parameter_content[64];
 	char* end_ptr = nullptr;
@@ -108,9 +106,8 @@ void X360Parse::GetLong(ParameterBlock* parameter_block, const char* parameter, 
 	*dest = std::strtol(parameter_content, &end_ptr, 0);
 }
 
-// OFFSET: 0x00423e80
-void X360Parse::GetULong(ParameterBlock* parameter_block, const char* parameter, const unsigned long fallback,
-                         unsigned long* dest) {
+// OFFSET: 0x00423e80, STATUS: COMPLETE
+void X360Parse::GetULong(ParameterBlock* parameter_block, const char* parameter, const unsigned long fallback, unsigned long* dest) {
 	char parameter_content[64];
 	char* end_ptr = nullptr;
 
@@ -123,7 +120,7 @@ void X360Parse::GetULong(ParameterBlock* parameter_block, const char* parameter,
 	*dest = std::strtoul(parameter_content, &end_ptr, 0);
 }
 
-// OFFSET: 0x00423d60
+// OFFSET: 0x00423d60, STATUS: COMPLETE
 void X360Parse::GetBool(ParameterBlock* parameter_block, const char* parameter, const bool fallback, bool* dest) {
 	char parameter_content[64];
 
@@ -138,10 +135,8 @@ void X360Parse::GetBool(ParameterBlock* parameter_block, const char* parameter, 
 		parameter_content, "Y") == 0;
 }
 
-
-// OFFSET: 0x00424310
-void X360Parse::GetD3DCmpFunc(ParameterBlock* parameter_block, const char* parameter, const D3DCMPFUNC fallback,
-                              D3DCMPFUNC* dest) {
+// OFFSET: 0x00424310, STATUS: COMPLETE
+void X360Parse::GetD3DCmpFunc(ParameterBlock* parameter_block, const char* parameter, const D3DCMPFUNC fallback, D3DCMPFUNC* dest) {
 	char parameter_content[64];
 
 	parameter_block->GetParameter(parameter, "undefined", parameter_content, sizeof(parameter_content));
@@ -190,9 +185,8 @@ void X360Parse::GetD3DCmpFunc(ParameterBlock* parameter_block, const char* param
 	}
 }
 
-// OFFSET: 0x00424930
-void X360Parse::GetD3DZBufferType(ParameterBlock* parameter_block, const char* parameter, const D3DZBUFFERTYPE fallback,
-                                  _D3DZBUFFERTYPE* dest) {
+// OFFSET: 0x00424930, STATUS: COMPLETE
+void X360Parse::GetD3DZBufferType(ParameterBlock* parameter_block, const char* parameter, const D3DZBUFFERTYPE fallback, _D3DZBUFFERTYPE* dest) {
 	char parameter_content[64];
 
 	parameter_block->GetParameter(parameter, "undefined", parameter_content, sizeof(parameter_content));
@@ -211,9 +205,8 @@ void X360Parse::GetD3DZBufferType(ParameterBlock* parameter_block, const char* p
 	}
 }
 
-// OFFSET: 0x004249f0
-void X360Parse::GetD3DCull(ParameterBlock* parameter_block, const char* parameter, const D3DCULL fallback,
-                           D3DCULL* dest) {
+// OFFSET: 0x004249f0, STATUS: COMPLETE
+void X360Parse::GetD3DCull(ParameterBlock* parameter_block, const char* parameter, const D3DCULL fallback, D3DCULL* dest) {
 	char parameter_content[64];
 
 	parameter_block->GetParameter(parameter, "undefined", parameter_content, sizeof(parameter_content));
@@ -237,9 +230,8 @@ void X360Parse::GetD3DCull(ParameterBlock* parameter_block, const char* paramete
 	}
 }
 
-// OFFSET: 0x004244e0
-void X360Parse::GetD3DBlend(ParameterBlock* parameter_block, const char* parameter, const D3DBLEND fallback,
-                            D3DBLEND* dest) {
+// OFFSET: 0x004244e0, STATUS: COMPLETE
+void X360Parse::GetD3DBlend(ParameterBlock* parameter_block, const char* parameter, const D3DBLEND fallback, D3DBLEND* dest) {
 	char parameter_content[64];
 
 	parameter_block->GetParameter(parameter, "undefined", parameter_content, sizeof(parameter_content));
@@ -320,9 +312,8 @@ void X360Parse::GetD3DBlend(ParameterBlock* parameter_block, const char* paramet
 	}
 }
 
-// OFFSET: 0x004247e0
-void X360Parse::GetD3DBlendOp(ParameterBlock* parameter_block, const char* parameter, const D3DBLENDOP fallback,
-                              D3DBLENDOP* dest) {
+// OFFSET: 0x004247e0, STATUS: COMPLETE
+void X360Parse::GetD3DBlendOp(ParameterBlock* parameter_block, const char* parameter, const D3DBLENDOP fallback, D3DBLENDOP* dest) {
 	char parameter_content[64];
 
 	parameter_block->GetParameter(parameter, "undefined", parameter_content, sizeof(parameter_content));

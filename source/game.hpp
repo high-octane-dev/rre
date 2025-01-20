@@ -95,8 +95,8 @@ public:
     Game();
 
 	virtual ~Game();
-	virtual int InitializeRenderer(char (&quit_message)[260]);
 	virtual int Initialize();
+	virtual int InitializeRenderer(char (&quit_message)[260]);
 	virtual void CreateStringTables();
 	virtual void AddTimeIntervalCallback(void (**)(int, float, void*), void*);
 	virtual void RemoveTimeIntervalCallback(void (**)(int, float, void*), void*);
@@ -109,7 +109,7 @@ public:
 	virtual int CreateMaterialPropertyManager();
 	virtual int Activate();
 	virtual int Deactivate();
-	virtual int SetBasicRenderStates();
+	virtual int SetBasicRenderStates() = 0;
 	virtual void PrepareFrame();
 	virtual int UpdateScreen();
 	virtual int Tick();
@@ -125,14 +125,14 @@ public:
     virtual void GetCameras(Camera*[4]);
     virtual int Terminate();
     virtual int GetFullPathToContentFile(const char*, char*);
-    virtual int SetDisplayMode(DisplayMode*);
+    virtual int SetDisplayMode(DisplayMode*) = 0;
     virtual void InitPlatformGraphicsCallback(DisplayMode*);
     virtual int GetResourceString(const char*, char*);
     virtual int Timeout(int);
     virtual void ReportMemoryUsage(char*);
     virtual void UpdateLocalizedPaths();
     virtual void UpdateTextureContentDirectories();
-    virtual RenderTarget* CreateRenderTarget();
+    virtual RenderTarget* CreateRenderTarget() = 0;
     virtual int PostDisplayModeChange();
 
     void DestroyStatisticsLog();
