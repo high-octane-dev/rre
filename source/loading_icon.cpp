@@ -2,6 +2,7 @@
 #include "data_access.hpp"
 #include <stdio.h>
 
+// OFFSET: 0x005503b0, STATUS: COMPLETE
 LoadingIcon::LoadingIcon()
 {
 	unk1 = 0;
@@ -15,6 +16,7 @@ LoadingIcon::LoadingIcon()
 	unk9 = 0;
 }
 
+// OFFSET: 0x005ed180, STATUS: WIP
 void LoadingIcon::Create(char* a1)
 {
 	ParameterBlock local_960;
@@ -36,12 +38,14 @@ void LoadingIcon::Create(char* a1)
 	}
 }
 
+// OFFSET: 0x005503e0, STATUS: WIP
 void LoadingIcon::Enable()
 {
 	//unk9 = timeGetTime();
 	unk4 = 1;
 }
 
+// OFFSET: 0x00550400, STATUS: COMPLETE
 void LoadingIcon::Disable()
 {
 	unk4 = 0;
@@ -50,6 +54,7 @@ void LoadingIcon::Disable()
 	unk8 = 0;
 }
 
+// OFFSET: 0x005d6780, STATUS: TODO
 int LoadingIcon::Load(ParameterBlock*)
 {
 	return 0;

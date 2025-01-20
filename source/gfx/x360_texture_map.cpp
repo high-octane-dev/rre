@@ -5,25 +5,25 @@
 
 extern int g_EnableEndianSwapping;
 
-// OFFSET: 0x0040f760
+// OFFSET: 0x0040f760, STATUS: COMPLETE
 void BaseTextureMap::ClearMaxProjectedSize()
 {
 	unk4 = 0.0f;
 }
 
-// OFFSET: 0x0040f770
+// OFFSET: 0x0040f770, STATUS: COMPLETE
 TextureMap* TextureMap::GetData()
 {
 	return this;
 }
 
-// OFFSET: INLINE
+// OFFSET: INLINE, STATUS: COMPLETE
 void X360TextureMap::Unk1()
 {
 	return;
 }
 
-// OFFSET: 0x00410100
+// OFFSET: 0x00410100, STATUS: WIP
 int X360TextureMap::Unk2(unsigned int a1)
 {
 	D3DXIMAGE_INFO local_3c;
@@ -62,91 +62,91 @@ int X360TextureMap::Unk2(unsigned int a1)
 	return 1;
 }
 
-// OFFSET: 0x00442ef0
+// OFFSET: 0x00442ef0, STATUS: COMPLETE
 int X360TextureMap::Unk3()
 {
 	return 0;
 }
 
-// OFFSET: 0x00410260
+// OFFSET: 0x00410260, STATUS: TODO
 int X360TextureMap::Unk4(void*, int, int, int, int, int, D3DFORMAT, unsigned int)
 {
 	return 0;
 }
 
-// OFFSET: 0x0040fb90
+// OFFSET: 0x0040fb90, STATUS: TODO
 int X360TextureMap::Unk5()
 {
 	return 0;
 }
 
-// OFFSET: INLINE
+// OFFSET: INLINE, STATUS: COMPLETE
 int X360TextureMap::Unk6()
 {
 	return 1;
 }
 
-// OFFSET: INLINE
+// OFFSET: INLINE, STATUS: COMPLETE
 int X360TextureMap::Unk7()
 {
 	return 1;
 }
 
-// OFFSET: INLINE
+// OFFSET: INLINE, STATUS: COMPLETE
 int X360TextureMap::Unk8()
 {
 	return 1;
 }
 
-// OFFSET: INLINE
+// OFFSET: INLINE, STATUS: COMPLETE
 void X360TextureMap::Unk9()
 {
 	return;
 }
 
-// OFFSET: INLINE
+// OFFSET: INLINE, STATUS: COMPLETE
 void X360TextureMap::Unk10()
 {
 	return;
 }
 
-// OFFSET: 0x0040fde0
+// OFFSET: 0x0040fde0, STATUS: TODO
 int X360TextureMap::Unk11(int, int, int*)
 {
 	return 0;
 }
 
-// OFFSET: 0x0040fe30
+// OFFSET: 0x0040fe30, STATUS: COMPLETE
 int X360TextureMap::Unk12()
 {
 	return texture->UnlockRect(0) == 0;
 }
 
-// OFFSET: 0x0040fcb0
+// OFFSET: 0x0040fcb0, STATUS: TODO
 int X360TextureMap::Unk13(int)
 {
 	return 0;
 }
 
-// OFFSET: 0x00410570
+// OFFSET: 0x00410570, STATUS: TODO
 int* X360TextureMap::Unk14(int)
 {
 	return nullptr;
 }
 
-// OFFSET: 0x004105c0
+// OFFSET: 0x004105c0, STATUS: TODO
 int X360TextureMap::Unk15(int)
 {
 	return 0;
 }
 
-// OFFSET: 0x0040fd90
+// OFFSET: 0x0040fd90, STATUS: TODO
 void X360TextureMap::Unk16(int)
 {
 	return;
 }
 
-// OFFSET: 0x00410e40
+// OFFSET: 0x00410e40, STATUS: TODO
 int X360TextureMap::Unk17()
 {
 	return 0;

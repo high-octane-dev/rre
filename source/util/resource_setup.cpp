@@ -5,6 +5,7 @@
 const char** UNK_0071626c = nullptr;
 int UNK_00716270;
 
+// OFFSET: 0x0055de70, STATUS: COMPLETE
 int ResourceSetup::UNK_0055de70(const char* param_1)
 {
 	int iVar2;
@@ -21,6 +22,7 @@ int ResourceSetup::UNK_0055de70(const char* param_1)
 	return 0;
 }
 
+// OFFSET: 0x005dd580, STATUS: COMPLETE
 void ResourceSetup::UNK_005dd580(const char* param_1, int param_2)
 {
 	if (g_ResBuilding == 3)
@@ -44,6 +46,7 @@ void ResourceSetup::UNK_005dd580(const char* param_1, int param_2)
 	}
 }
 
+// OFFSET: 0x005f2e80, STATUS: COMPLETE
 void ResourceSetup::ResourceSetup(const char* path, int a2, int a3, int a4, int a5, unsigned int* a6, int a7, int a8, int a9)
 {
 	if (g_EnableNonStreamingResFiles != 0)
@@ -64,6 +67,7 @@ void ResourceSetup::ResourceSetup(const char* path, int a2, int a3, int a4, int 
 	}
 }
 
+// OFFSET: 0x005f2f30, STATUS: COMPLETE
 void ResourceSetup::ResourceFinish(char* a1, int a2)
 {
 	if (g_EnableNonStreamingResFiles == 0)
