@@ -346,7 +346,7 @@ int Game::SetDisplayMode(struct DisplayMode*) {
 }
 
 // OFFSET: INLINE
-void Game::InitPlatformGraphicsCallback() {}
+void Game::InitPlatformGraphicsCallback(DisplayMode*) {}
 
 // OFFSET: 0x00617a20
 int Game::GetResourceString(const char*, char* dest) {

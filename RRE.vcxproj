@@ -115,6 +115,7 @@
     <ClCompile Include="source\data_access.cpp" />
     <ClCompile Include="source\file_io.cpp" />
     <ClCompile Include="source\gfx\cache.cpp" />
+    <ClCompile Include="source\gfx\cursor.cpp" />
     <ClCompile Include="source\gfx\d3d_state_manager.cpp" />
     <ClCompile Include="source\gfx\emotion_engine.cpp" />
     <ClCompile Include="source\gfx\render_target.cpp" />
@@ -151,7 +152,6 @@
     <ClInclude Include="source\action_script.hpp" />
     <ClInclude Include="source\action_sequence.hpp" />
     <ClInclude Include="source\base_object.hpp" />
-    <ClInclude Include="source\bind.hpp" />
     <ClInclude Include="source\block_allocator.hpp" />
     <ClInclude Include="source\cars_game.hpp" />
     <ClInclude Include="source\containers\container_hash_table.hpp" />
@@ -165,6 +165,7 @@
     <ClInclude Include="source\game.hpp" />
     <ClInclude Include="source\game_object.hpp" />
     <ClInclude Include="source\gfx\cache.hpp" />
+    <ClInclude Include="source\gfx\cursor.hpp" />
     <ClInclude Include="source\gfx\d3d_state_manager.hpp" />
     <ClInclude Include="source\gfx\emotion_engine.hpp" />
     <ClInclude Include="source\gfx\render_target.hpp" />

@@ -40,7 +40,7 @@ int g_ScavengerHuntPartGroupInExploreHub = FALSE;
 int g_CheckForXbox360TextureMipMaps = FALSE;
 int g_OnlyLoadXbox360LightMapsFromResourceFile = TRUE;
 
-// OFFSET: 0x004f50a0
+// OFFSET: 0x004f50a0, STATUS: WIP
 int CarsGame::InitializeRenderer(char (&quit_message)[260]) {
     SetLanguageToDefault();
     if (X360Game::InitializeRenderer(quit_message) == 0) {
@@ -51,7 +51,7 @@ int CarsGame::InitializeRenderer(char (&quit_message)[260]) {
     return 1;
 }
 
-// OFFSET: 0x0051c130
+// OFFSET: 0x0051c130, STATUS: WIP
 int CarsGame::Initialize() {
     if (splash_screen[0] != '\0') {
         ShowLoadingScreen(splash_screen, "ld_mcq", 1);
@@ -68,12 +68,12 @@ int CarsGame::Initialize() {
     return 1;
 }
 
-// OFFSET: 0x0043fe80
+// OFFSET: 0x0043fe80, STATUS: WIP
 int CarsGame::PreGameInitialize(DisplayMode*) {
     // TODO: Not completely implemented
     char material_file_content[260]{};
-    char debug_str_file[260];
-    char material_template_file[260];
+    char debug_str_file[260]{};
+    char material_template_file[260]{};
 
     X360Game::PreGameInitialize(nullptr);
 
@@ -105,20 +105,20 @@ int CarsGame::PreGameInitialize(DisplayMode*) {
     return 1;
 }
 
-// OFFSET: 0x00440360
+// OFFSET: 0x00440360, STATUS: COMPLETE
 void CarsGame::LoadConfigFile(ParameterBlock* parameter_block) {
-    char game_mode_parameter[64];
-    char difficulty_parameter[64];
-    char story_type_parameter[64];
-    char time_of_day_parameter[64];
-    char char_paint_type_parameter[260];
+    char game_mode_parameter[64]{};
+    char difficulty_parameter[64]{};
+    char story_type_parameter[64]{};
+    char time_of_day_parameter[64]{};
+    char char_paint_type_parameter[260]{};
     constexpr auto empty_vector = Vector4(0, 0, 0, 0);
-    char viewport_type_parameter[260];
-    char control_type_parameter[260];
-    char camera_type_parameter[260];
-    char language_parameter[64];
-    int build_resource_files_parameter;
-    int build_ini_files_parameter;
+    char viewport_type_parameter[260]{};
+    char control_type_parameter[260]{};
+    char camera_type_parameter[260]{};
+    char language_parameter[64]{};
+    int build_resource_files_parameter = 0;
+    int build_ini_files_parameter = 0;
 
     if (parameter_block->ReadParameterBlock("Cars") != 0) {
 	    parameter_block->GetParameter("GameMode", "", game_mode_parameter, sizeof(game_mode_parameter));
@@ -267,39 +267,39 @@ void CarsGame::LoadConfigFile(ParameterBlock* parameter_block) {
     Game::LoadConfigFile(parameter_block);
 }
 
-// OFFSET: 0x00440e00
+// OFFSET: 0x00440e00, STATUS: TODO
 void CarsGame::BeginAutoTest() {
 }
 
-// OFFSET: 0x004412b0
+// OFFSET: 0x004412b0, STATUS: TODO
 void CarsGame::EndAutoTest(int) {
 }
 
-// OFFSET: 0x004f51d0
+// OFFSET: 0x004f51d0, STATUS: TODO
 int CarsGame::Tick() {
     return 0;
 }
 
-// OFFSET: 0x00440320
+// OFFSET: 0x00440320, STATUS: TODO
 int CarsGame::KeyUpHandler(ProcessNode*, KeyInfo*) {
     return 0;
 }
 
-// OFFSET: 0x00440340
+// OFFSET: 0x00440340, STATUS: TODO
 int CarsGame::KeyDownHandler(ProcessNode*, KeyInfo*) {
     return 0;
 }
 
-// OFFSET: 0x0051c730
+// OFFSET: 0x0051c730, STATUS: TODO
 int CarsGame::Terminate() {
     return 0;
 }
 
-// OFFSET: 0x00441b70
+// OFFSET: 0x00441b70, STATUS: TODO
 void CarsGame::ReportMemoryUsage(char*) {
 }
 
-// OFFSET: 0x00487b80
+// OFFSET: 0x00487b80, STATUS: COMPLETE
 void CarsGame::UpdateLocalizedPaths() {
     char* prefix = language_prefixes[lang_defs[selected_language_configuration->TextLanguageIndex]->prefix_index];
     g_LocalizationContentDirectory[0] = *prefix;
@@ -309,7 +309,7 @@ void CarsGame::UpdateLocalizedPaths() {
     UpdateTextureContentDirectories();
 }
 
-// OFFSET: 0x00441d80
+// OFFSET: 0x00441d80, STATUS: COMPLETE
 void CarsGame::UpdateTextureContentDirectories() {
     if (g_ScreenMode == 2) {
         RSStringUtil::Ssnprintf(g_UILocalizedTextureContentDirectory, sizeof(g_UILocalizedTextureContentDirectory), "%s%s", g_LocalizedUIContentDirectory, "Tex_HD\\");
@@ -321,60 +321,60 @@ void CarsGame::UpdateTextureContentDirectories() {
     }
 }
 
-// OFFSET: 0x00441840
+// OFFSET: 0x00441840, STATUS: COMPLETE
 void CarsGame::ReloadMaterials() {
     Game::ReloadMaterials(0);
 }
 
-// OFFSET: 0x00441850
+// OFFSET: 0x00441850, STATUS: COMPLETE
 void CarsGame::ReloadMaterialsAndTextures() {
     Game::ReloadMaterialsAndTextures(0);
 }
 
-// OFFSET: 0x0043fa70
+// OFFSET: 0x0043fa70, STATUS: TODO
 void CarsGame::AddVisibilitySearchList(ContainerList<GameObject*>*) {
 }
 
-// OFFSET: 0x00441cb0
+// OFFSET: 0x00441cb0, STATUS: COMPLETE
 void CarsGame::ClearCheatCodes() {
     for (std::size_t i = 0; i < sizeof(cheat_codes) / sizeof(CheatCode); i++) {
         cheat_codes[i].active = 0;
     }
 }
 
-// OFFSET: 0x00487ac0
+// OFFSET: 0x00487ac0, STATUS: TODO
 void CarsGame::CreateActivityDatabase() {
 }
 
-// OFFSET: 0x004873c0
+// OFFSET: 0x004873c0, STATUS: TODO
 void CarsGame::CreateActivityManager() {
 }
 
-// OFFSET: 0x00487870
+// OFFSET: 0x00487870, STATUS: TODO
 void CarsGame::CreateBoltManager(int) {
 }
 
-// OFFSET: 0x004c3b70
+// OFFSET: 0x004c3b70, STATUS: TODO
 void CarsGame::CreateBonusContentManager() {
 }
 
-// OFFSET: 0x004c3a10
+// OFFSET: 0x004c3a10, STATUS: TODO
 void CarsGame::CreateBonusPointManager() {
 }
 
-// OFFSET: 0x004c3c40
+// OFFSET: 0x004c3c40, STATUS: TODO
 void CarsGame::CreateControllerSettings() {
 }
 
-// OFFSET: 0x00487b20
+// OFFSET: 0x00487b20, STATUS: TODO
 void CarsGame::CreateEventDatabase() {
 }
 
-// OFFSET: 0x00441470
+// OFFSET: 0x00441470, STATUS: TODO
 void CarsGame::CreateLoadingIcon(const char* name) {
 }
 
-// OFFSET: 0x00441370
+// OFFSET: 0x00441370, STATUS: WIP
 void CarsGame::CreateLoadingScreen(const char* name) {
 
     char package_name[260]{};
@@ -399,71 +399,71 @@ void CarsGame::CreateLoadingScreen(const char* name) {
     }
 }
 
-// OFFSET: 0x00487990
+// OFFSET: 0x00487990, STATUS: TODO
 void CarsGame::CreatePickupManager() {
 }
 
-// OFFSET: 0x0051c030
+// OFFSET: 0x0051c030, STATUS: TODO
 void CarsGame::CreateProfileManager() {
 }
 
-// OFFSET: 0x004c3960
+// OFFSET: 0x004c3960, STATUS: TODO
 void CarsGame::CreateRecordLibraries() {
 }
 
-// OFFSET: 0x004f54e0
+// OFFSET: 0x004f54e0, STATUS: TODO
 void CarsGame::CreateScavengerHuntManager() {
 }
 
-// OFFSET: 0x004f5560
+// OFFSET: 0x004f5560, STATUS: TODO
 void CarsGame::CreateStoryManager() {
 }
 
-// OFFSET: 0x004c3aa0
+// OFFSET: 0x004c3aa0, STATUS: TODO
 void CarsGame::CreateStreamManager() {
 }
 
-// OFFSET: 0x004877d0
+// OFFSET: 0x004877d0, STATUS: TODO
 void CarsGame::CreateUI() {
 }
 
-// OFFSET: 0x004c3bd0
+// OFFSET: 0x004c3bd0, STATUS: TODO
 void CarsGame::CreateUIResourceManager() {
 }
 
-// OFFSET: 0x004419e0
+// OFFSET: 0x004419e0, STATUS: TODO
 void CarsGame::CreateVideoFXManager(int) {
 }
 
-// OFFSET: 0x00441970
+// OFFSET: 0x00441970, STATUS: TODO
 void CarsGame::CreateVirtualNetwork() {
 }
 
-// OFFSET: 0x00422c80
+// OFFSET: 0x00422c80, STATUS: TODO
 void CarsGame::UNK_00422c80(int, int) {
 }
 
-// OFFSET: 0x00487470
+// OFFSET: 0x00487470, STATUS: TODO
 void CarsGame::UNK_00487470() {
 }
 
-// OFFSET: 0x0050b890
+// OFFSET: 0x0050b890, STATUS: TODO
 void CarsGame::LoadWorld() {
 }
 
-// OFFSET: 0x0043ffc0
+// OFFSET: 0x0043ffc0, STATUS: TODO
 void CarsGame::MapAllGameKeys() {
 }
 
-// OFFSET: 0x00441910
+// OFFSET: 0x00441910, STATUS: TODO
 void CarsGame::PrepareDeferredLoad(DeferredLoad) {
 }
 
-// OFFSET: 0x004237a0
+// OFFSET: 0x004237a0, STATUS: TODO
 void CarsGame::PresentFrame(int) {
 }
 
-// OFFSET: 0x00441b40
+// OFFSET: 0x00441b40, STATUS: TODO
 bool CarsGame::ReleaseVideoFXManager() {
     /*
     if (video_fx_manager != nullptr) {
@@ -474,12 +474,12 @@ bool CarsGame::ReleaseVideoFXManager() {
     return true;
 }
 
-// OFFSET: 0x00441660
+// OFFSET: 0x00441660, STATUS: TODO
 int CarsGame::ResetLoadingScreenAndIcon() {
     return 0;
 }
 
-// OFFSET: 0x004416b0
+// OFFSET: 0x004416b0, STATUS: COMPLETE
 void CarsGame::SetConfigArguments() {
     strncpy(activity, "FrontEndUI", 11);
     start[0] = '\0';
@@ -522,7 +522,7 @@ void CarsGame::SetConfigArguments() {
     always_show_gps = 1;
 }
 
-// OFFSET: 0x00440c90
+// OFFSET: 0x00440c90, STATUS: COMPLETE
 void CarsGame::SetLanguageToDefault() {
     XboxLanguage selected_dash_lang = GetSystemLanguage();
     if (selected_dash_lang == XboxLanguage::None) {
@@ -572,7 +572,7 @@ void CarsGame::SetLanguageToDefault() {
     }
 }
 
-// OFFSET: 0x00441570
+// OFFSET: 0x00441570, STATUS: WIP
 int CarsGame::ShowLoadingScreen(const char* _loading_screen, const char* _loading_icon, int is_first) {
     if (is_first == 0 && _loading_icon != nullptr && _loading_screen != nullptr) {
         if (_stricmp(_loading_screen, loading_screen_name) == 0 && _stricmp(_loading_icon, loading_icon_name) == 0) {
@@ -602,14 +602,14 @@ int CarsGame::ShowLoadingScreen(const char* _loading_screen, const char* _loadin
     return 1;
 }
 
-// OFFSET: 0x00422db0
+// OFFSET: 0x00422db0, STATUS: TODO
 void CarsGame::UnkRegistryGetValue(char*, unsigned int) {
 }
 
-// OFFSET: 0x00441870
+// OFFSET: 0x00441870, STATUS: TODO
 void CarsGame::UnloadStringTables() {
 }
 
-// OFFSET: 0x00487700
+// OFFSET: 0x00487700, STATUS: TODO
 void CarsGame::UnloadWorld() {
 }

@@ -2,6 +2,7 @@
 #include "x360_game.hpp"
 #include "gfx/x360_video_card.hpp"
 #include "gfx/x360_shader_manager.hpp"
+#include "gfx/cursor.hpp"
 
 // importing from main.cpp
 extern HWND g_HWNDReal;
@@ -171,10 +172,16 @@ int X360Game::Terminate() {
     return 0;
 }
 
-// OFFSET: 0x00422050
-int X360Game::SetDisplayMode(DisplayMode*)
-{
-    return 0;
+// OFFSET: 0x00422050, STATUS: COMPLETE
+int X360Game::SetDisplayMode(DisplayMode* mode) {
+    if (mode != nullptr) {
+        InitPlatformGraphicsCallback(mode);
+    }
+    if (g_VideoCard->ResetStateManager() == 0) {
+        return 0;
+    }
+    g_lpCursor = new Cursor();
+    return PostDisplayModeChange() != 0;
 }
 
 // OFFSET: 0x00422110

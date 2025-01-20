@@ -22,8 +22,8 @@ public:
 	unsigned int* min_sampler_state_type_used;
 	unsigned int* max_sampler_state_type_used;
 	unsigned int max_samplers;
-	unsigned int min_render_state;
-	unsigned int max_render_state;
+	unsigned int min_render_state_type;
+	unsigned int max_render_state_type;
 	unsigned int min_sampler_used;
 	unsigned int max_sampler_used;
 public:
@@ -33,6 +33,7 @@ public:
 	D3DStateManager& operator=(const D3DStateManager&) = delete;
 	void Reset();
 	void SendData();
+	void SetInitialRenderState(D3DRENDERSTATETYPE type, DWORD value);
 	void SetRenderState(D3DRENDERSTATETYPE type, DWORD value);
 	void SetSamplerState(DWORD sampler_index, D3DSAMPLERSTATETYPE sampler_state_type, DWORD value);
 

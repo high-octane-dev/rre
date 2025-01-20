@@ -126,7 +126,7 @@ public:
     virtual int Terminate();
     virtual int GetFullPathToContentFile(const char*, char*);
     virtual int SetDisplayMode(DisplayMode*);
-    virtual void InitPlatformGraphicsCallback();
+    virtual void InitPlatformGraphicsCallback(DisplayMode*);
     virtual int GetResourceString(const char*, char*);
     virtual int Timeout(int);
     virtual void ReportMemoryUsage(char*);

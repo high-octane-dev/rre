@@ -3,8 +3,8 @@
 
 ActionManager* lpASManager = nullptr;
 
-ActionManager::ActionManager() : GameObject(true), action_infos(10), action_test_infos(10)
-{
+// OFFSET: 0x005ce040, STATUS: WIP
+ActionManager::ActionManager() : GameObject(true), action_infos(10), action_test_infos(10) {
     lpASManager = this;
     unk3 = 0;
     unk4 = 0;
@@ -12,20 +12,17 @@ ActionManager::ActionManager() : GameObject(true), action_infos(10), action_test
     unk1 = 0;
 }
 
-// OFFSET: 0x0056ef30
-int ActionManager::Tick(float deltaSeconds)
-{
-    if ((lpGame->debug_flags & 8) != 0)
-    {
+// OFFSET: 0x0056ef30, STATUS: COMPLETE
+int ActionManager::Tick(float deltaSeconds) {
+    if ((lpGame->debug_flags & 8) != 0) {
         return 1;
     }
 
     return GameObject::Tick(deltaSeconds);
 }
 
-// OFFSET: 0x005e7a20
-ActionScript* ActionManager::CreateActionScript(char* param_1, char* param_2, char* param_3)
-{
+// OFFSET: 0x005e7a20, STATUS: WIP
+ActionScript* ActionManager::CreateActionScript(char* param_1, char* param_2, char* param_3) {
     char* local_860;
     ParameterBlock local_85c;
 
@@ -51,9 +48,8 @@ ActionScript* ActionManager::CreateActionScript(char* param_1, char* param_2, ch
     return pActionScript;
 }
 
-// OFFSET: 0x005ce220
-ActionScript* ActionManager::CreateActionScript(char* param_1, char* param_2, ParameterBlock* param_3)
-{
+// OFFSET: 0x005ce220, STATUS: WIP
+ActionScript* ActionManager::CreateActionScript(char* param_1, char* param_2, ParameterBlock* param_3) {
     char* pcVar4;
 
     pcVar4 = param_2;
@@ -69,9 +65,8 @@ ActionScript* ActionManager::CreateActionScript(char* param_1, char* param_2, Pa
     return newActionScript;
 }
 
-// OFFSET: 0x005e7b80
-ActionSequence* ActionManager::CreateActionSequence(char* param_1, char* param_2, char* param_3)
-{
+// OFFSET: 0x005e7b80, STATUS: WIP
+ActionSequence* ActionManager::CreateActionSequence(char* param_1, char* param_2, char* param_3) {
     char* local_860;
     ParameterBlock local_85c;  
     
@@ -96,9 +91,8 @@ ActionSequence* ActionManager::CreateActionSequence(char* param_1, char* param_2
     return pActionSequence;
 }
 
-// OFFSET: 0x005ce3d0
-ActionSequence* ActionManager::CreateActionSequence(char* param_1, char* param_2, ParameterBlock* param_3)
-{
+// OFFSET: 0x005ce3d0, STATUS: WIP
+ActionSequence* ActionManager::CreateActionSequence(char* param_1, char* param_2, ParameterBlock* param_3) {
     char* pcVar4;
 
     pcVar4 = param_2;
