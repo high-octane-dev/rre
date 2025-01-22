@@ -32,7 +32,7 @@
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <EnableASAN>true</EnableASAN>
+    <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -59,6 +59,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>.\dependencies;$(IncludePath)</IncludePath>
     <LibraryPath>.\dependencies;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnableManifest>true</VcpkgEnableManifest>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -120,6 +123,7 @@
     <ClCompile Include="source\gfx\texture_map_manager.cpp" />
     <ClCompile Include="source\gfx\video_card.cpp" />
     <ClCompile Include="source\gfx\x360_full_screen_texture_render.cpp" />
+    <ClCompile Include="source\gfx\x360_index_buffer.cpp" />
     <ClCompile Include="source\gfx\x360_material_template.cpp" />
     <ClCompile Include="source\gfx\x360_parse.cpp" />
     <ClCompile Include="source\gfx\x360_render_target.cpp" />
@@ -163,11 +167,14 @@
     <ClInclude Include="source\gfx\cache.hpp" />
     <ClInclude Include="source\gfx\d3d_state_manager.hpp" />
     <ClInclude Include="source\gfx\emotion_engine.hpp" />
+    <ClInclude Include="source\gfx\index_buffer.hpp" />
     <ClInclude Include="source\gfx\render_target.hpp" />
     <ClInclude Include="source\gfx\texture_map_manager.hpp" />
     <ClInclude Include="source\gfx\vertex_buffer.hpp" />
     <ClInclude Include="source\gfx\video_card.hpp" />
     <ClInclude Include="source\gfx\x360_full_screen_texture_render.hpp" />
+    <ClInclude Include="source\gfx\x360_index_buffer.hpp" />
+    <ClInclude Include="source\gfx\x360_index_buffer_cache.hpp" />
     <ClInclude Include="source\gfx\x360_material_template.hpp" />
     <ClInclude Include="source\gfx\x360_parse.hpp" />
     <ClInclude Include="source\gfx\x360_render_target.hpp" />
@@ -176,6 +183,8 @@
     <ClInclude Include="source\gfx\x360_texture_map.hpp" />
     <ClInclude Include="source\gfx\x360_texture_map_manager.hpp" />
     <ClInclude Include="source\gfx\x360_tex_map.hpp" />
+    <ClInclude Include="source\gfx\x360_vertex_buffer.hpp" />
+    <ClInclude Include="source\gfx\x360_vertex_buffer_cache.hpp" />
     <ClInclude Include="source\gfx\x360_video_card.hpp" />
     <ClInclude Include="source\language_configuration.hpp" />
     <ClInclude Include="source\language_definition.hpp" />
