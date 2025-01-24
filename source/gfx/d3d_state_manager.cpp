@@ -3,7 +3,7 @@
 
 D3DStateManager* lpD3DStateManager = nullptr;
 
-// OFFSET: 0x004157c0
+// OFFSET: 0x004157c0, STATUS: COMPLETE
 D3DStateManager::D3DStateManager() {
 	D3DCAPS9 caps{};
 	g_D3DDevice9->GetDeviceCaps(&caps);
@@ -15,14 +15,14 @@ D3DStateManager::D3DStateManager() {
 	Reset();
 }
 
-// OFFSET: 0x00415550
+// OFFSET: 0x00415550, STATUS: COMPLETE
 D3DStateManager::~D3DStateManager() {
 	delete[] sampler_states;
 	delete[] min_sampler_state_type_used;
 	delete[] max_sampler_state_type_used;
 }
 
-// OFFSET: 0x00415590
+// OFFSET: 0x00415590, STATUS: COMPLETE
 void D3DStateManager::Reset() {
 	for (auto& render_state : render_states) {
 		render_state.value = -1;
@@ -37,8 +37,8 @@ void D3DStateManager::Reset() {
 	g_D3DDevice9->SetRenderState(D3DRS_ALPHAREF, 0);
 	render_states[D3DRS_ALPHAREF].value = 0;
 	render_states[D3DRS_ALPHAREF].previous_value = 0;
-	min_render_state = MAX_RENDER_STATE_TYPE;
-	max_render_state = 0;
+	min_render_state_type = MAX_RENDER_STATE_TYPE;
+	max_render_state_type = 0;
 	min_sampler_used = max_samplers;
 	max_sampler_used = 0;
 	for (std::size_t i = 0; i < max_samplers; i++) {
@@ -47,12 +47,12 @@ void D3DStateManager::Reset() {
 	}
 }
 
-// OFFSET: 0x00415660
+// OFFSET: 0x00415660, STATUS: COMPLETE
 void D3DStateManager::SendData() {
-	if (min_render_state != MAX_RENDER_STATE_TYPE) {
-		CachedValue* render_state = &render_states[min_render_state];
-		for (std::size_t i = 0; i <= max_render_state - min_render_state; i++) {
-			std::size_t render_state_index = min_render_state + i;
+	if (min_render_state_type != MAX_RENDER_STATE_TYPE) {
+		CachedValue* render_state = &render_states[min_render_state_type];
+		for (std::size_t i = 0; i <= max_render_state_type - min_render_state_type; i++) {
+			std::size_t render_state_index = min_render_state_type + i;
 			DWORD value_to_set = render_state->value;
 
 			if (fullscreen_effects_enabled && (render_state_index == D3DRS_ALPHATESTENABLE || render_state_index == D3DRS_ALPHABLENDENABLE)) {
@@ -66,8 +66,8 @@ void D3DStateManager::SendData() {
 
 			render_state++;
 		}
-		min_render_state = MAX_RENDER_STATE_TYPE;
-		max_render_state = 0;
+		min_render_state_type = MAX_RENDER_STATE_TYPE;
+		max_render_state_type = 0;
 	}
 
 	if (min_sampler_used != max_samplers) {
@@ -93,14 +93,27 @@ void D3DStateManager::SendData() {
 	}
 }
 
-// OFFSET: 0x004025c0
-void D3DStateManager::SetRenderState(D3DRENDERSTATETYPE type, DWORD value) {
+// OFFSET: 0x004025c0, STATUS: COMPLETE
+void D3DStateManager::SetInitialRenderState(D3DRENDERSTATETYPE type, DWORD value) {
 	g_D3DDevice9->SetRenderState(type, value);
 	render_states[type].value = value;
 	render_states[type].previous_value = value;
 }
 
-// OFFSET: 0x00404bd0
+// OFFSET: INLINE, STATUS: COMPLETE
+void D3DStateManager::SetRenderState(D3DRENDERSTATETYPE type, DWORD value) {
+	render_states[type].value = value;
+	if (render_states[type].previous_value != value) {
+		if (type < min_render_state_type) {
+			min_render_state_type = type;
+		}
+		if (max_render_state_type < type) {
+			max_render_state_type = type;
+		}
+	}
+}
+
+// OFFSET: 0x00404bd0, STATUS: COMPLETE
 void D3DStateManager::SetSamplerState(DWORD sampler_index, D3DSAMPLERSTATETYPE sampler_state_type, DWORD value) {
 	sampler_states[sampler_index].sampler_desc[sampler_state_type].value = value;
 	if (value != sampler_states[sampler_index].sampler_desc[sampler_state_type].previous_value) {

@@ -2,17 +2,15 @@
 #include "game.hpp"
 #include "cars_game.hpp"
 
-// OFFSET: 0x00616ea0
-LanguageDefinition::LanguageDefinition()
-{
+// OFFSET: 0x00616ea0, STATUS: COMPLETE
+LanguageDefinition::LanguageDefinition() {
 	name[0] = '\0';
 	prefix[0] = '\0';
 	prefix_index = -1;
 }
 
-// OFFSET: 0x00618340
-void LanguageDefinition::Read(ParameterBlock* file)
-{
+// OFFSET: 0x00618340, STATUS: COMPLETE
+void LanguageDefinition::Read(ParameterBlock* file) {
 	file->ReadParameterBlock(name);
 	file->GetParameter("Prefix", "E", prefix, 32);
 	reinterpret_cast<CarsGame*>(lpGame)->language_prefixes.CLAddItem(prefix);

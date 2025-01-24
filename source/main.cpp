@@ -32,7 +32,7 @@ int g_GameInitialized = 0;
 int g_TickGame = 1;
 int g_EnableEndianSwapping = 0;
 
-// OFFSET: 0x005497e0
+// OFFSET: 0x005497e0, STATUS: COMPLETE
 void GetPlatformIDAndD3DVersion(unsigned int* direct3dVersion, DWORD* outPlatformId, unsigned int* canUseSoftwareRenderer) {
     HMODULE blade = LoadLibraryA("Blade.dll");
     if (blade == nullptr) {
@@ -87,7 +87,7 @@ void GetPlatformIDAndD3DVersion(unsigned int* direct3dVersion, DWORD* outPlatfor
     *direct3dVersion = 0;
 }
 
-// OFFSET: 0x00619190
+// OFFSET: 0x00619190, STATUS: COMPLETE
 void ReadConfigIni() {
     ParameterBlock language_ini{};
     if (language_ini.OpenFile("language.ini", 0, -1, nullptr, -1) == 0) {
@@ -142,7 +142,7 @@ void ReadConfigIni() {
             for (std::size_t i = 0; i < definition_count; i++) {
                 if (config.GetParameter("Configuration", "", configuration_name, sizeof(configuration_name)) != 0) {
                     LanguageConfiguration* language_configuration = new LanguageConfiguration();
-                    snprintf(language_configuration->Name, sizeof(language_configuration->Name), "%s", configuration_name);
+                    snprintf(language_configuration->name, sizeof(language_configuration->name), "%s", configuration_name);
                     lpGame->lang_confs.CLAddItem(language_configuration);
                 }
                 else {
@@ -173,7 +173,7 @@ void ReadConfigIni() {
     }
 }
 
-// OFFSET: 0x00618d50
+// OFFSET: 0x00618d50, STATUS: COMPLETE
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     if (uMsg < 0x11) {
         if (uMsg == 0x10) {
@@ -242,7 +242,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     return  DefWindowProcA(hwnd, uMsg, wParam, lParam);
 }
 
-// OFFSET: 0x00619050
+// OFFSET: 0x00619050, STATUS: COMPLETE
 int InitializeWindow(HINSTANCE param_1) {
     
     WNDCLASSA wnd_class;
@@ -285,7 +285,7 @@ int InitializeWindow(HINSTANCE param_1) {
     return 1;
 }
 
-// OFFSET: 0x006196a0
+// OFFSET: 0x006196a0, STATUS: COMPLETE
 int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
     unsigned int direct3DVersion = 0;
     DWORD platformID = 0;
