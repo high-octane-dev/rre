@@ -30,6 +30,11 @@ void X360VertexShaderManager::SetVertexFormatIndex(int vertex_format_index) {
 	}
 }
 
+// OFFSET: INLINE, STATUS: COMPLETE
+void X360VertexShaderManager::SetIsFullscreenEffect(int _is_fullscreen_effect) {
+	is_fullscreen_effect = _is_fullscreen_effect;
+}
+
 // OFFSET: 0x004110a0, STATUS: TODO
 void X360VertexShaderManager::SetVertexShader(X360VertexShader*) {
 	// blocked on X360RenderTarget

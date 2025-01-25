@@ -3,6 +3,9 @@
 #include <windows.h>
 #include <d3d9.h>
 
+extern int g_ScreenEffectWidth;
+extern int g_ScreenEffectHeight;
+
 class X360Game : public Game {
 public:
 	int unused19;

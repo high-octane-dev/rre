@@ -230,4 +230,4 @@ namespace EE {
 	static_assert(sizeof(D3DDeviceManager) == 0x9c);	
 };
 
-extern EE::D3DDeviceManager* lpD3DDeviceManager;
+extern EE::D3DDeviceManager* g_lpD3DDeviceManager;

@@ -5,7 +5,9 @@
 class X360VertexShaderManager {
 private:
 	IDirect3DVertexShader9* current_shader;
+public:
 	int current_vertex_format_index;
+private:
 	int is_fullscreen_effect;
 public:
 	X360VertexShaderManager();
@@ -15,5 +17,6 @@ public:
 
 	void Reset();
 	void SetVertexFormatIndex(int);
+	void SetIsFullscreenEffect(int);
 	void SetVertexShader(X360VertexShader*);
 };

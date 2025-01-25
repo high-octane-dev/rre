@@ -1,6 +1,10 @@
 #include "x360_render_target.hpp"
 #include "x360_video_card.hpp"
 #include "math/vector4.hpp"
+#include "cursor.hpp"
+#include "x360_game.hpp"
+#include "d3d_state_manager.hpp"
+#include "emotion_engine.hpp"
 
 X360RenderTarget* g_RenderTarget = nullptr;
 
@@ -105,38 +109,90 @@ void X360RenderTarget::ApplyViewportImpl(int clear_surface, int clear_depth_buff
 	g_D3DDevice9->SetVertexShaderConstantF(35, &constant.x, 1);
 }
 
-bool X360RenderTarget::CheckDeviceFormatImpl(D3DFORMAT)
-{
+// OFFSET: 0x004140b0, STATUS: COMPLETE
+bool X360RenderTarget::CheckDeviceFormatImpl(D3DFORMAT format) {
+	IDirect3D9* d3d9 = nullptr;
+	D3DDEVICE_CREATION_PARAMETERS creation_params{};
+	if (SUCCEEDED(g_D3DDevice9->GetDirect3D(&d3d9))) {
+		if (SUCCEEDED(g_D3DDevice9->GetCreationParameters(&creation_params))) {
+			d3d9->Release();
+			return SUCCEEDED(d3d9->CheckDeviceFormat(creation_params.AdapterOrdinal, creation_params.DeviceType, D3DFMT_UNKNOWN, 0, D3DRTYPE_TEXTURE, format));
+		}
+	}
 	return false;
 }
 
-void X360RenderTarget::Clear()
-{
+// OFFSET: 0x00413bd0, STATUS: COMPLETE
+void X360RenderTarget::Clear() {
+	vertex_shader_manager->current_vertex_format_index = -1;
+	for (std::size_t i = 0; i < 16; i++) {
+		g_D3DDevice9->SetStreamSource(i, nullptr, 0, 0);
+	}
+	for (std::size_t i = 0; i < 4; i++) {
+		g_D3DDevice9->SetTexture(i, nullptr);
+	}
+	return;
 }
 
-int X360RenderTarget::DrawCursorImpl()
-{
+// OFFSET: 0x004148e0, STATUS: COMPLETE
+int X360RenderTarget::DrawCursorImpl() {
+	D3DVIEWPORT9 cursor_viewport{};
+	if (g_lpCursor != nullptr) {
+		cursor_viewport.MinZ = viewport.MinZ;
+		cursor_viewport.Y = 0;
+		cursor_viewport.X = 0;
+		cursor_viewport.MaxZ = viewport.MaxZ;
+		cursor_viewport.Height = g_ScreenEffectHeight;
+		cursor_viewport.Width = g_ScreenEffectWidth;
+		g_D3DDevice9->SetViewport(&cursor_viewport);
+		g_lpCursor->Draw();
+		g_D3DDevice9->SetViewport(&viewport);
+	}
+	g_D3DDevice9->EndScene();
+	return 1;
+}
+
+int X360RenderTarget::DrawFullscreenEffects() {
 	return 0;
 }
 
-int X360RenderTarget::DrawFullscreenEffects()
-{
-	return 0;
+// OFFSET: 0x00414690, STATUS: COMPLETE
+int X360RenderTarget::EndFrame()  {
+	g_D3DDevice9->EndScene();
+	g_D3DDevice9->SetRenderState(D3DRS_DEPTHBIAS, 0);
+	g_D3DDevice9->SetRenderState(D3DRS_SLOPESCALEDEPTHBIAS, 0);
+	pixel_shader_manager->SetIsFullscreenEffect(0);
+	vertex_shader_manager->SetIsFullscreenEffect(0);
+	g_lpD3DStateManager->fullscreen_effects_enabled = 0;
+	g_D3DDevice9->SetRenderTarget(0, g_lpD3DDeviceManager->back_buffer);
+	g_D3DDevice9->SetDepthStencilSurface(g_lpD3DDeviceManager->depth_stencil_surface);
+	return 1;
 }
 
-int X360RenderTarget::EndFrame()
-{
-	return 0;
+// OFFSET: 0x0055de10, STATUS: COMPLETE
+void X360RenderTarget::IncrementFrameCount() {
+	frame_count++;
 }
 
-void X360RenderTarget::IncrementFrameCount()
-{
-}
-
-D3DFORMAT X360RenderTarget::MapToD3DFormat(UnkPixelFormat)
-{
-	return D3DFORMAT();
-}
+// OFFSET: 0x00566420, STATUS: COMPLETE
+D3DFORMAT X360RenderTarget::MapToD3DFormat(UnkPixelFormat param_1) {
+	if (param_1 == UnkPixelFormat::A1R5G5B5) {
+		return D3DFMT_A1R5G5B5;
+	}
+	if (param_1 == UnkPixelFormat::A8) {
+		return D3DFMT_A8;
+	}
+	if (param_1 == UnkPixelFormat::R5G6B5) {
+		return D3DFMT_R5G6B5;
+	}
+	if (param_1 == UnkPixelFormat::A4R4G4B4) {
+		return D3DFMT_A4R4G4B4;
+	}
+	if (param_1 == UnkPixelFormat::A8R8G8B8) {
+		return D3DFMT_A8R8G8B8;
+	}
+	return D3DFMT_UNKNOWN;
+}	
 
 int X360RenderTarget::Recreate()
 {

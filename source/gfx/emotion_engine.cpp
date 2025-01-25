@@ -2,7 +2,7 @@
 #include "gfx/emotion_engine.hpp"
 #include "x360_video_card.hpp"
 
-EE::D3DDeviceManager* lpD3DDeviceManager = nullptr;
+EE::D3DDeviceManager* g_lpD3DDeviceManager = nullptr;
 
 // OFFSET: INLINE, STATUS: COMPLETE
 EE::RefObject::~RefObject() {

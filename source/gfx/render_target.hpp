@@ -7,7 +7,7 @@ enum class UnkPixelFormat {
     Invalid = 0,
     A8 = 8,
     R5G6B5 = 565,
-    A1R5G6B5 = 1565,
+    A1R5G5B5 = 1555,
     A4R4G4B4 = 4444,
     A8R8G8B8 = 8888
 };
