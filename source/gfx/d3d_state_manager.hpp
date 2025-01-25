@@ -39,4 +39,4 @@ public:
 
 };
 
-extern D3DStateManager* lpD3DStateManager;
+extern D3DStateManager* g_lpD3DStateManager;

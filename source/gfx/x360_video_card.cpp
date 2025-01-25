@@ -13,7 +13,7 @@ X360VideoCard::X360VideoCard() : VideoCard()
 {
     unused = nullptr;
     g_D3DDevice9 = nullptr;
-    lpD3DStateManager = nullptr;
+    g_lpD3DStateManager = nullptr;
     flags = flags & 0xfc;
     current_frame = 0;
     unk_refresh_rate_param = 2;
@@ -43,9 +43,9 @@ void X360VideoCard::Create() {
         if (lpD3DDeviceManager->CreateAdapters(lpCarsGame->hwnd) != 0) {
             g_D3DDevice9 = lpD3DDeviceManager->device;
             g_D3DDevice9->AddRef();
-            capabilites = lpD3DDeviceManager->adapter_list.data[lpD3DDeviceManager->adapter_index]->capabilities;
+            capabilities = lpD3DDeviceManager->adapter_list.data[lpD3DDeviceManager->adapter_index]->capabilities;
             g_TargetFrameRate = 60.0;
-            lpD3DStateManager = new D3DStateManager();
+            g_lpD3DStateManager = new D3DStateManager();
         }
     }
 }
@@ -63,8 +63,8 @@ X360VideoCard::~X360VideoCard() {
         g_D3DDevice9->Release();
     }
 
-    if (lpD3DStateManager != nullptr) {
-        delete lpD3DStateManager;
+    if (g_lpD3DStateManager != nullptr) {
+        delete g_lpD3DStateManager;
         lpD3DDeviceManager = nullptr;
     }
 
@@ -87,7 +87,7 @@ void X360VideoCard::FreeCursor() {
 
 // OFFSET: 0x00414e00, STATUS: COMPLETE
 int X360VideoCard::ResetStateManager() {
-    lpD3DStateManager->Reset();
+    g_lpD3DStateManager->Reset();
     return 1;
 }
 

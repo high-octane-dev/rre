@@ -20,7 +20,7 @@ int g_FixMcqueensHeadquartersStage = FALSE;
 int g_McqueensHeadquartersStage = TRUE;
 int g_StartOnTitleScreenOnFirstBoot = TRUE;
 int g_Boost_Lvl = 1;
-int g_SuspensionLoadType = 1.0;
+float g_SuspensionLoadType = 1.0f;
 int g_EnableVehicleAudio = TRUE;
 int g_EnableVehicleMotionBlurOverlay = TRUE;
 int g_EnableAllResFiles = TRUE;
@@ -226,7 +226,7 @@ void CarsGame::LoadConfigFile(ParameterBlock* parameter_block) {
 	    parameter_block->GetParameter("Boost_Lvl", 1, &g_Boost_Lvl);
 	    g_Boost_Lvl = min(g_Boost_Lvl, 3);
 
-	    parameter_block->GetParameter("SuspensionLoadType", 1.0, &g_SuspensionLoadType);
+	    parameter_block->GetParameter("SuspensionLoadType", 1.0f, &g_SuspensionLoadType);
 	    parameter_block->GetParameter("EnableVehicleAudio", TRUE, &g_EnableVehicleAudio);
 	    parameter_block->GetParameter("EnableVehicleMotionBlurOverlay", TRUE, &g_EnableVehicleMotionBlurOverlay);
 	    parameter_block->GetParameter("EnableAllResFiles", FALSE, &g_EnableAllResFiles);

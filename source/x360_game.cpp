@@ -2,7 +2,9 @@
 #include "x360_game.hpp"
 #include "gfx/x360_video_card.hpp"
 #include "gfx/x360_shader_manager.hpp"
+#include "gfx/d3d_state_manager.hpp"
 #include "gfx/cursor.hpp"
+#include "gfx/x360_render_target.hpp"
 
 // importing from main.cpp
 extern HWND g_HWNDReal;
@@ -23,8 +25,11 @@ float g_UIScaleX = 1.0;
 float g_UIScaleY = 1.0;
 float g_ViewportFadeWidth = 1280.0;
 float g_ViewportFadeHeight = 720.0;
-float g_CameraAspect = 1.0;
-float g_CameraAspect2 = 1.0;
+float g_AspectRatios[3] = {
+    4.0 / 3.0,
+    16.0 / 9.0,
+    16.0 / 9.0
+};
 
 // OFFSET: 0x00559f20, STATUS: COMPLETE
 void SetDisplayModeGlobal(DisplayMode* display_mode) {
@@ -59,8 +64,8 @@ void SetDisplayModeGlobal(DisplayMode* display_mode) {
         g_UIScaleX = g_ViewportWidth / 1280.0;
         g_UIScaleY = g_ViewportHeight / 720.0;
     }
-    g_CameraAspect = 1.777778;
-    g_CameraAspect2 = 1.777778;
+    g_AspectRatios[1] = 16.0 / 9.0;
+    g_AspectRatios[2] = 16.0 / 9.0;
     return;
 }
 
@@ -76,9 +81,9 @@ int X360Game::InitializeRenderer(char(&quit_message)[260]) {
         if (g_VideoCard != nullptr) {
             g_VideoCard->Create();
             Game::Initialize();
-            lpX360ShaderManager = new X360ShaderManager();
-            if (lpX360ShaderManager != nullptr) {
-                lpX360ShaderManager->Create();
+            g_lpX360ShaderManager = new X360ShaderManager();
+            if (g_lpX360ShaderManager != nullptr) {
+                g_lpX360ShaderManager->Create();
                 SetDisplayMode(nullptr);
                 return 1;
             }
@@ -109,8 +114,8 @@ int X360Game::PreGameInitialize(DisplayMode* desired_display_mode) {
             Game::PreGameInitialize(nullptr);
             return 1;
         }
-        g_UIScaleX = g_WindowWidth / 1280.0;
-        g_UIScaleY = g_WindowHeight / 720.0;
+        g_UIScaleX = g_WindowWidth / 1280.0f;
+        g_UIScaleY = g_WindowHeight / 720.0f;
     }
     else {
         SetDisplayModeGlobal(desired_display_mode);
@@ -126,7 +131,19 @@ int X360Game::PreGameInitialize(DisplayMode* desired_display_mode) {
 
 // OFFSET: 0x004221c0, STATUS: TODO
 int X360Game::SetBasicRenderStates() {
-    return 0;
+    /*
+    g_lpD3DStateManager->SetRenderState(D3DRS_ZENABLE, flags >> 6 & 1);
+    g_lpD3DStateManager->SetRenderState(D3DRS_ZWRITEENABLE, flags >> 6 & 1);
+    g_lpD3DStateManager->SetRenderState(D3DRS_ZFUNC, D3DCMP_GREATEREQUAL);
+    g_lpD3DStateManager->SetRenderState(D3DRS_ALPHABLENDENABLE, 0);
+    g_lpD3DStateManager->SetRenderState(D3DRS_ALPHATESTENABLE, 1);
+    g_lpD3DStateManager->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+    g_lpD3DStateManager->SetRenderState(D3DRS_ALPHAREF, 0);
+    for (std::size_t i = 0; i < g_VideoCard->capabilities.MaxSimultaneousTextures; i++) {
+        
+    }
+    */
+    return 1;
 }
 
 // OFFSET: 0x00423060, STATUS: TODO
@@ -146,20 +163,18 @@ int X360Game::KeyDownHandler(ProcessNode*, KeyInfo*) {
 // OFFSET: 0x00422fd0, STATUS: WIP
 int X360Game::Terminate() {
     int return_value = Game::Terminate();
-    /*
     if (g_RenderTarget != nullptr) {
         delete g_RenderTarget;
         g_RenderTarget = nullptr;
     }
-    */
     if (g_VideoCard != nullptr) {
         g_VideoCard->FreeCursor();
         delete g_VideoCard;
         g_VideoCard = nullptr;
     }
-    if (lpX360ShaderManager != nullptr) {
-        delete lpX360ShaderManager;
-        lpX360ShaderManager = nullptr;
+    if (g_lpX360ShaderManager != nullptr) {
+        delete g_lpX360ShaderManager;
+        g_lpX360ShaderManager = nullptr;
     }
     if (d3d9 != nullptr) {
         d3d9->Release();
@@ -179,7 +194,14 @@ int X360Game::SetDisplayMode(DisplayMode* mode) {
     return PostDisplayModeChange() != 0;
 }
 
-// OFFSET: 0x00422110, STATUS: TODO
+// OFFSET: 0x00422110, STATUS: COMPLETE
 RenderTarget* X360Game::CreateRenderTarget() {
-    return nullptr;
+    if (g_RenderTarget != nullptr) {
+        g_RenderTarget->SetDimensions(g_VideoCard);
+        return g_RenderTarget;
+    }
+    g_RenderTarget = new X360RenderTarget();
+    g_RenderTarget->Create(g_VideoCard);
+    g_RenderTarget->SetDimensions(g_VideoCard);
+    return g_RenderTarget;
 }

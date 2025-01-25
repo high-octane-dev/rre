@@ -4,6 +4,7 @@
 #include "game.hpp"
 #include "data_access.hpp"
 #include "gfx/x360_video_card.hpp"
+#include "gfx/x360_render_target.hpp"
 
 Game* lpGame = nullptr;
 X360MaterialTemplate* lpSceneObjectMaterialTemplate = nullptr;
@@ -62,8 +63,8 @@ Game::Game() {
 
     /* 
     lpMotionLibrary = new MotionLibrary();
-    g_RenderTarget = nullptr;
     */
+    g_RenderTarget = nullptr;
     g_VideoCard = nullptr;
 
 
@@ -130,12 +131,10 @@ Game::~Game() {
     if (statistics_log != nullptr) {
         DestroyStatisticsLog();
     }
-    /*
     if (g_RenderTarget != nullptr) {
         delete g_RenderTarget;
         g_RenderTarget = nullptr;
     }
-    */
     if (g_VideoCard != nullptr) {
         g_VideoCard->FreeCursor();
         delete g_VideoCard;
@@ -325,12 +324,10 @@ void Game::GetCameras(Camera* dest[4]) {
 // OFFSET: 0x00617ff0, STATUS: WIP
 int Game::Terminate() {
     // TODO: Not completely implemented
-    /*
     if (g_RenderTarget != nullptr) {
         delete g_RenderTarget;
         g_RenderTarget = nullptr;
     }
-    */
     if (g_VideoCard != nullptr) {
         g_VideoCard->FreeCursor();
         delete g_VideoCard;

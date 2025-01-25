@@ -1,7 +1,7 @@
 #include "d3d_state_manager.hpp"
 #include "x360_video_card.hpp"
 
-D3DStateManager* lpD3DStateManager = nullptr;
+D3DStateManager* g_lpD3DStateManager = nullptr;
 
 // OFFSET: 0x004157c0, STATUS: COMPLETE
 D3DStateManager::D3DStateManager() {

@@ -61,7 +61,7 @@
     <LibraryPath>.\dependencies;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg">
-    <VcpkgEnableManifest>true</VcpkgEnableManifest>
+    <VcpkgEnableManifest>false</VcpkgEnableManifest>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -113,19 +113,23 @@
     <ClCompile Include="source\action_sequence.cpp" />
     <ClCompile Include="source\base_object.cpp" />
     <ClCompile Include="source\block_allocator.cpp" />
+    <ClCompile Include="source\camera.cpp" />
     <ClCompile Include="source\containers\dynamic_string_table.cpp" />
     <ClCompile Include="source\containers\string_table.cpp" />
     <ClCompile Include="source\data_access.cpp" />
+    <ClCompile Include="source\dynamic_searchable_object.cpp" />
     <ClCompile Include="source\file_io.cpp" />
     <ClCompile Include="source\gfx\cache.cpp" />
     <ClCompile Include="source\gfx\cursor.cpp" />
     <ClCompile Include="source\gfx\d3d_state_manager.cpp" />
     <ClCompile Include="source\gfx\emotion_engine.cpp" />
+    <ClCompile Include="source\gfx\index_buffer.cpp" />
     <ClCompile Include="source\gfx\render_target.cpp" />
     <ClCompile Include="source\gfx\texture_map_manager.cpp" />
     <ClCompile Include="source\gfx\video_card.cpp" />
     <ClCompile Include="source\gfx\x360_full_screen_texture_render.cpp" />
     <ClCompile Include="source\gfx\x360_index_buffer.cpp" />
+    <ClCompile Include="source\gfx\x360_index_buffer_manager.cpp" />
     <ClCompile Include="source\gfx\x360_material_template.cpp" />
     <ClCompile Include="source\gfx\x360_parse.cpp" />
     <ClCompile Include="source\gfx\x360_pixel_shader_manager.cpp" />
@@ -136,6 +140,7 @@
     <ClCompile Include="source\gfx\x360_texture_map_manager.cpp" />
     <ClCompile Include="source\gfx\x360_tex_map.cpp" />
     <ClCompile Include="source\gfx\x360_vertex_attribute_format_string_table.cpp" />
+    <ClCompile Include="source\gfx\x360_vertex_buffer_manager.cpp" />
     <ClCompile Include="source\gfx\x360_vertex_shader_manager.cpp" />
     <ClCompile Include="source\gfx\x360_video_card.cpp" />
     <ClCompile Include="source\language_configuration.cpp" />
@@ -148,9 +153,11 @@
     <ClCompile Include="source\material_string_table.cpp" />
     <ClCompile Include="source\panic.cpp" />
     <ClCompile Include="source\parameter_block.cpp" />
+    <ClCompile Include="source\searchable_object.cpp" />
     <ClCompile Include="source\string_block_allocator.cpp" />
     <ClCompile Include="source\util\resource_setup.cpp" />
     <ClCompile Include="source\util\rsstring_util.cpp" />
+    <ClCompile Include="source\x360_camera.cpp" />
     <ClCompile Include="source\x360_game.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +166,7 @@
     <ClInclude Include="source\action_sequence.hpp" />
     <ClInclude Include="source\base_object.hpp" />
     <ClInclude Include="source\block_allocator.hpp" />
+    <ClInclude Include="source\camera.hpp" />
     <ClInclude Include="source\cars_game.hpp" />
     <ClInclude Include="source\containers\container_hash_table.hpp" />
     <ClInclude Include="source\containers\container_linked_list.hpp" />
@@ -167,6 +175,7 @@
     <ClInclude Include="source\containers\dynamic_string_table.hpp" />
     <ClInclude Include="source\containers\string_table.hpp" />
     <ClInclude Include="source\data_access.hpp" />
+    <ClInclude Include="source\dynamic_searchable_object.hpp" />
     <ClInclude Include="source\file_io.hpp" />
     <ClInclude Include="source\game.hpp" />
     <ClInclude Include="source\game_object.hpp" />
@@ -182,6 +191,7 @@
     <ClInclude Include="source\gfx\x360_full_screen_texture_render.hpp" />
     <ClInclude Include="source\gfx\x360_index_buffer.hpp" />
     <ClInclude Include="source\gfx\x360_index_buffer_cache.hpp" />
+    <ClInclude Include="source\gfx\x360_index_buffer_manager.hpp" />
     <ClInclude Include="source\gfx\x360_material_template.hpp" />
     <ClInclude Include="source\gfx\x360_parse.hpp" />
     <ClInclude Include="source\gfx\x360_pixel_shader_manager.hpp" />
@@ -194,6 +204,7 @@
     <ClInclude Include="source\gfx\x360_vertex_buffer.hpp" />
     <ClInclude Include="source\gfx\x360_vertex_buffer_cache.hpp" />
     <ClInclude Include="source\gfx\x360_vertex_attribute_format_string_table.hpp" />
+    <ClInclude Include="source\gfx\x360_vertex_buffer_manager.hpp" />
     <ClInclude Include="source\gfx\x360_vertex_shader_manager.hpp" />
     <ClInclude Include="source\gfx\x360_video_card.hpp" />
     <ClInclude Include="source\language_configuration.hpp" />
@@ -203,10 +214,12 @@
     <ClInclude Include="source\math\vector4.hpp" />
     <ClInclude Include="source\panic.hpp" />
     <ClInclude Include="source\parameter_block.hpp" />
+    <ClInclude Include="source\searchable_object.hpp" />
     <ClInclude Include="source\string_block_allocator.hpp" />
     <ClInclude Include="source\util\resource_setup.hpp" />
     <ClInclude Include="source\util\rsstring_util.hpp" />
     <ClInclude Include="source\util\token_string.hpp" />
+    <ClInclude Include="source\x360_camera.hpp" />
     <ClInclude Include="source\x360_game.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

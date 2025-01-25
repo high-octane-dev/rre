@@ -268,7 +268,7 @@ extern int g_FixMcqueensHeadquartersStage;
 extern int g_McqueensHeadquartersStage;
 extern int g_StartOnTitleScreenOnFirstBoot;
 extern int g_Boost_Lvl;
-extern int g_SuspensionLoadType;
+extern float g_SuspensionLoadType;
 extern int g_EnableVehicleAudio;
 extern int g_EnableVehicleMotionBlurOverlay;
 extern int g_EnableAllResFiles;

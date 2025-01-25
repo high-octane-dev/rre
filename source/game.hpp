@@ -1,20 +1,19 @@
 #pragma once
-#include "language_definition.hpp"
-#include "language_configuration.hpp"
 #include "containers/container_list.hpp"
-#include "game_object.hpp"
-#include "gfx/x360_material_template.hpp"
 #include "containers/container_linked_list.hpp"
 #include "containers/string_table.hpp"
+#include "game_object.hpp"
+#include "gfx/x360_material_template.hpp"
+#include "gfx/render_target.hpp"
+#include "language_definition.hpp"
+#include "language_configuration.hpp"
+#include "x360_camera.hpp"
 
 struct TimeIntervalCallback {
     void (**callback)(int, float, void*);
     void* time_interval;
 };
 
-struct Camera {};
-struct X360Camera : public Camera {};
-struct RenderTarget;
 struct DisplayMode {
     int field0_0x0;
     int screen_mode;

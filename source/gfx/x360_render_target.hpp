@@ -1,8 +1,13 @@
 #pragma once
 
 #include <d3d9.h>
+#include "camera.hpp"
 #include "render_target.hpp"
 #include "x360_shader.hpp"
+#include "x360_vertex_shader_manager.hpp"
+#include "x360_pixel_shader_manager.hpp"
+#include "x360_vertex_buffer_manager.hpp"
+#include "x360_index_buffer_manager.hpp"
 
 using RBVIEWPORT = D3DVIEWPORT9;
 
@@ -24,13 +29,13 @@ private:
     X360VertexShader* shadow_puppet_vertex;
     int unk_viewport_index;
     RBVIEWPORT viewport;
-    struct Camera* used_camera;
+    Camera* used_camera;
     int unk_filter_index;
     int unused13;
-    class X360VertexBufferManager* vertex_buffer_manager;
-    class X360IndexBufferManager* index_buffer_manager;
-    class X360VertexShaderManager* vertex_shader_manager;
-    class X360PixelShaderManager* pixel_shader_manager;
+    X360VertexBufferManager* vertex_buffer_manager;
+    X360IndexBufferManager* index_buffer_manager;
+    X360VertexShaderManager* vertex_shader_manager;
+    X360PixelShaderManager* pixel_shader_manager;
     float fog_parameters[4];
     X360VertexShader* blt_vertex;
     X360PixelShader* blt_pixel;
@@ -40,7 +45,7 @@ private:
     bool device_lost;
 public:
 	X360RenderTarget();
-    void ApplyViewportImpl();
+    void ApplyViewportImpl(int clear_surface, int clear_depth_buffer, unsigned int unused0, unsigned int unused1);
     bool CheckDeviceFormatImpl(D3DFORMAT);
     void Clear();
     int DrawCursorImpl();
@@ -55,8 +60,8 @@ public:
     bool StartFrame();
 
 	virtual ~X360RenderTarget() override;
-    virtual void Create(int unused) override;
-    virtual void SetDimensions(int unused0, int unused1) override;
+    virtual void Create(VideoCard* unused) override;
+    virtual void SetDimensions(VideoCard* unused) override;
     virtual void ApplyViewport() override;
     virtual void DrawCursor() override;
     virtual void Blt(unsigned int unused, TextureMap* tex, int alpha_blend, D3DCOLOR color) override;
@@ -70,4 +75,4 @@ public:
     virtual void SetFogDistances(float min, float max) override;
 };
 
-// extern X360RenderTarget* g_RenderTarget;
+extern X360RenderTarget* g_RenderTarget;

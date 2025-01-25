@@ -1,5 +1,7 @@
 #pragma once
 #include "x360_texture_map.hpp"
+#include "video_card.hpp"
+#include "camera.hpp"
 
 enum class UnkPixelFormat {
     Invalid = 0,
@@ -12,7 +14,7 @@ enum class UnkPixelFormat {
 
 class RenderTarget {
 protected:
-    struct Camera* camera;
+    Camera* camera;
     int width;
     int height;
     int unk_camera_related;
@@ -37,8 +39,8 @@ public:
 	RenderTarget& operator=(const RenderTarget&) = delete;
 
 	virtual ~RenderTarget();
-    virtual void Create(int unused) = 0;
-    virtual void SetDimensions(int unused0, int unused1) = 0;
+    virtual void Create(VideoCard* unused) = 0;
+    virtual void SetDimensions(VideoCard* unused) = 0;
     virtual void ApplyViewport() = 0;
     virtual void DrawCursor() = 0;
     virtual void Blt(unsigned int unused, TextureMap* tex, int alpha_blend, D3DCOLOR color) = 0;

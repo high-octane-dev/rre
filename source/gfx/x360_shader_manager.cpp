@@ -7,7 +7,7 @@
 #include <dxsdk-d3dx/d3dx9.h>
 #include <format>
 
-X360ShaderManager* lpX360ShaderManager = nullptr;
+X360ShaderManager* g_lpX360ShaderManager = nullptr;
 
 // OFFSET: 0x00415920, STATUS: COMPLETE
 int X360ShaderManager::Unk1(int, int, int, int, int, int) {
