@@ -18,5 +18,5 @@ public:
 	void Reset();
 	void SetVertexFormatIndex(int);
 	void SetIsFullscreenEffect(int);
-	void SetVertexShader(X360VertexShader*);
+	void SetVertexShader(X360VertexShader*, int);
 };

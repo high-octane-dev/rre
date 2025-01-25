@@ -23,10 +23,12 @@ private:
     IDirect3DTexture9* unk_texture;
     int unused11;
     int unused12;
+public:
     X360VertexShader* shadow_vertex;
     X360PixelShader* shadow_pixel;
     X360VertexShader* shadow_skinned_vertex;
     X360VertexShader* shadow_puppet_vertex;
+private:
     int unk_viewport_index;
     RBVIEWPORT viewport;
     Camera* used_camera;
@@ -41,7 +43,7 @@ private:
     X360PixelShader* blt_pixel;
     int texcoord_indices[4];
     int unused14;
-    IUnknown* query;
+    IDirect3DQuery9* query;
     bool device_lost;
 public:
 	X360RenderTarget();
@@ -64,7 +66,7 @@ public:
     virtual void SetDimensions(VideoCard* unused) override;
     virtual void ApplyViewport() override;
     virtual void DrawCursor() override;
-    virtual void Blt(unsigned int unused, TextureMap* tex, int alpha_blend, D3DCOLOR color) override;
+    virtual int Blt(unsigned int unused, TextureMap* tex, int alpha_blend, D3DCOLOR color) override;
     virtual int Unk6(int, int, int) override;
     virtual int Unk7(int) override;
     virtual void Unk8(int) override;

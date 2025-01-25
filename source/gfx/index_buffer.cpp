@@ -37,4 +37,3 @@ IDirect3DIndexBuffer9* IndexBuffer::Get()
 void IndexBuffer::Unk()
 {
 }
->>>>>>> Stashed changes

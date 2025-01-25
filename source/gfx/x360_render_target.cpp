@@ -5,8 +5,10 @@
 #include "x360_game.hpp"
 #include "d3d_state_manager.hpp"
 #include "emotion_engine.hpp"
+#include "x360_vertex_attribute_format_string_table.hpp"
 
 X360RenderTarget* g_RenderTarget = nullptr;
+int g_RenderTargetVAFIndex = -1;
 
 // OFFSET: 0x00566470, STATUS: COMPLETE
 UnkPixelFormat MapToUnkPixelFormat(D3DFORMAT param_1) {
@@ -192,7 +194,7 @@ int X360RenderTarget::DrawFullscreenEffects() {
 	g_D3DDevice9->SetDepthStencilSurface(depth_stencil_surface);
 
 	D3DRECT rect{ 0, 0, 1024, 1024 };
-	g_D3DDevice9->Clear(1, &rect, 7, 0x000000FF, 0.0, 0);
+	g_D3DDevice9->Clear(1, &rect, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, 0x000000FF, 0.0, 0);
 
 	float w = std::abs(static_cast<float>(viewport.Width));
 	float h = std::abs(static_cast<float>(viewport.Height));
@@ -256,10 +258,76 @@ void X360RenderTarget::SetUnkViewportIndex(int index) {
 }
 
 bool X360RenderTarget::StartFrame() {
+	g_D3DDevice9->TestCooperativeLevel();
+	g_D3DDevice9->BeginScene();
 	return false;
 }
 
+// OFFSET: 0x00413800, STATUS: COMPLETE
 void X360RenderTarget::Create(VideoCard* unused) {
+	fog_uninitialized = 0;
+	fog_color = 0;
+	vertex_buffer_manager = new X360VertexBufferManager();
+	index_buffer_manager = new X360IndexBufferManager();
+	g_D3DDevice9->CreateQuery(D3DQUERYTYPE_OCCLUSION, &query);
+	
+	D3DDISPLAYMODE mode{};
+	dynamic_cast<X360Game*>(lpGame)->d3d9->GetAdapterDisplayMode(0, &mode);
+	if (g_VideoCard->IsFXEnabled()) {
+		g_D3DDevice9->CreateDepthStencilSurface(1024, 1024, D3DFMT_D24S8, D3DMULTISAMPLE_NONE, 0, 1, &depth_stencil_surface, 0);
+		g_D3DDevice9->CreateTexture(1024, 1024, 1, 1, D3DFMT_R32F, D3DPOOL_DEFAULT, &unk_texture, 0);
+
+		shadow_vertex = new X360VertexShader();
+		shadow_vertex->Create("360_Shadow.hlsl", 0);
+		
+		shadow_pixel= new X360PixelShader();
+		shadow_pixel->Create("360_Shadow.hlsl", 0);
+
+		shadow_skinned_vertex = new X360VertexShader();
+		shadow_skinned_vertex->Create("360_Shadow_Skinned.hlsl", 0);
+
+		shadow_puppet_vertex = new X360VertexShader();
+		shadow_puppet_vertex->Create("360_Shadow_Puppet.hlsl", 0);
+	}
+	
+	vertex_shader_manager = new X360VertexShaderManager();
+	pixel_shader_manager = new X360PixelShaderManager();
+
+	blt_vertex = new X360VertexShader();
+	blt_vertex->Create("360_Blt.hlsl", 0);
+
+	blt_pixel = new X360PixelShader();
+	blt_pixel->Create("360_Blt.hlsl", 0);
+
+	D3DVERTEXELEMENT9 elements[] = {
+		D3DVERTEXELEMENT9{
+			.Stream = 0,
+			.Offset = 0,
+			.Type = D3DDECLTYPE_FLOAT2,
+			.Method = D3DDECLMETHOD_DEFAULT,
+			.Usage = D3DDECLUSAGE_POSITION,
+			.UsageIndex = 0,
+		},
+		D3DVERTEXELEMENT9{
+			.Stream = 0,
+			.Offset = 8,
+			.Type = D3DDECLTYPE_FLOAT2,
+			.Method = D3DDECLMETHOD_DEFAULT,
+			.Usage = D3DDECLUSAGE_TEXCOORD,
+			.UsageIndex = 0,
+		},
+		D3DVERTEXELEMENT9{
+			.Stream = 0xFF,
+			.Offset = 0,
+			.Type = D3DDECLTYPE_UNUSED,
+			.Method = D3DDECLMETHOD_DEFAULT,
+			.Usage = D3DDECLUSAGE_POSITION,
+			.UsageIndex = 0,
+		},
+	};
+
+	g_RenderTargetVAFIndex = g_lpVertexAttributeFormatStringTable->AddItem("X360RenderTarget", elements);
+
 }
 
 // OFFSET: 0x00413ba0, STATUS: COMPLETE
@@ -279,7 +347,53 @@ void X360RenderTarget::DrawCursor() {
 	DrawCursorImpl();
 }
 
-void X360RenderTarget::Blt(unsigned int unused, TextureMap* tex, int alpha_blend, D3DCOLOR color) {
+int X360RenderTarget::Blt(unsigned int unused, TextureMap* tex, int alpha_blend, D3DCOLOR color) {
+	if (device_lost) {
+		return 1;
+	}
+
+	vertex_shader_manager->SetIsFullscreenEffect(g_RenderTargetVAFIndex);
+	vertex_shader_manager->SetVertexShader(blt_vertex, 0);
+	pixel_shader_manager->SetPixelShader(blt_pixel);
+	g_D3DDevice9->SetTexture(0, dynamic_cast<X360TextureMap*>(tex)->texture);
+	g_lpD3DStateManager->SetRenderState(D3DRS_ZENABLE, 0);
+	g_lpD3DStateManager->SetRenderState(D3DRS_ALPHATESTENABLE, 0);
+	g_lpD3DStateManager->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	g_lpD3DStateManager->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
+	g_lpD3DStateManager->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
+
+	if (tex == nullptr) {
+		g_lpD3DStateManager->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
+		g_lpD3DStateManager->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+	}
+	else {
+		g_lpD3DStateManager->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+		g_lpD3DStateManager->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	}
+	
+	g_lpD3DStateManager->SetSamplerState(0, D3DSAMP_MIPFILTER, 0);
+
+	if (alpha_blend == 0) {
+		g_lpD3DStateManager->SetRenderState(D3DRS_ALPHABLENDENABLE, 0);
+	}
+	else {
+		g_lpD3DStateManager->SetRenderState(D3DRS_ALPHABLENDENABLE, 1);
+		g_lpD3DStateManager->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		g_lpD3DStateManager->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	}
+	g_lpD3DStateManager->SendData();
+
+	// TODO:
+	Vector4 shader_color_scale{
+		((color >> 24) & 0xFF) / 255.0f,
+		((color >> 16) & 0xFF) / 255.0f,
+		((color >> 8) & 0xFF) / 255.0f,
+		(color & 0xFF) / 255.0f,
+	};
+
+	g_D3DDevice9->SetPixelShaderConstantF(0, &shader_color_scale.x, 1);
+	g_D3DDevice9->DrawPrimitiveUP(D3DPT_TRIANGLELIST, 2, nullptr, 16);
+	g_D3DDevice9->SetTexture(0, nullptr);
 }
 
 // OFFSET: INLINE, STATUS: COMPLETE

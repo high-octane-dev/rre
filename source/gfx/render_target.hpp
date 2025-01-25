@@ -44,7 +44,7 @@ public:
     virtual void SetDimensions(VideoCard* unused) = 0;
     virtual void ApplyViewport() = 0;
     virtual void DrawCursor() = 0;
-    virtual void Blt(unsigned int unused, TextureMap* tex, int alpha_blend, D3DCOLOR color) = 0;
+    virtual int Blt(unsigned int unused, TextureMap* tex, int alpha_blend, D3DCOLOR color) = 0;
     virtual int Unk6(int, int, int) = 0;
     virtual int Unk7(int) = 0;
     virtual void Unk8(int) = 0;
