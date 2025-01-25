@@ -4,6 +4,7 @@
 #include "camera.hpp"
 
 enum class UnkPixelFormat {
+    AlsoInvalid = -1,
     Invalid = 0,
     A8 = 8,
     R5G6B5 = 565,

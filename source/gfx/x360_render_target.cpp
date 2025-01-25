@@ -8,6 +8,27 @@
 
 X360RenderTarget* g_RenderTarget = nullptr;
 
+// OFFSET: 0x00566470, STATUS: COMPLETE
+UnkPixelFormat MapToUnkPixelFormat(D3DFORMAT param_1) {
+	switch (param_1) {
+	case 5:
+	case D3DFMT_A8R8G8B8:
+	case D3DFMT_X8R8G8B8:
+		return UnkPixelFormat::A8R8G8B8;
+	default:
+		return UnkPixelFormat::AlsoInvalid;
+	case D3DFMT_R5G6B5:
+		return UnkPixelFormat::R5G6B5;
+	case D3DFMT_X1R5G5B5:
+	case D3DFMT_A1R5G5B5:
+		return UnkPixelFormat::A1R5G5B5;
+	case D3DFMT_A4R4G4B4:
+		return UnkPixelFormat::A4R4G4B4;
+	case D3DFMT_A8:
+		return UnkPixelFormat::A8;
+	}
+}
+
 // OFFSET: 0x00413730, STATUS: COMPLETE
 X360RenderTarget::X360RenderTarget() : RenderTarget() {
 	fog_parameters[0] = 0.0;
@@ -152,8 +173,33 @@ int X360RenderTarget::DrawCursorImpl() {
 	return 1;
 }
 
+// OFFSET: 0x00414990, STATUS: COMPLETE
 int X360RenderTarget::DrawFullscreenEffects() {
-	return 0;
+	if (unk_texture == nullptr) {
+		return 0;
+	}
+	vertex_shader_manager->Reset();
+	pixel_shader_manager->Reset();
+	pixel_shader_manager->SetIsFullscreenEffect(1);
+	vertex_shader_manager->SetIsFullscreenEffect(1);
+	g_lpD3DStateManager->fullscreen_effects_enabled = 1;
+
+	IDirect3DSurface9* unk_surface = nullptr;
+	if (SUCCEEDED(unk_texture->GetSurfaceLevel(0, &unk_surface))) {
+		g_D3DDevice9->SetRenderTarget(0, unk_surface);
+		unk_surface->Release();
+	}
+	g_D3DDevice9->SetDepthStencilSurface(depth_stencil_surface);
+
+	D3DRECT rect{ 0, 0, 1024, 1024 };
+	g_D3DDevice9->Clear(1, &rect, 7, 0x000000FF, 0.0, 0);
+
+	float w = std::abs(static_cast<float>(viewport.Width));
+	float h = std::abs(static_cast<float>(viewport.Height));
+	Vector4 constant{ 2.0f / w, -2.0f / h, -1.0f, 1.0f };
+	g_D3DDevice9->SetVertexShaderConstantF(34, &constant.x, 1);
+	g_D3DDevice9->SetVertexShaderConstantF(35, &constant.x, 1);
+	return static_cast<int>(StartFrame());
 }
 
 // OFFSET: 0x00414690, STATUS: COMPLETE
@@ -194,34 +240,33 @@ D3DFORMAT X360RenderTarget::MapToD3DFormat(UnkPixelFormat param_1) {
 	return D3DFMT_UNKNOWN;
 }	
 
-int X360RenderTarget::Recreate()
-{
+int X360RenderTarget::Recreate() {
 	return 0;
 }
 
-void X360RenderTarget::Reset()
-{
+void X360RenderTarget::Reset() {
 }
 
-void X360RenderTarget::SetCamera(Camera*)
-{
+void X360RenderTarget::SetCamera(Camera*) {
 }
 
-void X360RenderTarget::SetUnkViewportIndex(int)
-{
+// OFFSET: 0x00413b90, STATUS: COMPLETE
+void X360RenderTarget::SetUnkViewportIndex(int index) {
+	unk_viewport_index = index;
 }
 
-bool X360RenderTarget::StartFrame()
-{
+bool X360RenderTarget::StartFrame() {
 	return false;
 }
 
-void X360RenderTarget::Create(VideoCard* unused)
-{
+void X360RenderTarget::Create(VideoCard* unused) {
 }
 
-void X360RenderTarget::SetDimensions(VideoCard* unused)
-{
+// OFFSET: 0x00413ba0, STATUS: COMPLETE
+void X360RenderTarget::SetDimensions(VideoCard* unused) {
+	width = g_CameraWidth;
+	height = g_CameraHeight;
+	unk_pixel_format = MapToUnkPixelFormat(D3DFMT_A8R8G8B8);
 }
 
 // OFFSET: 0x00414cd0, STATUS: COMPLETE
@@ -229,47 +274,60 @@ void X360RenderTarget::ApplyViewport() {
 	ApplyViewportImpl(1, 1, 1, 1);
 }
 
-void X360RenderTarget::DrawCursor()
-{
+// OFFSET: 0x00414cb0, STATUS: COMPLETE
+void X360RenderTarget::DrawCursor() {
+	DrawCursorImpl();
 }
 
-void X360RenderTarget::Blt(unsigned int unused, TextureMap* tex, int alpha_blend, D3DCOLOR color)
-{
+void X360RenderTarget::Blt(unsigned int unused, TextureMap* tex, int alpha_blend, D3DCOLOR color) {
 }
 
-int X360RenderTarget::Unk6(int, int, int)
-{
+// OFFSET: INLINE, STATUS: COMPLETE
+int X360RenderTarget::Unk6(int, int, int) {
 	return 0;
 }
 
-int X360RenderTarget::Unk7(int)
-{
+// OFFSET: INLINE, STATUS: COMPLETE
+int X360RenderTarget::Unk7(int) {
 	return 0;
 }
 
-void X360RenderTarget::Unk8(int)
-{
+// OFFSET: INLINE, STATUS: COMPLETE
+void X360RenderTarget::Unk8(int) {
 }
 
-void X360RenderTarget::Unk9()
-{
+// OFFSET: INLINE, STATUS: COMPLETE
+void X360RenderTarget::Unk9() {
 }
 
-int X360RenderTarget::Unk10(int, int)
-{
+// OFFSET: INLINE, STATUS: COMPLETE
+int X360RenderTarget::Unk10(int, int) {
+	return 1;
+}
+
+// OFFSET: 0x00414140, STATUS: COMPLETE
+bool X360RenderTarget::CheckDeviceFormat(UnkPixelFormat fmt) {
+	return CheckDeviceFormatImpl(MapToD3DFormat(fmt));
+}
+
+// OFFSET: 0x00414060, STATUS: COMPLETE
+int X360RenderTarget::SetViewport(D3DVIEWPORT9* new_viewport) {
+	viewport.X = new_viewport->X;
+	viewport.Y = new_viewport->Y;
+	viewport.Width = new_viewport->Width;
+	viewport.Height = new_viewport->Height;
+	viewport.MinZ = new_viewport->MinZ;
+	viewport.MaxZ = new_viewport->MaxZ;
 	return 0;
 }
 
-bool X360RenderTarget::CheckDeviceFormat(UnkPixelFormat)
-{
-	return false;
-}
-
-int X360RenderTarget::SetViewport(D3DVIEWPORT9*)
-{
-	return 0;
-}
-
-void X360RenderTarget::SetFogDistances(float min, float max)
-{
+// OFFSET: 0x00414160, STATUS: COMPLETE
+void X360RenderTarget::SetFogDistances(float min, float max) {
+	maximum_fog_distance = max;
+	minimum_fog_distance = min;
+	fog_parameters[0] = -1.0f / (max - min);
+	fog_parameters[1] = max / (max - min);
+	fog_parameters[2] = 20.0f;
+	fog_parameters[3] = 0.001f;
+	fog_uninitialized = 0;
 }

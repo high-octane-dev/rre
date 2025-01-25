@@ -3,8 +3,20 @@
 #include <windows.h>
 #include <d3d9.h>
 
+extern int g_ViewportWidth;
+extern int g_ViewportHeight;
 extern int g_ScreenEffectWidth;
 extern int g_ScreenEffectHeight;
+extern int g_CameraWidth;
+extern int g_CameraHeight;
+extern int g_ScreenMode;
+extern int PlatformGraphics_BackBufferViewport_OffsetX;
+extern int PlatformGraphics_BackBufferViewport_OffsetY;
+extern float g_UIScaleX;
+extern float g_UIScaleY;
+extern float g_ViewportFadeWidth;
+extern float g_ViewportFadeHeight;
+extern float g_AspectRatios[3];
 
 class X360Game : public Game {
 public:
