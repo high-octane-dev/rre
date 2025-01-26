@@ -211,6 +211,7 @@
     <ClInclude Include="source\language_definition.hpp" />
     <ClInclude Include="source\loading_icon.hpp" />
     <ClInclude Include="source\material_string_table.hpp" />
+    <ClInclude Include="source\math\frect.hpp" />
     <ClInclude Include="source\math\vector4.hpp" />
     <ClInclude Include="source\panic.hpp" />
     <ClInclude Include="source\parameter_block.hpp" />

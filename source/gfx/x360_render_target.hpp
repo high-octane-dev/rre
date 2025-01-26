@@ -59,14 +59,14 @@ public:
     void Reset();
     void SetCamera(Camera*);
     void SetUnkViewportIndex(int);
-    bool StartFrame();
+    bool StartFrame(int);
 
 	virtual ~X360RenderTarget() override;
     virtual void Create(VideoCard* unused) override;
     virtual void SetDimensions(VideoCard* unused) override;
     virtual void ApplyViewport() override;
     virtual void DrawCursor() override;
-    virtual int Blt(unsigned int unused, TextureMap* tex, int alpha_blend, D3DCOLOR color) override;
+    virtual int Blt(FRECT* dest, TextureMap* texture, FRECT* unused0, unsigned int unused1, int use_linear, int alpha_blend, D3DCOLOR color) override;
     virtual int Unk6(int, int, int) override;
     virtual int Unk7(int) override;
     virtual void Unk8(int) override;

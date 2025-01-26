@@ -1,4 +1,5 @@
 #pragma once
+#include "math/frect.hpp"
 #include "x360_texture_map.hpp"
 #include "video_card.hpp"
 #include "camera.hpp"
@@ -44,7 +45,7 @@ public:
     virtual void SetDimensions(VideoCard* unused) = 0;
     virtual void ApplyViewport() = 0;
     virtual void DrawCursor() = 0;
-    virtual int Blt(unsigned int unused, TextureMap* tex, int alpha_blend, D3DCOLOR color) = 0;
+    virtual int Blt(FRECT* dest, TextureMap* texture, FRECT* unused0, unsigned int unused1, int use_linear, int alpha_blend, D3DCOLOR color) = 0;
     virtual int Unk6(int, int, int) = 0;
     virtual int Unk7(int) = 0;
     virtual void Unk8(int) = 0;

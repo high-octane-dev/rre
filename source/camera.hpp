@@ -22,8 +22,10 @@ protected:
     float viewport_to_camera_aspect;
     float far_clip_distance;
     float near_clip_distance;
+public:
     int max_viewport_width;
     int max_viewport_height;
+private:
     int unk_timer;
     int unk_render_target_related;
     float unused1;
