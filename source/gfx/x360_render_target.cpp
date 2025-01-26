@@ -351,7 +351,7 @@ void X360RenderTarget::Create(VideoCard* unused) {
 	g_D3DDevice9->CreateQuery(D3DQUERYTYPE_OCCLUSION, &query);
 	
 	D3DDISPLAYMODE mode{};
-	dynamic_cast<X360Game*>(lpGame)->d3d9->GetAdapterDisplayMode(0, &mode);
+	static_cast<X360Game*>(lpGame)->d3d9->GetAdapterDisplayMode(0, &mode);
 	if (g_VideoCard->IsFXEnabled()) {
 		g_D3DDevice9->CreateDepthStencilSurface(1024, 1024, D3DFMT_D24S8, D3DMULTISAMPLE_NONE, 0, 1, &depth_stencil_surface, 0);
 		g_D3DDevice9->CreateTexture(1024, 1024, 1, 1, D3DFMT_R32F, D3DPOOL_DEFAULT, &unk_texture, 0);
@@ -435,7 +435,7 @@ int X360RenderTarget::Blt(FRECT* dest, TextureMap* texture, FRECT* unused0, unsi
 	vertex_shader_manager->SetIsFullscreenEffect(g_RenderTargetVAFIndex);
 	vertex_shader_manager->SetVertexShader(blt_vertex, 0);
 	pixel_shader_manager->SetPixelShader(blt_pixel);
-	g_D3DDevice9->SetTexture(0, dynamic_cast<X360TextureMap*>(texture)->texture);
+	g_D3DDevice9->SetTexture(0, static_cast<X360TextureMap*>(texture)->texture);
 	g_lpD3DStateManager->SetRenderState(D3DRS_ZENABLE, 0);
 	g_lpD3DStateManager->SetRenderState(D3DRS_ALPHATESTENABLE, 0);
 	g_lpD3DStateManager->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);

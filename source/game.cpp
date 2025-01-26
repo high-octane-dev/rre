@@ -388,7 +388,12 @@ void Game::UpdateLocalizedPaths() {
 void Game::UpdateTextureContentDirectories() {
 }
 
-// OFFSET: 0x006171d0, STATUS: TODO
+// OFFSET: 0x006171d0, STATUS: COMPLETE
 int Game::PostDisplayModeChange() {
-    return 0;
+    g_RenderTarget = static_cast<X360RenderTarget*>(CreateRenderTarget());
+    if (g_RenderTarget == nullptr) {
+        return 0;
+    }
+    SetBasicRenderStates();
+    return 1;
 }
