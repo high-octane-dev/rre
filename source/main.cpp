@@ -175,22 +175,22 @@ void ReadConfigIni() {
 
 // OFFSET: 0x00618d50, STATUS: COMPLETE
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    if (uMsg < 0x11) {
-        if (uMsg == 0x10) {
+    if (uMsg < WM_QUERYENDSESSION) {
+        if (uMsg == WM_CLOSE) {
             lpGame->Terminate();
             DestroyWindow(hwnd);
             PostQuitMessage(0);
             return 0;
         }
         switch (uMsg) {
-        case 3:
-        case 5:
+        case WM_MOVE:
+        case WM_SIZE:
             if ((g_GameInitialized != 0) && (IsIconic(hwnd) != 0)) {
                 lpGame->Deactivate();
                 return DefWindowProcA(hwnd, uMsg, wParam, lParam);
             }
-
-        case 6:
+            break;
+        case WM_ACTIVATE:
             if (((short)wParam != 0) && (wParam >> 0x10 == 0)) {
                 g_TickGame = 1;
                 lpGame->Activate();
@@ -201,8 +201,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             return DefWindowProcA(hwnd, uMsg, wParam, lParam);
         }
     }
-    else if (uMsg < 0x114) {
-        if (uMsg == 0x113) {
+    else if (uMsg < WM_HSCROLL) {
+        if (uMsg == WM_TIMER) {
             if (g_TickGame != 0) {
                 if (lpGame->Tick() == 0) {
                     lpGame->Terminate();
@@ -211,11 +211,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
                     return 1;
                 }
                 reinterpret_cast<CarsGame*>(lpGame)->PresentFrame(1);
-                return DefWindowProcA(hwnd, 0x113, wParam, lParam);
+                return DefWindowProcA(hwnd, WM_TIMER, wParam, lParam);
             }
         }
         else {
-            if (uMsg == 0x20) {
+            if (uMsg == WM_SETCURSOR) {
                 if ((short)lParam == 1) {
                     SetCursor((HCURSOR)0x0);
                     return 1;
@@ -223,7 +223,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
                 SetCursor(LoadCursorA((HINSTANCE)0x0, (LPCSTR)0x7f00));
                 return 1;
             }
-            if (uMsg == 0x112) {
+            if (uMsg == WM_SYSCOMMAND) {
                 switch (wParam & 0xfffffff0) {
                 case 0xf100:
                 case 0xf140:
@@ -381,7 +381,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
         do {
             BOOL message_available = PeekMessageA(&message, nullptr, 0, 0, 1);
             while (message_available != 0) {
-                if (message.message == 0x12) {
+                if (message.message == WM_QUIT) {
                     should_exit = true;
                 }
                 TranslateMessage(&message);
@@ -389,7 +389,9 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
                 message_available = PeekMessageA(&message, nullptr, 0, 0, 1);
             }
             if ((!should_exit) && (g_TickGame != 0)) {
-                if (lpGame->Tick() == 0) break;
+                if (lpGame->Tick() == 0) {
+                    break;
+                }
                 reinterpret_cast<CarsGame*>(lpGame)->PresentFrame(1);
             }
             Sleep(1);

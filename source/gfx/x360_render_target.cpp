@@ -507,6 +507,7 @@ int X360RenderTarget::Blt(FRECT* dest, TextureMap* texture, FRECT* unused0, unsi
 	g_D3DDevice9->SetPixelShaderConstantF(0, vertices, 1);
 	g_D3DDevice9->DrawPrimitiveUP(D3DPT_TRIANGLELIST, 2, vertices, sizeof(float[4]));
 	g_D3DDevice9->SetTexture(0, nullptr);
+	return 1;
 }
 
 // OFFSET: INLINE, STATUS: COMPLETE
