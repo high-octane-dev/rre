@@ -129,9 +129,8 @@ int X360Game::PreGameInitialize(DisplayMode* desired_display_mode) {
     return 1;
 }
 
-// OFFSET: 0x004221c0, STATUS: TODO
+// OFFSET: 0x004221c0, STATUS: WIP
 int X360Game::SetBasicRenderStates() {
-    /*
     g_lpD3DStateManager->SetRenderState(D3DRS_ZENABLE, flags >> 6 & 1);
     g_lpD3DStateManager->SetRenderState(D3DRS_ZWRITEENABLE, flags >> 6 & 1);
     g_lpD3DStateManager->SetRenderState(D3DRS_ZFUNC, D3DCMP_GREATEREQUAL);
@@ -140,9 +139,60 @@ int X360Game::SetBasicRenderStates() {
     g_lpD3DStateManager->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
     g_lpD3DStateManager->SetRenderState(D3DRS_ALPHAREF, 0);
     for (std::size_t i = 0; i < g_VideoCard->capabilities.MaxSimultaneousTextures; i++) {
-        
+        if (i < 6) {
+            g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
+            g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
+            g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP);
+
+            if (i > 5) {
+                g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+                g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
+                g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+            }
+            else {
+                g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+                g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+                g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+            }
+        }
+        else if (i < 7) {
+            g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
+            g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
+            g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_ADDRESSW, D3DTADDRESS_CLAMP);
+
+            g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+            g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+            g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+        }
+        else {
+            g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_ADDRESSU, D3DTADDRESS_BORDER);
+            g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_ADDRESSV, D3DTADDRESS_BORDER);
+            g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_ADDRESSW, D3DTADDRESS_BORDER);
+
+            if (i == 7) {
+                g_D3DDevice9->SetSamplerState(i, D3DSAMP_BORDERCOLOR, 0xFFFFFFFF);
+            }
+            else {
+                g_D3DDevice9->SetSamplerState(i, D3DSAMP_BORDERCOLOR, 0);
+            }
+
+            g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+            g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+            g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+        }
     }
-    */
+    // TODO: Handle Lights and EcoSystem
+    if (g_RenderTarget->used_camera != nullptr) {
+        g_D3DDevice9->SetVertexShaderConstantF(24, &g_RenderTarget->used_camera->position.x, 1);
+        g_D3DDevice9->SetPixelShaderConstantF(9, &g_RenderTarget->used_camera->position.x, 1);
+    }
+    // TODO: Handle Fog and WorldShadowMap
+    if (g_RenderTarget->used_camera != nullptr) {
+        if (g_RenderTarget->used_camera->enable_perspective == 0) {
+            g_D3DDevice9->SetTexture(5, g_RenderTarget->unk_texture);
+        }
+    }
+    // TODO: Handle DistanceFade
     return 1;
 }
 

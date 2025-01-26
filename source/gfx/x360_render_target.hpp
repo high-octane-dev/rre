@@ -20,7 +20,9 @@ private:
     int unused9;
     int unused10;
     IDirect3DSurface9* depth_stencil_surface;
+public:
     IDirect3DTexture9* unk_texture;
+private:
     int unused11;
     int unused12;
 public:
@@ -31,7 +33,9 @@ public:
 private:
     int unk_viewport_index;
     RBVIEWPORT viewport;
+public:
     Camera* used_camera;
+private:
     int unk_filter_index;
     int unused13;
     X360VertexBufferManager* vertex_buffer_manager;

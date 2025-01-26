@@ -11,7 +11,9 @@ protected:
     Matrix4x4 view_matrix;
     Matrix4x4 view_projection_matrix;
     Matrix4x4 identity;
+public:
     Vector4 position;
+private:
     Vector4 look_vector;
     Vector4 up_vector;
     float fov_degrees;
@@ -48,6 +50,7 @@ private:
     int dump_spin_cycle_count;
     Vector4* dump_cube_position;
     std::uint8_t flags;
+public:
     int enable_perspective;
 public:
 };
