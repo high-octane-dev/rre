@@ -60,7 +60,7 @@ public:
     float unused8;
     float unused9;
     float dt_seconds;
-    X360Camera* cameras[4];
+    Camera* cameras[4];
     int camera_count;
     int viewport_index;
     int paused_frame_count;

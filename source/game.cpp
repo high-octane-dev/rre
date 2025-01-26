@@ -309,16 +309,33 @@ void Game::ReloadMaterialsAndTextures(int) {
 void Game::LoadShaders() {
 }
 
-// OFFSET: 0x00617200, STATUS: TODO
-void Game::SetCameras(Camera*, Camera*, Camera*, Camera*) {
+// OFFSET: 0x00617200, STATUS: COMPLETE
+void Game::SetCameras(Camera* camera_1, Camera* camera_2, Camera* camera_3, Camera* camera_4) {
+    cameras[0] = camera_1;
+    cameras[1] = camera_2;
+    cameras[2] = camera_3;
+    cameras[3] = camera_4;
+    camera_count = 0;
+    if (cameras[0] != nullptr) {
+        camera_count = 1;
+    }
+    if (cameras[1] != nullptr) {
+        camera_count = camera_count + 1;
+    }
+    if (cameras[2] != nullptr) {
+        camera_count = camera_count + 1;
+    }
+    if (cameras[3] != nullptr) {
+        camera_count = camera_count + 1;
+    }
 }
 
 // OFFSET: 0x00617280, STATUS: COMPLETE
 void Game::GetCameras(Camera* dest[4]) {
-    dest[0] = this->cameras[0];
-    dest[1] = this->cameras[1];
-    dest[2] = this->cameras[2];
-    dest[3] = this->cameras[3];
+    dest[0] = cameras[0];
+    dest[1] = cameras[1];
+    dest[2] = cameras[2];
+    dest[3] = cameras[3];
 }
 
 // OFFSET: 0x00617ff0, STATUS: WIP

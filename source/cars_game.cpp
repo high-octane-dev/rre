@@ -59,7 +59,8 @@ int CarsGame::Initialize() {
 
     char game_info_path[260];
     RSStringUtil::Ssnprintf(game_info_path, sizeof(game_info_path), "%s%sGameInfo.%s.res", "Res\\Data\\", "C\\Appstart\\", "x360");
-    ResourceSetup::ResourceSetup(game_info_path, -1, 1, 8, 0, 0, -1, 1, 0);
+    // Until we implement RES file loading, we should keep any ResourceSetup stuff commented out.
+    // ResourceSetup::ResourceSetup(game_info_path, -1, 1, 8, 0, 0, -1, 1, 0);
     /*
     cars_settings = new CarsSettings();
     cars_settings->Create();
@@ -84,12 +85,11 @@ int CarsGame::PreGameInitialize(DisplayMode*) {
     /*
     (*((lpMaterialStringTable->StringTable).vtable)->Load)(%sDebugStr.mst);
     */
-    RSStringUtil::Ssnprintf(material_template_file,sizeof(material_template_file),"%s%sMaterialTemplate.%s.res", "Res\\Data\\", "C\\Appstart\\","x360");
+    RSStringUtil::Ssnprintf(material_template_file, sizeof(material_template_file), "%s%sMaterialTemplate.%s.res", "Res\\Data\\", "C\\Appstart\\", "x360");
 
-    bool bVar2 = g_ResBuilding == 0;
-    if (bVar2)
-    {
-        ResourceSetup::ResourceSetup(material_template_file,0xffffffff,1,8,0,0,-1,1,0);
+    if (g_ResBuilding == 0) {
+        // Until we implement RES file loading, we should keep any ResourceSetup stuff commented out.
+        // ResourceSetup::ResourceSetup(material_template_file,0xffffffff,1,8,0,0,-1,1,0);
     }
 
     RSStringUtil::Ssnprintf(material_file_content, sizeof(material_file_content), "%sDfltMT", "C\\AppStart\\");
@@ -97,9 +97,9 @@ int CarsGame::PreGameInitialize(DisplayMode*) {
     RSStringUtil::Ssnprintf(material_file_content, sizeof(material_file_content), "%sIconMT", "C\\AppStart\\");
     lpIconMaterialTemplate->LoadFromFile(material_file_content);
 	
-    if (bVar2)
-    {
-        ResourceSetup::ResourceFinish(material_template_file,1);
+    if (g_ResBuilding == 0) {
+        // Until we implement RES file loading, we should keep any ResourceSetup stuff commented out.
+        // ResourceSetup::ResourceFinish(material_template_file,1);
     }
 
     return 1;
@@ -379,7 +379,8 @@ void CarsGame::CreateLoadingScreen(const char* name) {
 
     char package_name[260]{};
     RSStringUtil::Ssnprintf(package_name,0x104,"%s%s%s.%s.res","Res\\Data\\", g_UILocalizedTextureContentDirectory, name,"x360");
-    ResourceSetup::ResourceSetup(package_name,-1,1,8,0,0,-1,1,0);
+    // Until we implement RES file loading, we should keep any ResourceSetup stuff commented out.
+    // ResourceSetup::ResourceSetup(package_name,-1,1,8,0,0,-1,1,0);
 
     char texture_name[260]{};
     snprintf(texture_name, sizeof(texture_name), "%s%s", g_UILocalizedTextureContentDirectory, name);
