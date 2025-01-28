@@ -1,6 +1,9 @@
 #include "cars_game.hpp"
 #include <globals.hpp>
 #include "gfx/x360_tex_map.hpp"
+#include "gfx/x360_render_target.hpp"
+#include "gfx/x360_video_card.hpp"
+#include "gfx/x360_full_screen_texture_render.hpp"
 #include "util/rsstring_util.hpp"
 #include "util/resource_setup.hpp"
 
@@ -40,6 +43,14 @@ int g_ScavengerHuntPartGroupInExploreHub = FALSE;
 int g_CheckForXbox360TextureMipMaps = FALSE;
 int g_OnlyLoadXbox360LightMapsFromResourceFile = TRUE;
 
+X360FullScreenRenderPass* g_CurrentFSRP = nullptr;
+
+// OFFSET: 0x0043faf0, STATUS: TODO
+CarsGame::CarsGame() : X360Game() {
+    splash_screen[0] = '\0';
+    RSStringUtil::Ssnprintf(splash_screen, sizeof(splash_screen), "load_logo");
+}
+
 // OFFSET: 0x004f50a0, STATUS: WIP
 int CarsGame::InitializeRenderer(char (&quit_message)[260]) {
     SetLanguageToDefault();
@@ -71,7 +82,7 @@ int CarsGame::Initialize() {
 
 // OFFSET: 0x0043fe80, STATUS: WIP
 int CarsGame::PreGameInitialize(DisplayMode*) {
-    // TODO: Not completely implemented
+    // FIXME: Not completely implemented
     char material_file_content[260]{};
     char debug_str_file[260]{};
     char material_template_file[260]{};
@@ -277,7 +288,7 @@ void CarsGame::EndAutoTest(int) {
 
 // OFFSET: 0x004f51d0, STATUS: TODO
 int CarsGame::Tick() {
-    return 0;
+    return 1;
 }
 
 // OFFSET: 0x00440320, STATUS: TODO
@@ -386,12 +397,16 @@ void CarsGame::CreateLoadingScreen(const char* name) {
     snprintf(texture_name, sizeof(texture_name), "%s%s", g_UILocalizedTextureContentDirectory, name);
     TextureMap* texture_map = X360TexMap::GetTextureMapFromResourceName(texture_name, 555, 0);
     if (texture_map != nullptr) {
+        // FIXME: This is a hack. See definition for `g_CurrentFSRP`.
+        g_FullscreenRender.SetTexture(0, texture_map);
+        g_CurrentFSRP = &g_FullscreenRender;
+        texture_map->Release();
         /*
         // always zero
         iVar2 = FUN_00413600();
         
         FUN_00413620(iVar2);
-        X360FullScreenTextureRender::FUN_00413460(&g_FullscreenRender,iVar2,texture_map);
+        g_FullscreenRender.SetTexture(0, texture_map);
         X360FullScreenTextureRender_ARRAY_006fd378[iVar2 * 4 + 3].unk = &g_FullscreenRender;
         FUN_00413670(iVar2);
         
@@ -461,7 +476,28 @@ void CarsGame::PrepareDeferredLoad(DeferredLoad) {
 }
 
 // OFFSET: 0x004237a0, STATUS: TODO
-void CarsGame::PresentFrame(int) {
+void CarsGame::PresentFrame(int draw_fullscreen_render_pass) {
+    // FIXME: This entire implementation is a hack. See definition for ``g_CurrentFSRP``.
+    if (g_CurrentFSRP == nullptr) {
+        // FIXME: Implement this.
+    }
+    else {
+        D3DVIEWPORT9 fullscreen_viewport{
+            .X = 0,
+            .Y = 0,
+            .Width = g_ViewportWidth,
+            .Height = g_ViewportHeight,
+            .MinZ = 0.0f,
+            .MaxZ = 1.0f,
+        };
+        g_RenderTarget->SetViewport(&fullscreen_viewport);
+        g_RenderTarget->ApplyViewportImpl(1, 1, 1, draw_fullscreen_render_pass);
+        if (draw_fullscreen_render_pass != 0) {
+            g_CurrentFSRP->Draw(0);
+            g_RenderTarget->DrawCursor();
+        }
+    }
+    g_VideoCard->DisplayToScreen(1);
 }
 
 // OFFSET: 0x00441b40, STATUS: TODO

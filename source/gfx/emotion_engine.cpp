@@ -136,7 +136,6 @@ IDirect3DTexture9* EE::D3DDeviceManager::GetBackBuffer() {
 	D3DSURFACE_DESC surface_desc;
 	back_buffer_surface->GetDesc(&surface_desc);
 
-	unsigned int texture_flag = 0x400;
 	IDirect3DTexture9* new_texture = nullptr;
 	HRESULT result = device->CreateTexture(0x400, 0x200, 1, 1, surface_desc.Format, D3DPOOL_DEFAULT, &new_texture, nullptr);
 
@@ -145,13 +144,13 @@ IDirect3DTexture9* EE::D3DDeviceManager::GetBackBuffer() {
 
 // OFFSET: 0x0063b7d0, STATUS: TODO
 D3DFORMAT EE::D3DDeviceManager::GetBestFormat(D3DAdapter* adapter) {
-	// TODO: This is a stub for now. The real deal is quite complicated... :/
+	// FIXME: This is a stub for now. The real deal is quite complicated... :/
 	return D3DFORMAT::D3DFMT_X8R8G8B8;
 }
 
 // OFFSET: 0x0063b930, STATUS: TODO
 D3DFORMAT EE::D3DDeviceManager::GetBestDepthStencilFormat(D3DAdapter* adapter, int back_buffer_index) {
-	// TODO: This is a stub for now. The real deal is quite complicated... :/
+	// FIXME: This is a stub for now. The real deal is quite complicated... :/
 	return D3DFORMAT::D3DFMT_D24S8;
 }
 

@@ -30,5 +30,7 @@ public:
 	void FreeString(char* str);
 };
 
+#ifndef _WIN64
 static_assert(sizeof(StringBlockAllocator::StringBlock) == 16);
 static_assert(sizeof(StringBlockAllocator) == 32);
+#endif

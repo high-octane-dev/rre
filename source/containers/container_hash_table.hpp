@@ -370,5 +370,7 @@ int ContainerHashTable<TKey, TVal>::GetNextValue(Node** node, TKey* key, TVal* v
     return 0;
 }
 
+#ifndef _WIN64
 static_assert(sizeof(ContainerHashTable<const char*, int>::Node) == 20);
 static_assert(sizeof(ContainerHashTable<const char*, int>) == 24);
+#endif

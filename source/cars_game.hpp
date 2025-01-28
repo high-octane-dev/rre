@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "x360_game.hpp"
+#include "gfx/x360_full_screen_render_pass.hpp"
 
 enum class XboxLocale {
     None = 0,
@@ -185,6 +186,8 @@ public:
     CheatCode cheat_codes[11];
     int unused30;
 public:
+    CarsGame();
+
     virtual int InitializeRenderer(char(&quit_message)[260]) override;
     virtual int Initialize() override;
     virtual int PreGameInitialize(DisplayMode*) override;
@@ -287,3 +290,10 @@ extern int g_ShowScavengerHuntOverlayInExploreHub;
 extern int g_ScavengerHuntPartGroupInExploreHub;
 extern int g_CheckForXbox360TextureMipMaps;
 extern int g_OnlyLoadXbox360LightMapsFromResourceFile;
+
+// FIXME: So, in the original game, this is actually a 1-sized array of X360FullScreenRenderPass* es;
+// Every function that accesses that array does so by retrieving an index from some function, but
+// those functions always return 0. There is a decent amount of code sprinkled throughout the
+// rendering classes in the game that use 1-sized arrays like this, but at the moment we do not
+// know enough about the game to declare them as such.
+extern X360FullScreenRenderPass* g_CurrentFSRP;

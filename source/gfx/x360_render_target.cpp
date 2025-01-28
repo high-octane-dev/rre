@@ -432,7 +432,7 @@ int X360RenderTarget::Blt(FRECT* dest, TextureMap* texture, FRECT* unused0, unsi
 		return 1;
 	}
 
-	vertex_shader_manager->SetIsFullscreenEffect(g_RenderTargetVAFIndex);
+	vertex_shader_manager->SetVertexFormatIndex(g_RenderTargetVAFIndex);
 	vertex_shader_manager->SetVertexShader(blt_vertex, 0);
 	pixel_shader_manager->SetPixelShader(blt_pixel);
 	g_D3DDevice9->SetTexture(0, static_cast<X360TextureMap*>(texture)->texture);
@@ -479,33 +479,41 @@ int X360RenderTarget::Blt(FRECT* dest, TextureMap* texture, FRECT* unused0, unsi
 		clip_space_dest[3] = 1.0 - inv_half_height * dest->y2;
 	}
 
+	Vector4 shader_color_scale = {
+		(color >> 16 & 0xFF) / 255.0f,
+		(color >> 8 & 0xFF) / 255.0f,
+		(color & 0xFF) / 255.0f,
+		(color >> 24) / 255.0f,
+	};
+
 	float vertices[24]{};
-	vertices[0] = (color >> 16 & 0xFF) / 255.0;
-	vertices[1] = (color >> 8 & 0xFF) / 255.0;
-	vertices[2] = (color & 0xFF) / 255.0;
-	vertices[3] = (color >> 24) / 255.0;
-	vertices[4] = clip_space_dest[0];
+	vertices[0] = clip_space_dest[0];
+	vertices[1] = clip_space_dest[1];
+	vertices[2] = 0.0;
+	vertices[3] = 0.0;
+	vertices[4] = clip_space_dest[2];
 	vertices[5] = clip_space_dest[1];
-	vertices[6] = 0.0;
+	vertices[6] = 1.0;
 	vertices[7] = 0.0;
-	vertices[8] = clip_space_dest[2];
-	vertices[9] = clip_space_dest[1];
-	vertices[10] = 1.0;
-	vertices[11] = 0.0;
+	vertices[8] = clip_space_dest[0];
+	vertices[9] = clip_space_dest[3];
+	vertices[10] = 0.0;
+	vertices[11] = 1.0;
 	vertices[12] = clip_space_dest[0];
 	vertices[13] = clip_space_dest[3];
 	vertices[14] = 0.0;
 	vertices[15] = 1.0;
-	vertices[16] = clip_space_dest[0];
-	vertices[17] = clip_space_dest[3];
-	vertices[18] = 0.0;
-	vertices[19] = 1.0;
+	vertices[16] = clip_space_dest[2];
+	vertices[17] = clip_space_dest[1];
+	vertices[18] = 1.0;
+	vertices[19] = 0.0;
 	vertices[20] = clip_space_dest[2];
-	vertices[21] = clip_space_dest[1];
+	vertices[21] = clip_space_dest[3];
 	vertices[22] = 1.0;
-	vertices[23] = 0.0;
-	g_D3DDevice9->SetPixelShaderConstantF(0, vertices, 1);
-	g_D3DDevice9->DrawPrimitiveUP(D3DPT_TRIANGLELIST, 2, vertices, sizeof(float[4]));
+	vertices[23] = 1.0;
+
+	g_D3DDevice9->SetPixelShaderConstantF(0, &shader_color_scale.x, 1);
+	g_D3DDevice9->DrawPrimitiveUP(D3DPT_TRIANGLELIST, 2, vertices, 16);
 	g_D3DDevice9->SetTexture(0, nullptr);
 	return 1;
 }

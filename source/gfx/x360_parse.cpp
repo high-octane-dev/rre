@@ -4,8 +4,6 @@
 #include <d3d9types.h>
 #include <cstdlib>
 
-#include "BASS.h"
-
 // OFFSET: 0x00424070, STATUS: COMPLETE
 void X360Parse::GetAddressMode(ParameterBlock* parameter_block, const char* parameter, const D3DTEXTUREADDRESS fallback, D3DTEXTUREADDRESS* dest) {
 	char parameter_content[64];

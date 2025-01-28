@@ -340,7 +340,7 @@ void Game::GetCameras(Camera* dest[4]) {
 
 // OFFSET: 0x00617ff0, STATUS: WIP
 int Game::Terminate() {
-    // TODO: Not completely implemented
+    // FIXME: Not completely implemented
     if (g_RenderTarget != nullptr) {
         delete g_RenderTarget;
         g_RenderTarget = nullptr;

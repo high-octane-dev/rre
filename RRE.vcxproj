@@ -76,11 +76,12 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>bass.lib;d3d9.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>binkw32.lib;bass.lib;d3d9.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y dependencies\bass.dll "$(TargetDir)bass.dll"</Command>
+      <Command>copy /Y dependencies\bass.dll "$(TargetDir)bass.dll"
+copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -100,11 +101,12 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>bass.lib;d3d9.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>binkw32.lib;bass.lib;d3d9.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y dependencies\bass.dll "$(TargetDir)bass.dll"</Command>
+      <Command>copy /Y dependencies\bass.dll "$(TargetDir)bass.dll"
+copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -188,6 +190,7 @@
     <ClInclude Include="source\gfx\texture_map_manager.hpp" />
     <ClInclude Include="source\gfx\vertex_buffer.hpp" />
     <ClInclude Include="source\gfx\video_card.hpp" />
+    <ClInclude Include="source\gfx\x360_full_screen_render_pass.hpp" />
     <ClInclude Include="source\gfx\x360_full_screen_texture_render.hpp" />
     <ClInclude Include="source\gfx\x360_index_buffer.hpp" />
     <ClInclude Include="source\gfx\x360_index_buffer_cache.hpp" />

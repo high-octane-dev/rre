@@ -9,7 +9,7 @@ MaterialStringTable::MaterialStringTable(std::size_t user_data_stride, LookupTyp
 
 // OFFSET: 0x00585fa0, STATUS: TODO
 void MaterialStringTable::AddItem(char const*, int) {
-	// TODO: Implement This!
+	// FIXME: Implement This!
 }
 
 // OFFSET: 0x00586140, STATUS: COMPLETE

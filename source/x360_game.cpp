@@ -12,8 +12,8 @@ extern int g_WindowWidth;
 extern int g_WindowHeight;
 extern float g_TargetFrameRate;
 
-int g_ViewportWidth = 0;
-int g_ViewportHeight = 0;
+unsigned int g_ViewportWidth = 0;
+unsigned int g_ViewportHeight = 0;
 int g_ScreenEffectWidth = 0;
 int g_ScreenEffectHeight = 0;
 int g_CameraWidth = 0;
@@ -67,6 +67,16 @@ void SetDisplayModeGlobal(DisplayMode* display_mode) {
     g_AspectRatios[1] = 16.0 / 9.0;
     g_AspectRatios[2] = 16.0 / 9.0;
     return;
+}
+
+// OFFSET: 0x00421cd0, STATUS: COMPLETE
+X360Game::X360Game() : Game() {
+    unused17 = 0;
+    d3d9 = nullptr;
+    unused18 = 0;
+    unused19 = 0;
+    unused20 = 0;
+    hwnd = nullptr;
 }
 
 // OFFSET: 0x00421d10, STATUS: TODO
@@ -181,18 +191,18 @@ int X360Game::SetBasicRenderStates() {
             g_lpD3DStateManager->SetSamplerState(i, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
         }
     }
-    // TODO: Handle Lights and EcoSystem
+    // FIXME: Handle Lights and EcoSystem
     if (g_RenderTarget->used_camera != nullptr) {
         g_D3DDevice9->SetVertexShaderConstantF(24, &g_RenderTarget->used_camera->position.x, 1);
         g_D3DDevice9->SetPixelShaderConstantF(9, &g_RenderTarget->used_camera->position.x, 1);
     }
-    // TODO: Handle Fog and WorldShadowMap
+    // FIXME: Handle Fog and WorldShadowMap
     if (g_RenderTarget->used_camera != nullptr) {
         if (g_RenderTarget->used_camera->enable_perspective == 0) {
             g_D3DDevice9->SetTexture(5, g_RenderTarget->unk_texture);
         }
     }
-    // TODO: Handle DistanceFade
+    // FIXME: Handle DistanceFade
     return 1;
 }
 

@@ -95,7 +95,7 @@ void ReadConfigIni() {
     }
     else {
         language_ini.ReadParameterBlock("Language");
-        language_ini.GetParameter("Name", "English", g_LanguageName, 0x40);
+        language_ini.GetParameter("Name", "English", g_LanguageName, sizeof(g_LanguageName));
     }
     ParameterBlock config{};
     if (config.OpenFile("config.ini", 0, -1, nullptr, 0xffffffff) != 0) {
@@ -151,7 +151,7 @@ void ReadConfigIni() {
             }
 
             config.search.SetResetParameterSearch(1);
-            config.GetParameter("DefaultConfiguration", "English", lpGame->selected_language_configuration_name, 0x20);
+            config.GetParameter("DefaultConfiguration", "English", lpGame->selected_language_configuration_name, sizeof(lpGame->selected_language_configuration_name));
             lpGame->GetLanguageConfiguration(lpGame->selected_language_configuration_name);
             
             for (std::size_t i = 0; i < lpGame->lang_confs.Length(); i++) {
@@ -161,7 +161,7 @@ void ReadConfigIni() {
             config.ReadParameterBlock("LanguageGeneral");
             config.GetParameter("UseDashboardLocale", 0, &lpGame->use_dashboard_locale);
             config.ReadParameterBlock("LanguageTitles");
-            config.GetParameter(g_LanguageName, "Cars Mater-National", g_Caption, 0x80);
+            config.GetParameter(g_LanguageName, "Cars Mater-National", g_Caption, sizeof(g_Caption));
             
             for (std::size_t i = 0; i < sizeof(g_Caption); i++) {
                 if (g_Caption[i] == '_') {

@@ -3,8 +3,8 @@
 #include <windows.h>
 #include <d3d9.h>
 
-extern int g_ViewportWidth;
-extern int g_ViewportHeight;
+extern unsigned int g_ViewportWidth;
+extern unsigned int g_ViewportHeight;
 extern int g_ScreenEffectWidth;
 extern int g_ScreenEffectHeight;
 extern int g_CameraWidth;
@@ -28,6 +28,7 @@ public:
 	char unused21[16];
 	IDirect3D9* d3d9;
 public:
+	X360Game();
 	virtual ~X360Game() override;
 	virtual int InitializeRenderer(char (&quit_message)[260]) override;
 	virtual int PreGameInitialize(DisplayMode*) override;
