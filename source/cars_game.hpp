@@ -115,7 +115,7 @@ public:
     struct CarsSettings* settings;
     struct CarsBoltManager* bolt_manager;
     struct Cars2PickupManager* pickup_manager;
-    struct CarsScavengerHuntManager* scavanger_hunt_manager;
+    struct CarsScavengerHuntManager* scavenger_hunt_manager;
     struct Cars2BonusPointManager* bonus_point_manager;
     struct CarsAchievementManager* achievement_manager;
     struct Cars2SceneDatabase* scene_database;

@@ -45,17 +45,106 @@ int g_OnlyLoadXbox360LightMapsFromResourceFile = TRUE;
 
 X360FullScreenRenderPass* g_CurrentFSRP = nullptr;
 
-// OFFSET: 0x0043faf0, STATUS: TODO
+// OFFSET: 0x0043faf0, STATUS: COMPLETE
 CarsGame::CarsGame() : X360Game() {
+    for (std::size_t i = 0; i < sizeof(cheat_codes) / sizeof(CheatCode); i++) {
+        cheat_codes[i].index = -1;
+        cheat_codes[i].name[0] = 0;
+        cheat_codes[i].active = 0;
+    }
+    profile = nullptr;
+    brake_when_resting_threshold = 5.0;
+    hall_of_fame = nullptr;
+    personal_records = nullptr;
+    audio_manager = nullptr;
+    world = nullptr;
+    ui = nullptr;
+    video_fx_manager = nullptr;
+    settings = nullptr;
+    bolt_manager = nullptr;
+    pickup_manager = nullptr;
+    scavenger_hunt_manager = nullptr;
+    bonus_point_manager = nullptr;
+    achievement_manager = nullptr;
+    scene_database = nullptr;
+    activity_database = nullptr;
+    event_database = nullptr;
+    vehicle_database = nullptr;
+    story_manager = nullptr;
+    event_join_point_manager = nullptr;
+    ui_resource_manager = nullptr;
+    bonus_content_manager = nullptr;
+    scene[0] = 0;
+    scene_name[0] = 0;
+    use_vehicle_engine_sound = 0;
+    play_music = 0;
+    brake_when_resting = 0;
+    screen_text_font_manager = nullptr;
+    char_number = 0;
+    char_name[0] = 0;
+    char_paint_type = 0;
+    char_color1 = Vector4(0, 0, 0, 1);
+    char_color2 = Vector4(0, 0, 0, 1);
+    vehicle_manual_transmission = 0;
+    unused22 = nullptr;
+    total_laps = 3;
+    no_321 = 0;
+    build_spline_mode = 0;
+    unused26 = 0;
+    analog_gas = 0;
+    show_coords = 1;
+    dump_results = 0;
+    unused27 = 0;
+    world_paused = 0;
+    unlock_all = 0;
+    unlock_all_abilities = 0;
+    unused28 = 0;
+    enforce_free_camera_speed = 1;
+    unused29 = 0;
+    cinema_mode = 0;
+    loop_cutscenes = 0;
+    loading_tip_preview = 0;
+    unused23[0] = 0;
     splash_screen[0] = '\0';
     RSStringUtil::Ssnprintf(splash_screen, sizeof(splash_screen), "load_logo");
+    loading_icon = nullptr;
+    loading_screen_name[0] = 0;
+    loading_icon_name[0] = 0;
+    unlock_all_bonus_content = 0;
+    cheat_codes[0].index = 0;
+    RSStringUtil::Ssnprintf(cheat_codes[0].name, sizeof(CheatCode::name), "MATTEL07");
+    cheat_codes[1].index = 1;
+    RSStringUtil::Ssnprintf(cheat_codes[1].name, sizeof(CheatCode::name), "PAINTIT");
+    cheat_codes[2].index = 2;
+    RSStringUtil::Ssnprintf(cheat_codes[2].name, sizeof(CheatCode::name), "NCEDUDZ");
+    cheat_codes[3].index = 3;
+    RSStringUtil::Ssnprintf(cheat_codes[3].name, sizeof(CheatCode::name), "INSTYLE");
+    cheat_codes[4].index = 4;
+    RSStringUtil::Ssnprintf(cheat_codes[4].name, sizeof(CheatCode::name), "PLAYALL");
+    cheat_codes[5].index = 5;
+    RSStringUtil::Ssnprintf(cheat_codes[5].name, sizeof(CheatCode::name), "SCENZ4U");
+    cheat_codes[6].index = 6;
+    RSStringUtil::Ssnprintf(cheat_codes[6].name, sizeof(CheatCode::name), "BUYTALL");
+    cheat_codes[7].index = 7;
+    RSStringUtil::Ssnprintf(cheat_codes[7].name, sizeof(CheatCode::name), "ALLYORS");
+    cheat_codes[8].index = 8;
+    RSStringUtil::Ssnprintf(cheat_codes[8].name, sizeof(CheatCode::name), "VRYFAST");
+    cheat_codes[9].index = 9;
+    RSStringUtil::Ssnprintf(cheat_codes[9].name, sizeof(CheatCode::name), "ZZOOOOM");
+    cheat_codes[10].index = 10;
+    RSStringUtil::Ssnprintf(cheat_codes[10].name, sizeof(CheatCode::name), "0TO200X");
+    ai_names[0] = 0;
+    difficulty = 0;
+    time_of_day = 0;
+    starting_bolt_banners = 0;
+    starting_bonus_points = 0;
 }
 
 // OFFSET: 0x004f50a0, STATUS: WIP
 int CarsGame::InitializeRenderer(char (&quit_message)[260]) {
     SetLanguageToDefault();
     if (X360Game::InitializeRenderer(quit_message) == 0) {
-        snprintf(quit_message, sizeof(quit_message), "Failed to initialize renderer!");
+        RSStringUtil::Ssnprintf(quit_message, sizeof(quit_message), "Failed to initialize renderer!");
         return 0;
     }
     unk_game_state = 1;
@@ -394,7 +483,7 @@ void CarsGame::CreateLoadingScreen(const char* name) {
     // ResourceSetup::ResourceSetup(package_name,-1,1,8,0,0,-1,1,0);
 
     char texture_name[260]{};
-    snprintf(texture_name, sizeof(texture_name), "%s%s", g_UILocalizedTextureContentDirectory, name);
+    RSStringUtil::Ssnprintf(texture_name, sizeof(texture_name), "%s%s", g_UILocalizedTextureContentDirectory, name);
     TextureMap* texture_map = X360TexMap::GetTextureMapFromResourceName(texture_name, 555, 0);
     if (texture_map != nullptr) {
         // FIXME: This is a hack. See definition for `g_CurrentFSRP`.
@@ -522,7 +611,7 @@ void CarsGame::SetConfigArguments() {
     start[0] = '\0';
     scene[0] = '\0';
     scene_name[0] = '\0';
-    snprintf(splash_screen, sizeof(splash_screen), "load_logo");
+    RSStringUtil::Ssnprintf(splash_screen, sizeof(splash_screen), "load_logo");
     unused24 = 0;
     char_number = 0;
     strncpy(char_name, "McQ", 4);
@@ -628,14 +717,14 @@ int CarsGame::ShowLoadingScreen(const char* _loading_screen, const char* _loadin
     }
     else {
         CreateLoadingScreen(_loading_screen);
-        snprintf(loading_screen_name, sizeof(loading_screen_name), "%s", _loading_screen);
+        RSStringUtil::Ssnprintf(loading_screen_name, sizeof(loading_screen_name), "%s", _loading_screen);
     }
     if (_loading_icon == nullptr) {
         loading_icon_name[0] = '\0';
         return 1;
     }
     CreateLoadingIcon(_loading_icon);
-    snprintf(loading_icon_name, sizeof(loading_screen_name), "%s", _loading_icon);
+    RSStringUtil::Ssnprintf(loading_icon_name, sizeof(loading_screen_name), "%s", _loading_icon);
     return 1;
 }
 

@@ -1,14 +1,12 @@
 #include <cstdio>
-#include <clocale>
-#include <algorithm>
 #include <cstdlib>
 
 #include <Windows.h>
 #include <d3d9.h>
-#include <span>
 #include "cars_game.hpp"
 #include "parameter_block.hpp"
 #include "language_configuration.hpp"
+#include "util/rsstring_util.hpp"
 
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 
@@ -118,7 +116,7 @@ void ReadConfigIni() {
             for (std::size_t i = 0; i < definition_count; i++) {
                 if (config.GetParameter("Definition", "", definition_name, sizeof(definition_name)) != 0) {
                     LanguageDefinition* language_definition = new LanguageDefinition();
-                    snprintf(language_definition->name, sizeof(language_definition->name), "%s", definition_name);
+                    RSStringUtil::Ssnprintf(language_definition->name, sizeof(language_definition->name), "%s", definition_name);
                     lpGame->lang_defs.CLAddItem(language_definition);
                 }
                 else {
@@ -142,7 +140,7 @@ void ReadConfigIni() {
             for (std::size_t i = 0; i < definition_count; i++) {
                 if (config.GetParameter("Configuration", "", configuration_name, sizeof(configuration_name)) != 0) {
                     LanguageConfiguration* language_configuration = new LanguageConfiguration();
-                    snprintf(language_configuration->name, sizeof(language_configuration->name), "%s", configuration_name);
+                    RSStringUtil::Ssnprintf(language_configuration->name, sizeof(language_configuration->name), "%s", configuration_name);
                     lpGame->lang_confs.CLAddItem(language_configuration);
                 }
                 else {

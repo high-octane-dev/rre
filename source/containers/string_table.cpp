@@ -1,6 +1,7 @@
 #include "string_table.hpp"
 #include "util/token_string.hpp"
-#include <data_access.hpp>
+#include "data_access.hpp"
+#include "util/rsstring_util.hpp"
 
 // OFFSET: 0x00563e90, STATUS: COMPLETE
 StringTable::StringTable(std::size_t user_data_stride, LookupType lookup_type, std::size_t initial_string_entry_count, std::size_t string_entries_increment, std::size_t string_heap_capacity, int unk3, std::size_t max_table_markers) {
@@ -356,7 +357,7 @@ int StringTable::LoadStringsBufferFromFile(char* path) {
     char* leftover_data = nullptr;
     std::size_t leftover_len = 0;
 
-    snprintf(normalized_filename, sizeof(normalized_filename), "%s", path);
+    RSStringUtil::Ssnprintf(normalized_filename, sizeof(normalized_filename), "%s", path);
     this->ModifyFilename(normalized_filename);
 
     for (std::size_t i = 0; i < sizeof(lowercase_filename); i++) {

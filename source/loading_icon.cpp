@@ -1,6 +1,7 @@
+#include <cstdio>
 #include "loading_icon.hpp"
 #include "data_access.hpp"
-#include <stdio.h>
+#include "util/rsstring_util.hpp"
 
 // OFFSET: 0x005503b0, STATUS: COMPLETE
 LoadingIcon::LoadingIcon()
@@ -22,7 +23,7 @@ void LoadingIcon::Create(char* a1)
 	ParameterBlock local_960;
 	char filename[260]{};
 
-	snprintf(filename, sizeof(filename), "%s.%s.lsi", a1, "x360");
+	RSStringUtil::Ssnprintf(filename, sizeof(filename), "%s.%s.lsi", a1, "x360");
 	if ((lpDataAccess->flags & 0x2000) != 0)
 	{
 		lpDataAccess->flags = lpDataAccess->flags & 0xffffdfff;

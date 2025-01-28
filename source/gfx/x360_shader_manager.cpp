@@ -1,11 +1,10 @@
+#include <dxsdk-d3dx/d3dx9.h>
 #include "globals.hpp"
 #include "gfx/x360_shader_manager.hpp"
 #include "gfx/emotion_engine.hpp"
 #include "gfx/x360_video_card.hpp"
+#include "util/rsstring_util.hpp"
 
-#include <stdio.h>
-#include <dxsdk-d3dx/d3dx9.h>
-#include <format>
 
 X360ShaderManager* g_lpX360ShaderManager = nullptr;
 
@@ -40,7 +39,7 @@ X360ShaderManager::~X360ShaderManager() {
 void X360ShaderManager::Create() {
     char filter[260]{};
     const char* shader_model_dir = g_lpD3DDeviceManager->GetRelativeShaderPath();
-    snprintf(filter, sizeof(filter), "%s%s%s%s", g_DataPCDirectory, "C\\Shaders\\", shader_model_dir, "*.hlsl");
+    RSStringUtil::Ssnprintf(filter, sizeof(filter), "%s%s%s%s", g_DataPCDirectory, "C\\Shaders\\", shader_model_dir, "*.hlsl");
 
     WIN32_FIND_DATAA ffd{};
     HANDLE find = FindFirstFileA(filter, &ffd);
@@ -97,7 +96,7 @@ IDirect3DPixelShader9* X360ShaderManager::GetPixelShader(const char* name) const
 IDirect3DVertexShader9* X360ShaderManager::LoadVertexShader(const char* name) {
     char full_path[260]{};
     const char* shader_model_dir = g_lpD3DDeviceManager->GetRelativeShaderPath();
-    snprintf(full_path, sizeof(full_path), "%s\\C\\Shaders\\%s%s.compiled.vsh", g_DataPCDirectory, shader_model_dir, name);
+    RSStringUtil::Ssnprintf(full_path, sizeof(full_path), "%s\\C\\Shaders\\%s%s.compiled.vsh", g_DataPCDirectory, shader_model_dir, name);
     FILE* f = fopen(full_path, "rb");
     if (f == nullptr) {
         return nullptr;
@@ -121,7 +120,7 @@ IDirect3DVertexShader9* X360ShaderManager::LoadVertexShader(const char* name) {
 IDirect3DPixelShader9* X360ShaderManager::LoadPixelShader(const char* name) {
     char full_path[260]{};
     const char* shader_model_dir = g_lpD3DDeviceManager->GetRelativeShaderPath();
-    snprintf(full_path, sizeof(full_path), "%s\\C\\Shaders\\%s%s.compiled.psh", g_DataPCDirectory, shader_model_dir, name);
+    RSStringUtil::Ssnprintf(full_path, sizeof(full_path), "%s\\C\\Shaders\\%s%s.compiled.psh", g_DataPCDirectory, shader_model_dir, name);
     FILE* f = fopen(full_path, "rb");
     if (f == nullptr) {
         return nullptr;

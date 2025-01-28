@@ -1,7 +1,8 @@
-#include <stdio.h>
+#include <cstdio>
 #include "parameter_block.hpp"
 #include "panic.hpp"
 #include "data_access.hpp"
+#include "util/rsstring_util.hpp"
 
 // OFFSET: 0x00539d10, STATUS: COMPLETE
 static void RemoveWhiteSpace(const char* input_str, char* output_str, int is_loaded_from_memory) {
@@ -399,7 +400,7 @@ int ParameterBlock::GetParameter(const char* parameter, const char* default_valu
 	if (search.GetParameter(parameter, dest, dest_len) != 0) {
 		return 1;
 	}
-	snprintf(dest, dest_len, "%s", default_value);
+	RSStringUtil::Ssnprintf(dest, dest_len, "%s", default_value);
 	return 0;
 }
 
@@ -485,7 +486,7 @@ void ParameterBlock::GetHeaderList(char* dest, int len) {
 		for (std::size_t i = 0; i < headers_capacity; i++) {
 			char* name = label_string_table[headers[i].label_string_table_index];
 			if (headers[i].flag_or_index != -1) {
-				dest_ptr += snprintf(dest_ptr, len - (dest_ptr - dest), "%s%d", name, static_cast<int>(headers[i].flag_or_index));
+				dest_ptr += RSStringUtil::Ssnprintf(dest_ptr, len - (dest_ptr - dest), "%s%d", name, static_cast<int>(headers[i].flag_or_index));
 				*dest_ptr = 0;
 				dest_ptr++;
 			}
@@ -905,7 +906,7 @@ int ParameterBlock::PBSearch::GetParameter(const char* parameter, char* dest, st
 				start_index++;
 			}
 			if (start_index < parameter_count) {
-				snprintf(dest, dest_len, "%s", parent->headers[current_header_index].parameters[start_index].value);
+				RSStringUtil::Ssnprintf(dest, dest_len, "%s", parent->headers[current_header_index].parameters[start_index].value);
 				strcpy_s(current_parameter_name, parameter);
 				current_parameter_index = start_index;
 				return 1;

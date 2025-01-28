@@ -1,8 +1,7 @@
-#include "rsstring_util.hpp"
-
 #include <cstdio>
 #include <cstdarg>
 #include <cstring>
+#include "rsstring_util.hpp"
 
 // OFFSET: 0x0055f230, STATUS: TODO
 int RSStringUtil::Ssnprintf(char* buf, std::size_t len, const char* format, ...) {
