@@ -53,4 +53,24 @@ private:
 public:
     int enable_perspective;
 public:
+    virtual ~Camera() override;
+    virtual void Disable() override;
+    virtual void Enable() override;
+    virtual GameObject* Create() override;
+    virtual int Tick(float) override;
+    virtual int Restore() override;
+    virtual int KeyDownHandler(ProcessNode*, KeyInfo*) override;
+
+    virtual Camera* Create(float, int, int);
+    virtual void DumpSnapShot();
+    virtual void SetDumpCubeViewParameters();
+    virtual void DumpCubeFace();
+    virtual void SetDumpSpinViewParameters();
+    virtual void DumpSpin(Vector4*, Vector4*, int);
+    virtual void DumpSpinFrame();
+    virtual void UpdateMatrices();
+    virtual void ComputeGuardBandMatrix(Matrix4x4*, Matrix4x4*, float, float);
+    virtual void UpdateClipDistances(float, float);
+    virtual int LookAt(Vector4*, Vector4*);
+    virtual int SurfaceChanged(float, int, int);
 };
