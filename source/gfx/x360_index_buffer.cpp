@@ -1,16 +1,12 @@
 #include "x360_index_buffer.hpp"
 
-X360IndexBuffer::X360IndexBuffer(D3DFORMAT fmt, int param2) {
-
-    this->format = D3DFMT_UNKNOWN;
-    this->bytes_per_index = 0;
-    this->index_count = 0;
-    this->field1_0x4 = 0;
-
+// OFFSET: 0x00412cd0, STATUS: COMPLETE
+X360IndexBuffer::X360IndexBuffer(D3DFORMAT fmt, int param2) : IndexBuffer() {
+    field1_0x4 = 0;
     Create(fmt, param2);
 }
 
+// OFFSET: 0x00412b80, STATUS: TODO
 int X360IndexBuffer::Create(D3DFORMAT fmt, int index_count) {
-
     return 0;
 }

@@ -8,12 +8,14 @@ protected:
 	int bytes_per_index;
 	int index_count;
 public:
-	virtual int Create(D3DFORMAT fmt, int index_count);
-	virtual void Release();
-	virtual int ReadData(void* dst, int data_index, int len);
-	virtual int CopyFrom(IndexBuffer* other, int unk, int data_index, int len);
-	virtual int Lock(int data_index, int count, DWORD flags);
-	virtual bool Unlock();
-	virtual IDirect3DIndexBuffer9* Get();
-	virtual void Unk();
+	IndexBuffer();
+	~IndexBuffer();
+	virtual int Create(D3DFORMAT fmt, int index_count) = 0;
+	virtual void Release() = 0;
+	virtual int ReadData(void* dst, int data_index, int len) = 0;
+	virtual int CopyFrom(IndexBuffer* other, int unk, int data_index, int len) = 0;
+	virtual int Lock(int data_index, int count, DWORD flags) = 0;
+	virtual bool Unlock() = 0;
+	virtual IDirect3DIndexBuffer9* Get() = 0;
+	virtual void Unk() = 0;
 };

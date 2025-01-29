@@ -1,18 +1,19 @@
 #include "x360_vertex_buffer_manager.hpp"
 
-X360VertexBufferManager::X360VertexBufferManager()
-{
+// OFFSET: 0x004129a0, STATUS: TODO
+X360VertexBufferManager::X360VertexBufferManager() {
 }
 
-X360VertexBufferManager::~X360VertexBufferManager()
-{
+// OFFSET: INLINE, STATUS: COMPLETE
+X360VertexBufferManager::~X360VertexBufferManager() {
+	EmptyCacheList();
 }
 
-int X360VertexBufferManager::CreateVertexBuffer(D3DFORMAT format, int vertex_count)
-{
+// OFFSET: 0x00413200, STATUS: TODO
+int X360VertexBufferManager::CreateVertexBuffer(D3DFORMAT format, int vertex_count) {
 	return 0;
 }
 
-void X360VertexBufferManager::EmptyCacheList()
-{
+// OFFSET: 0x00413000, STATUS: TODO
+void X360VertexBufferManager::EmptyCacheList() {
 }

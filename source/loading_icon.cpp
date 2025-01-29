@@ -4,8 +4,7 @@
 #include "util/rsstring_util.hpp"
 
 // OFFSET: 0x005503b0, STATUS: COMPLETE
-LoadingIcon::LoadingIcon()
-{
+LoadingIcon::LoadingIcon() {
 	unk1 = 0;
 	unk2 = 0;
 	unk3 = 1;
@@ -18,8 +17,7 @@ LoadingIcon::LoadingIcon()
 }
 
 // OFFSET: 0x005ed180, STATUS: WIP
-void LoadingIcon::Create(char* a1)
-{
+void LoadingIcon::Create(char* a1) {
 	ParameterBlock local_960;
 	char filename[260]{};
 
@@ -40,15 +38,13 @@ void LoadingIcon::Create(char* a1)
 }
 
 // OFFSET: 0x005503e0, STATUS: WIP
-void LoadingIcon::Enable()
-{
+void LoadingIcon::Enable() {
 	//unk9 = timeGetTime();
 	unk4 = 1;
 }
 
 // OFFSET: 0x00550400, STATUS: COMPLETE
-void LoadingIcon::Disable()
-{
+void LoadingIcon::Disable() {
 	unk4 = 0;
 	unk9 = 0;
 	unk7 = 0;
@@ -56,7 +52,6 @@ void LoadingIcon::Disable()
 }
 
 // OFFSET: 0x005d6780, STATUS: TODO
-int LoadingIcon::Load(ParameterBlock*)
-{
+int LoadingIcon::Load(ParameterBlock*) {
 	return 0;
 }
