@@ -218,7 +218,7 @@ namespace EE {
 		int Create();
 		bool CheckAdapterDisplayMode(D3DAdapter* adapter, D3DFORMAT fmt, int* w, int* h);
 	};
-#ifndef _WIN64
+#ifdef _M_IX86
 	static_assert(sizeof(D3DDepthStencil) == 0x20);
 	static_assert(sizeof(D3DRenderTarget) == 0x1C);
 	static_assert(sizeof(D3DBackBuffer) == 0x20);

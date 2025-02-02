@@ -144,7 +144,7 @@ public:
 extern DataAccess* lpDataAccess;
 extern BlockAllocator* lpVirtualFileAllocator;
 
-#ifndef _WIN64
+#ifdef _M_IX86
 static_assert(sizeof(VirtualDataDevice) == 40);
 static_assert(sizeof(VirtualDataFile) == 36);
 static_assert(sizeof(VirtualFileCache) == 12);
