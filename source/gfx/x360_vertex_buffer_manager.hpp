@@ -13,7 +13,7 @@ public:
 class X360VertexBufferManager : public VertexBufferManager {
 private:
 	std::size_t unk_capacity;
-	LinkedList<X360VertexBufferCache*> cache_list;
+	LinkedList<X360VertexBufferCache*>* cache_list;
 	unsigned int unused;
 public:
 	X360VertexBufferManager();

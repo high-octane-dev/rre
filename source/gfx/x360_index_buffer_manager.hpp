@@ -13,7 +13,7 @@ public:
 class X360IndexBufferManager : public IndexBufferManager {
 private:
 	std::size_t unk_capacity;
-	LinkedList<X360IndexBufferCache*> cache_list;
+	LinkedList<X360IndexBufferCache*>* cache_list;
 	unsigned int unused;
 public:
 	X360IndexBufferManager();

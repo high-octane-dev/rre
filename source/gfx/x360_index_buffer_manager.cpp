@@ -1,7 +1,10 @@
 #include "x360_index_buffer_manager.hpp"
 
-// OFFSET: 0x004129d0, STATUS: TODO
+// OFFSET: 0x004129d0, STATUS: COMPLETE
 X360IndexBufferManager::X360IndexBufferManager() {
+	unk_capacity = 0;
+	cache_list = nullptr;
+	unused = 0;
 }
 
 // OFFSET: INLINE, STATUS: COMPLETE
