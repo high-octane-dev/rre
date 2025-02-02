@@ -487,29 +487,29 @@ int X360RenderTarget::Blt(FRECT* dest, TextureMap* texture, FRECT* unused0, unsi
 	};
 
 	float vertices[24]{};
-	vertices[0] = clip_space_dest[0];
+	vertices[0] = clip_space_dest[0]; // Vertex 0 - Position
 	vertices[1] = clip_space_dest[1];
-	vertices[2] = 0.0;
+	vertices[2] = 0.0; // Vertex 0 - TexCoord
 	vertices[3] = 0.0;
-	vertices[4] = clip_space_dest[2];
+	vertices[4] = clip_space_dest[2]; // Vertex 1 - Position
 	vertices[5] = clip_space_dest[1];
-	vertices[6] = 1.0;
+	vertices[6] = 1.0; // Vertex 1 - TexCoord
 	vertices[7] = 0.0;
-	vertices[8] = clip_space_dest[0];
+	vertices[8] = clip_space_dest[0]; // Vertex 2 - Position
 	vertices[9] = clip_space_dest[3];
-	vertices[10] = 0.0;
+	vertices[10] = 0.0; // Vertex 2 - TexCoord
 	vertices[11] = 1.0;
-	vertices[12] = clip_space_dest[0];
+	vertices[12] = clip_space_dest[0]; // Vertex 3 - Position
 	vertices[13] = clip_space_dest[3];
-	vertices[14] = 0.0;
+	vertices[14] = 0.0; // Vertex 3 - TexCoord
 	vertices[15] = 1.0;
-	vertices[16] = clip_space_dest[2];
+	vertices[16] = clip_space_dest[2]; // Vertex 4 - Position
 	vertices[17] = clip_space_dest[1];
-	vertices[18] = 1.0;
+	vertices[18] = 1.0; // Vertex 4 - TexCoord
 	vertices[19] = 0.0;
-	vertices[20] = clip_space_dest[2];
+	vertices[20] = clip_space_dest[2]; // Vertex 5 - Position
 	vertices[21] = clip_space_dest[3];
-	vertices[22] = 1.0;
+	vertices[22] = 1.0; // Vertex 5 - TexCoord
 	vertices[23] = 1.0;
 
 	g_D3DDevice9->SetPixelShaderConstantF(0, &shader_color_scale.x, 1);
