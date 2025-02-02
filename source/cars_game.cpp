@@ -1,5 +1,6 @@
 #include "cars_game.hpp"
-#include <globals.hpp>
+#include "data_access.hpp"
+#include "globals.hpp"
 #include "gfx/x360_tex_map.hpp"
 #include "gfx/x360_render_target.hpp"
 #include "gfx/x360_video_card.hpp"
@@ -17,6 +18,7 @@ char g_BaseUIContentDirectory[260] = "C\\UI\\";
 char g_LocalizationContentDirectory[260] = "E\\Loc\\";
 char g_FontTextureContentDirectory[260] = "E\\Font\\";
 char g_AudioDialogueDirectory[260] = "E\\Audio\\";
+char g_DebugDirectory[260] = "C\\Debug\\";
 
 int g_GetActivityTypeFromActivityFile = FALSE;
 int g_FixMcqueensHeadquartersStage = FALSE;
@@ -133,6 +135,12 @@ CarsGame::CarsGame() : X360Game() {
     RSStringUtil::Ssnprintf(cheat_codes[9].name, sizeof(CheatCode::name), "ZZOOOOM");
     cheat_codes[10].index = 10;
     RSStringUtil::Ssnprintf(cheat_codes[10].name, sizeof(CheatCode::name), "0TO200X");
+
+    // This does basically nothing, since the return value from DataAccess::FileExists gets discarded.
+    char dont_share_me[260]{};
+    RSStringUtil::Ssnprintf(dont_share_me, sizeof(dont_share_me), "%sDontShareMe.txt", g_DebugDirectory);
+    lpDataAccess->FileExists(dont_share_me);
+
     ai_names[0] = 0;
     difficulty = 0;
     time_of_day = 0;
@@ -160,7 +168,7 @@ int CarsGame::InitializeRenderer(char (&quit_message)[260]) {
     }
     */
     g_VideoCard->initialized = 1;
-    flags | 32;
+    flags |= 32;
     MapAllGameKeys();
     /*
     screen_text_font_manager = new ScreenTextFontManager();
@@ -204,7 +212,7 @@ int CarsGame::PreGameInitialize(DisplayMode*) {
     /*
     _timeGameInit = timeGetTime();
     */
-    RSStringUtil::Ssnprintf(debug_str_file,sizeof(debug_str_file),"%sDebugStr.mst","C\\Debug\\");
+    RSStringUtil::Ssnprintf(debug_str_file,sizeof(debug_str_file),"%sDebugStr.mst", g_DebugDirectory);
     /*
     (*((lpMaterialStringTable->StringTable).vtable)->Load)(%sDebugStr.mst);
     */

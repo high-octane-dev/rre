@@ -266,6 +266,9 @@ extern char g_FontTextureContentDirectory[260];
 // E\Audio
 extern char g_AudioDialogueDirectory[260];
 
+// C\Debug
+extern char g_DebugDirectory[260];
+
 extern int g_GetActivityTypeFromActivityFile;
 extern int g_FixMcqueensHeadquartersStage;
 extern int g_McqueensHeadquartersStage;
