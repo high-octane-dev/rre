@@ -143,12 +143,35 @@ CarsGame::CarsGame() : X360Game() {
 // OFFSET: 0x004f50a0, STATUS: WIP
 int CarsGame::InitializeRenderer(char (&quit_message)[260]) {
     SetLanguageToDefault();
-    if (X360Game::InitializeRenderer(quit_message) == 0) {
+    int renderer_initialized = X360Game::InitializeRenderer(quit_message);
+    if (renderer_initialized == 0) {
+        // The original game does not populate the quit message, but we do.
         RSStringUtil::Ssnprintf(quit_message, sizeof(quit_message), "Failed to initialize renderer!");
-        return 0;
     }
+    /*
+    Activity::Registry->Create();
+    Actor::Registry->Create();
+    ActorInterface::Registry->Create();
+    if (g_lpVirtualNetwork == nullptr) {
+        CreateVirtualNetwork();
+    }
+    if (g_lpGlobalStreamManager == nullptr && g_lpGlobalCarsUIStreamManager == nullptr) {
+        CreateStreamManager();
+    }
+    */
+    g_VideoCard->initialized = 1;
+    flags | 32;
+    MapAllGameKeys();
+    /*
+    screen_text_font_manager = new ScreenTextFontManager();
+    screen_text_font_manager = screen_text_font_manager->Create(); // Does nothing but return itself
+    */
     unk_game_state = 1;
-    return 1;
+    /*
+    managers->AddChild(FlowChartEngine::GetInstance(), 2);
+    managers->AddChild(TRCEngine::GetInstance(), 2);
+    */
+    return renderer_initialized;
 }
 
 // OFFSET: 0x0051c130, STATUS: WIP
