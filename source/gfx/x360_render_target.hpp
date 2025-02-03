@@ -58,7 +58,7 @@ public:
     int DrawFullscreenEffects();
     int EndFrame();
     void IncrementFrameCount();
-    D3DFORMAT MapToD3DFormat(UnkPixelFormat);
+    D3DFORMAT MapToD3DFormat(ImageDataFormat);
     int Recreate();
     void Reset();
     void SetCamera(Camera*);
@@ -76,7 +76,7 @@ public:
     virtual void Unk8(int) override;
     virtual void Unk9() override;
     virtual int Unk10(int, int) override;
-    virtual bool CheckDeviceFormat(UnkPixelFormat) override;
+    virtual bool CheckDeviceFormat(ImageDataFormat) override;
     virtual int SetViewport(D3DVIEWPORT9*) override;
     virtual void SetFogDistances(float min, float max) override;
 };

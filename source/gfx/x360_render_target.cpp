@@ -11,23 +11,23 @@ X360RenderTarget* g_RenderTarget = nullptr;
 int g_RenderTargetVAFIndex = -1;
 
 // OFFSET: 0x00566470, STATUS: COMPLETE
-UnkPixelFormat MapToUnkPixelFormat(D3DFORMAT param_1) {
+ImageDataFormat MapToUnkPixelFormat(D3DFORMAT param_1) {
 	switch (param_1) {
 	case 5:
 	case D3DFMT_A8R8G8B8:
 	case D3DFMT_X8R8G8B8:
-		return UnkPixelFormat::A8R8G8B8;
+		return ImageDataFormat::A8R8G8B8;
 	default:
-		return UnkPixelFormat::AlsoInvalid;
+		return ImageDataFormat::Invalid;
 	case D3DFMT_R5G6B5:
-		return UnkPixelFormat::R5G6B5;
+		return ImageDataFormat::R5G6B5;
 	case D3DFMT_X1R5G5B5:
 	case D3DFMT_A1R5G5B5:
-		return UnkPixelFormat::A1R5G5B5;
+		return ImageDataFormat::A1R5G5B5;
 	case D3DFMT_A4R4G4B4:
-		return UnkPixelFormat::A4R4G4B4;
+		return ImageDataFormat::A4R4G4B4;
 	case D3DFMT_A8:
-		return UnkPixelFormat::A8;
+		return ImageDataFormat::A8;
 	}
 }
 
@@ -224,20 +224,20 @@ void X360RenderTarget::IncrementFrameCount() {
 }
 
 // OFFSET: 0x00566420, STATUS: COMPLETE
-D3DFORMAT X360RenderTarget::MapToD3DFormat(UnkPixelFormat param_1) {
-	if (param_1 == UnkPixelFormat::A1R5G5B5) {
+D3DFORMAT X360RenderTarget::MapToD3DFormat(ImageDataFormat param_1) {
+	if (param_1 == ImageDataFormat::A1R5G5B5) {
 		return D3DFMT_A1R5G5B5;
 	}
-	if (param_1 == UnkPixelFormat::A8) {
+	if (param_1 == ImageDataFormat::A8) {
 		return D3DFMT_A8;
 	}
-	if (param_1 == UnkPixelFormat::R5G6B5) {
+	if (param_1 == ImageDataFormat::R5G6B5) {
 		return D3DFMT_R5G6B5;
 	}
-	if (param_1 == UnkPixelFormat::A4R4G4B4) {
+	if (param_1 == ImageDataFormat::A4R4G4B4) {
 		return D3DFMT_A4R4G4B4;
 	}
-	if (param_1 == UnkPixelFormat::A8R8G8B8) {
+	if (param_1 == ImageDataFormat::A8R8G8B8) {
 		return D3DFMT_A8R8G8B8;
 	}
 	return D3DFMT_UNKNOWN;
@@ -542,7 +542,7 @@ int X360RenderTarget::Unk10(int, int) {
 }
 
 // OFFSET: 0x00414140, STATUS: COMPLETE
-bool X360RenderTarget::CheckDeviceFormat(UnkPixelFormat fmt) {
+bool X360RenderTarget::CheckDeviceFormat(ImageDataFormat fmt) {
 	return CheckDeviceFormatImpl(MapToD3DFormat(fmt));
 }
 

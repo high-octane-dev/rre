@@ -6,7 +6,7 @@ RenderTarget::RenderTarget() {
 	should_render_ui = 0;
 	unk_camera_related = 0;
 	frame_count = 0;
-	unk_pixel_format = UnkPixelFormat::Invalid;
+	unk_pixel_format = ImageDataFormat::Unknown;
 	unused3 = 0;
 	unused4 = 0;
 	unused5 = 0;

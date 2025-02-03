@@ -3,16 +3,7 @@
 #include "x360_texture_map.hpp"
 #include "video_card.hpp"
 #include "camera.hpp"
-
-enum class UnkPixelFormat {
-    AlsoInvalid = -1,
-    Invalid = 0,
-    A8 = 8,
-    R5G6B5 = 565,
-    A1R5G5B5 = 1555,
-    A4R4G4B4 = 4444,
-    A8R8G8B8 = 8888
-};
+#include "image_data_format.hpp"
 
 class RenderTarget {
 protected:
@@ -23,7 +14,7 @@ protected:
     int frame_count;
     int unused;
     int unused2;
-    UnkPixelFormat unk_pixel_format;
+    ImageDataFormat unk_pixel_format;
     int fog_uninitialized;
     D3DCOLOR fog_color;
     int should_render_ui;
@@ -51,7 +42,7 @@ public:
     virtual void Unk8(int) = 0;
     virtual void Unk9();
     virtual int Unk10(int, int) = 0;
-    virtual bool CheckDeviceFormat(UnkPixelFormat) = 0;
+    virtual bool CheckDeviceFormat(ImageDataFormat) = 0;
     virtual int SetViewport(D3DVIEWPORT9*) = 0;
     virtual void SetFogDistances(float min, float max);
 };

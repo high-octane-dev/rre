@@ -15,7 +15,7 @@ X360FullScreenTextureRender::~X360FullScreenTextureRender() {
     }
 }
 
-// OFFSET: 0x004134a0, STATUS: WIP
+// OFFSET: 0x004134a0, STATUS: COMPLETE
 void X360FullScreenTextureRender::Draw(int index) {
     if (index != 0) {
         panic("Index is not 0!");

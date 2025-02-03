@@ -5,131 +5,133 @@
 
 extern int g_EnableEndianSwapping;
 
+// OFFSET: 0x005966b0, STATUS: TODO
+TextureMap::~TextureMap() {
+}
+
 // OFFSET: 0x0040f760, STATUS: COMPLETE
-void BaseTextureMap::ClearMaxProjectedSize() {
+void TextureMap::ClearMaxProjectedSize() {
 	max_projected_size = 0.0f;
 }
 
 // OFFSET: 0x0040f770, STATUS: COMPLETE
-TextureMap* TextureMap::GetData() {
+TextureMap* TextureMap::GetData(int) {
 	return this;
 }
 
 // OFFSET: INLINE, STATUS: COMPLETE
-void X360TextureMap::Unk1() {
+void X360TextureMap::Unk1(int) {
 	return;
 }
 
-// OFFSET: 0x00410100, STATUS: WIP
-int X360TextureMap::Unk2(unsigned int a1) {
-	D3DXIMAGE_INFO local_3c;
+// OFFSET: 0x00410100, STATUS: COMPLETE
+int X360TextureMap::LoadFromContainer(int resource_handle) {
+	D3DXIMAGE_INFO info{};
+	D3DSURFACE_DESC desc{};
 
-	//this->field3_0xd0 = 0;
-	lpDataAccess->FRead(a1, &a1, 4, 1);
-	if (g_EnableEndianSwapping == 0)
-	{
-		a1 = (a1 & 0xff0000 | a1 >> 0x10) >> 8 |
-			(a1 & 0xff00 | a1 << 0x10) << 8;
+	unused_zero = 0;
+	std::size_t file_size = 0;
+	lpDataAccess->FRead(resource_handle, &file_size, 4, 1);
+	if (g_EnableEndianSwapping == 0) {
+		file_size = std::byteswap(file_size);
 	}
-	void* pSrcData = malloc(a1);
-	lpDataAccess->FRead(a1, pSrcData, a1, 1);
-	D3DXGetImageInfoFromFileInMemory(pSrcData, a1, &local_3c);
-	if (local_3c.ResourceType == D3DRTYPE_CUBETEXTURE)
-	{
-		D3DXCreateCubeTextureFromFileInMemoryEx(g_D3DDevice9, pSrcData, a1, local_3c.Width, local_3c.MipLevels, 0, local_3c.Format, D3DPOOL_MANAGED, -1, -1, 0, nullptr, nullptr, &cube_texture);
+	void* src_data = malloc(file_size);
+	lpDataAccess->FRead(resource_handle, src_data, file_size, 1);
+	D3DXGetImageInfoFromFileInMemory(src_data, file_size, &info);
+	if (info.ResourceType == D3DRTYPE_CUBETEXTURE) {
+		D3DXCreateCubeTextureFromFileInMemoryEx(g_D3DDevice9, src_data, file_size, info.Width, info.MipLevels, 0, info.Format, D3DPOOL_MANAGED, -1, -1, 0, nullptr, nullptr, &cube_texture);
 	}
-	else
-	{
-		D3DXCreateTextureFromFileInMemoryEx(g_D3DDevice9, pSrcData, a1, local_3c.Width, local_3c.Height, local_3c.MipLevels, 0, local_3c.Format, D3DPOOL_MANAGED, -1, -1, 0, nullptr, nullptr, &texture);
+	else {
+		D3DXCreateTextureFromFileInMemoryEx(g_D3DDevice9, src_data, file_size, info.Width, info.Height, info.MipLevels, 0, info.Format, D3DPOOL_MANAGED, -1, -1, 0, nullptr, nullptr, &texture);
 	}
-	free(pSrcData);
-	/*
-	pIVar2 = (IDirect3DCubeTexture9 *)this->texture;
-	if (pIVar2 == (IDirect3DCubeTexture9 *)0x0) {
-		pIVar2 = this->cube_texture;
+	free(src_data);
+	if (texture == nullptr) {
+		texture->GetLevelDesc(0, &desc);
 	}
-	(*(code *)((IDirect3DTexture9_VTable *)pIVar2->field0_0x0)->GetLevelDesc)
-			((IDirect3DTexture9 *)pIVar2,0,&local_20);
-	(this->TextureMap).BaseTextureMap.field3_0xe = (word)local_20.Height;
-	(this->TextureMap).field4_0x38 = local_20.Format;
-	(this->TextureMap).BaseTextureMap.field2_0xc = (word)local_20.Width;
-	*/
-
+	else {
+		if (cube_texture == nullptr) {
+			return 0;
+		}
+		cube_texture->GetLevelDesc(0, &desc);
+	}
+	format = info.Format;
+	pool = desc.Pool;
+	multi_sample_type = desc.MultiSampleType;
 	return 1;
 }
 
 // OFFSET: 0x00442ef0, STATUS: COMPLETE
-int X360TextureMap::Unk3() {
+int X360TextureMap::LoadFromSurfaces(long, ImageDataFormat, unsigned int, X360Palette*) {
 	return 0;
 }
 
 // OFFSET: 0x00410260, STATUS: TODO
-int X360TextureMap::Unk4(void*, int, int, int, int, int, D3DFORMAT, unsigned int) {
+int X360TextureMap::LoadFromImage(unsigned char*, int, int, int, int, int, D3DFORMAT, unsigned int) {
 	return 0;
 }
 
 // OFFSET: 0x0040fb90, STATUS: TODO
-int X360TextureMap::Unk5() {
+TextureMap* X360TextureMap::Clone() {
 	return 0;
 }
 
 // OFFSET: INLINE, STATUS: COMPLETE
-int X360TextureMap::Unk6() {
+int X360TextureMap::InVideoRAM() {
 	return 1;
 }
 
 // OFFSET: INLINE, STATUS: COMPLETE
-int X360TextureMap::Unk7() {
+int X360TextureMap::PlaceInVideoMemory(int, int, int) {
 	return 1;
 }
 
 // OFFSET: INLINE, STATUS: COMPLETE
-int X360TextureMap::Unk8() {
+int X360TextureMap::UpdateVideoMemory(RECT*, int) {
 	return 1;
 }
 
 // OFFSET: INLINE, STATUS: COMPLETE
-void X360TextureMap::Unk9() {
+void X360TextureMap::RemoveFromVideoMemory() {
 	return;
 }
 
 // OFFSET: INLINE, STATUS: COMPLETE
-void X360TextureMap::Unk10() {
+void X360TextureMap::Unk2() {
 	return;
 }
 
 // OFFSET: 0x0040fde0, STATUS: TODO
-int X360TextureMap::Unk11(int, int, int*) {
+int X360TextureMap::LockSys(RECT*, long*, unsigned int) {
 	return 0;
 }
 
 // OFFSET: 0x0040fe30, STATUS: COMPLETE
-int X360TextureMap::Unk12() {
+int X360TextureMap::UnlockSys(RECT*) {
 	return texture->UnlockRect(0) == 0;
 }
 
 // OFFSET: 0x0040fcb0, STATUS: TODO
-int X360TextureMap::Unk13(int) {
+int X360TextureMap::BuildMipMapChain(int) {
 	return 0;
 }
 
 // OFFSET: 0x00410570, STATUS: TODO
-int* X360TextureMap::Unk14(int) {
+int* X360TextureMap::LockMipMapSurface(int) {
 	return nullptr;
 }
 
 // OFFSET: 0x004105c0, STATUS: TODO
-int X360TextureMap::Unk15(int) {
+int X360TextureMap::UnlockMipMapSurface(int) {
 	return 0;
 }
 
 // OFFSET: 0x0040fd90, STATUS: TODO
-void X360TextureMap::Unk16(int) {
+void X360TextureMap::SetTexture(int) {
 	return;
 }
 
 // OFFSET: 0x00410e40, STATUS: TODO
-int X360TextureMap::Unk17() {
+int X360TextureMap::DumpChain() {
 	return 0;
 }
 
@@ -153,7 +155,7 @@ int X360TextureMap::LoadViaD3DX(std::uint8_t* data, std::size_t len) {
 	return 1;
 }
 
-// OFFSET: 0x0040fff0, STATUS: WIP
+// OFFSET: 0x0040fff0, STATUS: COMPLETE
 void X360TextureMap::ReadDesc(){
 	D3DSURFACE_DESC desc{};
 	if (texture == nullptr) {
@@ -165,7 +167,7 @@ void X360TextureMap::ReadDesc(){
 		}
 		cube_texture->GetLevelDesc(0, &desc);
 	}
-	// unk_level = 0;
+	format = D3DFMT_UNKNOWN;
 	pool = desc.Pool;
 	multi_sample_type = desc.MultiSampleType;
 }

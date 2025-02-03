@@ -185,6 +185,7 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClInclude Include="source\gfx\cursor.hpp" />
     <ClInclude Include="source\gfx\d3d_state_manager.hpp" />
     <ClInclude Include="source\gfx\emotion_engine.hpp" />
+    <ClInclude Include="source\gfx\image_data_format.hpp" />
     <ClInclude Include="source\gfx\index_buffer.hpp" />
     <ClInclude Include="source\gfx\render_target.hpp" />
     <ClInclude Include="source\gfx\texture_map_manager.hpp" />
