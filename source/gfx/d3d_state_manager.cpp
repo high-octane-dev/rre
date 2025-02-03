@@ -104,11 +104,11 @@ void D3DStateManager::SetInitialRenderState(D3DRENDERSTATETYPE type, DWORD value
 void D3DStateManager::SetRenderState(D3DRENDERSTATETYPE type, DWORD value) {
 	render_states[type].value = value;
 	if (render_states[type].previous_value != value) {
-		if (type < min_render_state_type) {
-			min_render_state_type = type;
+		if (static_cast<unsigned int>(type) < min_render_state_type) {
+			min_render_state_type = static_cast<unsigned int>(type);
 		}
-		if (max_render_state_type < type) {
-			max_render_state_type = type;
+		if (max_render_state_type < static_cast<unsigned int>(type)) {
+			max_render_state_type = static_cast<unsigned int>(type);
 		}
 	}
 }
@@ -123,11 +123,11 @@ void D3DStateManager::SetSamplerState(DWORD sampler_index, D3DSAMPLERSTATETYPE s
 		if (max_sampler_used < sampler_index) {
 			max_sampler_used = sampler_index;
 		}
-		if (sampler_state_type < min_sampler_state_type_used[sampler_index]) {
-			min_sampler_state_type_used[sampler_index] = sampler_state_type;
+		if (static_cast<unsigned int>(sampler_state_type) < min_sampler_state_type_used[sampler_index]) {
+			min_sampler_state_type_used[sampler_index] = static_cast<unsigned int>(sampler_state_type);
 		}
-		if (max_sampler_state_type_used[sampler_index] < sampler_state_type) {
-			max_sampler_state_type_used[sampler_index] = sampler_state_type;
+		if (max_sampler_state_type_used[sampler_index] < static_cast<unsigned int>(sampler_state_type)) {
+			max_sampler_state_type_used[sampler_index] = static_cast<unsigned int>(sampler_state_type);
 		}
 	}
 }

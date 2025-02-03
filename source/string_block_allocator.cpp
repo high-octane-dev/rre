@@ -32,7 +32,7 @@ void StringBlockAllocator::Create(int unk) {
 
 // OFFSET: 0x005b6830, STATUS: COMPLETE
 char* StringBlockAllocator::StringBlockAllocator_AllocStringByLength(int length, int unk) {
-	for (int block_index = 0; block_index < string_blocks.Length(); block_index++) {
+	for (std::size_t block_index = 0; block_index < string_blocks.Length(); block_index++) {
 		StringBlock* current_block = string_blocks[block_index];
 
 		size_t available_space = 0;

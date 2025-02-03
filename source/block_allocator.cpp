@@ -1,4 +1,4 @@
-#include <corecrt_malloc.h>
+#include <cstdlib>
 #include <cstddef>
 #include "block_allocator.hpp"
 

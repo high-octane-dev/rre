@@ -106,15 +106,15 @@ void ParameterBlock::FreeHeaders() {
 	if (headers != nullptr) {
 		for (std::size_t i = 0; i < headers_capacity; i++) {
 			if (headers[i].parameters != nullptr) {
-				for (std::size_t j = 0; j < headers[i].parameter_count; j++) {
+				for (std::size_t j = 0; j < static_cast<std::size_t>(headers[i].parameter_count); j++) {
 					free(headers[i].parameters[j].value);
 				}
 				free(headers[i].parameters);
 			}
 
 			if (headers[i].parameter_lists != nullptr) {
-				for (std::size_t j = 0; j < headers[i].parameter_list_count; j++) {
-					for (std::size_t k = 0; k < headers[i].parameter_lists[j].token_count; k++) {
+				for (std::size_t j = 0; j < static_cast<std::size_t>(headers[i].parameter_list_count); j++) {
+					for (std::size_t k = 0; k < static_cast<std::size_t>(headers[i].parameter_lists[j].token_count); k++) {
 						free(headers[i].parameter_lists[j].tokens[k]);
 					}
 				}
@@ -280,7 +280,7 @@ int ParameterBlock::OpenFile(const char* name, int load_from_memory_or_not, int 
 			}
 		}
 
-		if (search.current_header_index != -1 && search.current_header_index < headers_capacity) {
+		if (search.current_header_index != -1 && search.current_header_index < static_cast<int>(headers_capacity)) {
 			headers_capacity = search.current_header_index + 1;
 			headers = reinterpret_cast<Header*>(realloc(headers, (search.current_header_index + 1) * sizeof(Header)));
 		}
@@ -451,7 +451,7 @@ int ParameterBlock::GetNumberOfParameterValues(const char* parameter) {
 	}
 	if (headers[search.current_header_index].parameter_count != -1) {
 		int return_value = 0;
-		for (std::size_t i = 0; i < headers[search.current_header_index].parameter_count; i++) {
+		for (std::size_t i = 0; i < static_cast<std::size_t>(headers[search.current_header_index].parameter_count); i++) {
 			if (_stricmp(parameter, label_string_table[headers[search.current_header_index].parameters[i].label_string_table_index]) == 0) {
 				return_value++;
 			}
@@ -570,7 +570,7 @@ int ParameterBlock::GetOrInsertStringTableIndex(char* label) {
 	if (label_string_table == nullptr) {
 		label_string_table_len = 64;
 		label_string_table = static_cast<char**>(malloc(64 * sizeof(char*)));
-		for (int i = 0; i < label_string_table_len; ++i) {
+		for (std::size_t i = 0; i < label_string_table_len; ++i) {
 			label_string_table[i] = nullptr;
 		}
 	}
@@ -586,10 +586,10 @@ int ParameterBlock::GetOrInsertStringTableIndex(char* label) {
 	}
 
 	if (i >= label_string_table_len) {
-		int old_len = label_string_table_len;
+		std::size_t old_len = label_string_table_len;
 		label_string_table_len += 64;
 		label_string_table = static_cast<char**>(realloc(label_string_table, label_string_table_len * sizeof(char*)));
-		for (int j = old_len; j < label_string_table_len; j++) {
+		for (std::size_t j = old_len; j < label_string_table_len; j++) {
 			label_string_table[j] = nullptr;
 		}
 	}
@@ -647,7 +647,7 @@ void ParameterBlock::ResizeValueStringTable(int len) {
 }
 
 // OFFSET: 0x00554270, STATUS: COMPLETE
-void ParameterBlock::StoreNewHeader(const char* line, int line_len) {
+void ParameterBlock::StoreNewHeader(const char* line, std::size_t line_len) {
 	char buffer[2048]{};
 
 	if (line_len < 1 || *line != '[') {
@@ -662,7 +662,7 @@ void ParameterBlock::StoreNewHeader(const char* line, int line_len) {
 	short parsed_header_index = ParseIndexedHeaderFromName(buffer);
 
 	if (search.current_header_index != -1) {
-		short param_count = headers[search.current_header_index].parameter_count;
+		std::size_t param_count = static_cast<std::size_t>(headers[search.current_header_index].parameter_count);
 		if (param_count != 0 && param_count < total_parameter_capacity) {
 			headers[search.current_header_index].parameters = reinterpret_cast<Parameter*>(realloc(headers[search.current_header_index].parameters, param_count * sizeof(Parameter)));
 		}
@@ -680,8 +680,8 @@ void ParameterBlock::StoreNewHeader(const char* line, int line_len) {
 		}
 	}
 	else {
-		int old_headers_capacity = headers_capacity;
-		if (old_headers_capacity <= search.current_header_index) {
+		std::size_t old_headers_capacity = headers_capacity;
+		if (old_headers_capacity <= static_cast<std::size_t>(search.current_header_index)) {
 			headers_capacity = old_headers_capacity + 32;
 			headers = reinterpret_cast<Header*>(realloc(headers, headers_capacity * sizeof(Header)));
 			for (; old_headers_capacity < headers_capacity; old_headers_capacity++) {
@@ -701,10 +701,10 @@ void ParameterBlock::StoreNewHeader(const char* line, int line_len) {
 }
 
 // OFFSET: 0x00554430, STATUS: COMPLETE
-void ParameterBlock::StoreNewParameter(char* line, int line_len) {
+void ParameterBlock::StoreNewParameter(char* line, std::size_t line_len) {
 	char buffer[2048]{};
 
-	int equal_sign = -1;
+	std::size_t equal_sign = 0xFFFFFFFF;
 	for (std::size_t i = 0; i < line_len; i++) {
 		if (line[i] == '=') {
 			buffer[i] = 0;
@@ -713,7 +713,7 @@ void ParameterBlock::StoreNewParameter(char* line, int line_len) {
 		}
 		buffer[i] = line[i];
 	}
-	if (equal_sign != -1 && line_len > (equal_sign + 1)) {
+	if (equal_sign != 0xFFFFFFFF && line_len > (equal_sign + 1)) {
 		int label_string_table_index = GetOrInsertStringTableIndex(buffer);
 		std::memset(buffer, 0, 2048);
 		for (std::size_t i = equal_sign + 1; i < line_len; i++) {
@@ -735,8 +735,8 @@ void ParameterBlock::StoreNewParameter(char* line, int line_len) {
 			}
 		}
 		else {
-			int old_parameter_capacity = total_parameter_capacity;
-			if (old_parameter_capacity <= headers[search.current_header_index].parameter_count) {
+			std::size_t old_parameter_capacity = total_parameter_capacity;
+			if (old_parameter_capacity <= static_cast<std::size_t>(headers[search.current_header_index].parameter_count)) {
 				total_parameter_capacity = old_parameter_capacity + 16;
 				headers[search.current_header_index].parameters = reinterpret_cast<Parameter*>(realloc(headers[search.current_header_index].parameters, total_parameter_capacity * sizeof(Parameter)));
 				for (; old_parameter_capacity < total_parameter_capacity; old_parameter_capacity++) {

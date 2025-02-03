@@ -21,14 +21,14 @@ int g_CameraHeight = 0;
 int g_ScreenMode = 2;
 int PlatformGraphics_BackBufferViewport_OffsetX = 0;
 int PlatformGraphics_BackBufferViewport_OffsetY = 0;
-float g_UIScaleX = 1.0;
-float g_UIScaleY = 1.0;
-float g_ViewportFadeWidth = 1280.0;
-float g_ViewportFadeHeight = 720.0;
+float g_UIScaleX = 1.0f;
+float g_UIScaleY = 1.0f;
+float g_ViewportFadeWidth = 1280.0f;
+float g_ViewportFadeHeight = 720.0f;
 float g_AspectRatios[3] = {
-    4.0 / 3.0,
-    16.0 / 9.0,
-    16.0 / 9.0
+    4.0f / 3.0f,
+    16.0f / 9.0f,
+    16.0f / 9.0f
 };
 
 // OFFSET: 0x00559f20, STATUS: COMPLETE
@@ -38,7 +38,7 @@ void SetDisplayModeGlobal(DisplayMode* display_mode) {
         g_ScreenMode = 1;
         g_ScreenEffectWidth = 640;
         g_ViewportWidth = 640;
-        if (display_mode->fps <= 54.97) {
+        if (display_mode->fps <= 54.97f) {
             g_ViewportHeight = 576;
         }
         else {
@@ -57,15 +57,15 @@ void SetDisplayModeGlobal(DisplayMode* display_mode) {
     PlatformGraphics_BackBufferViewport_OffsetX = 0;
     PlatformGraphics_BackBufferViewport_OffsetY = 0;
     if (g_ScreenMode == 1) {
-        g_UIScaleX = g_ViewportWidth / 640.0;
-        g_UIScaleY = g_ViewportHeight / 448.0;
+        g_UIScaleX = g_ViewportWidth / 640.0f;
+        g_UIScaleY = g_ViewportHeight / 448.0f;
     }
     else {
-        g_UIScaleX = g_ViewportWidth / 1280.0;
-        g_UIScaleY = g_ViewportHeight / 720.0;
+        g_UIScaleX = g_ViewportWidth / 1280.0f;
+        g_UIScaleY = g_ViewportHeight / 720.0f;
     }
-    g_AspectRatios[1] = 16.0 / 9.0;
-    g_AspectRatios[2] = 16.0 / 9.0;
+    g_AspectRatios[1] = 16.0f / 9.0f;
+    g_AspectRatios[2] = 16.0f / 9.0f;
     return;
 }
 
@@ -119,8 +119,8 @@ int X360Game::PreGameInitialize(DisplayMode* desired_display_mode) {
         PlatformGraphics_BackBufferViewport_OffsetX = 0;
         PlatformGraphics_BackBufferViewport_OffsetY = 0;
         if (g_ScreenMode == 1) {
-            g_UIScaleX = g_WindowWidth / 640.0;
-            g_UIScaleY = g_WindowHeight / 448.0;
+            g_UIScaleX = g_WindowWidth / 640.0f;
+            g_UIScaleY = g_WindowHeight / 448.0f;
             UpdateTextureContentDirectories();
             Game::PreGameInitialize(nullptr);
             return 1;

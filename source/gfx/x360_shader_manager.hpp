@@ -10,7 +10,7 @@ struct Shader {
 };
 
 struct ShaderCollection {
-	int len;
+	std::size_t len;
 	Shader entries[256];
 	inline ShaderCollection() {
 		len = 0;

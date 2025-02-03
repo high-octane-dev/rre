@@ -525,9 +525,9 @@ int DataAccess::FRead(int resource_handle, void* dst, int size, int count) {
 }
 
 // OFFSET: 0x005812f0, STATUS: COMPLETE
-int DataAccess::FREADDeviceCache(VirtualDeviceCache* _device_cache, int len, FILE* fp) {
-    int bytes_read = 0;
-    int bytes_remaining = 0;
+int DataAccess::FREADDeviceCache(VirtualDeviceCache* _device_cache, std::size_t len, FILE* fp) {
+    std::size_t bytes_read = 0;
+    std::size_t bytes_remaining = 0;
 
     for (std::size_t i = 0; i < num_device_cache_pages; i++) {
         if (_device_cache->cache_buffer[i] != nullptr) {
@@ -769,7 +769,7 @@ int DataAccess::GetDeviceSlot() {
     while (true) {
         current_slot += 1;
 
-        if (current_slot >= number_of_devices_in_list) {
+        if (static_cast<std::size_t>(current_slot) >= number_of_devices_in_list) {
             current_slot = 0;
         }
 
@@ -837,7 +837,7 @@ int DataAccess::GrowFileLookupList() {
 }
 
 // OFFSET: 0x005d2e10, STATUS: COMPLETE
-int DataAccess::Initialize(int initial_device_count, std::size_t initial_file_lookup_capacity, int default_device_cache_size, int initial_file_cache_len, int _flags) {
+int DataAccess::Initialize(std::size_t initial_device_count, std::size_t initial_file_lookup_capacity, std::size_t default_device_cache_size, std::size_t initial_file_cache_len, int _flags) {
     if (-1 < _flags) {
         flags = _flags;
     }
@@ -936,7 +936,7 @@ void DataAccess::LoadResourceFromFile(char*, unsigned int*, unsigned int, int, u
 }
 
 // OFFSET: 0x00549580, STATUS: COMPLETE
-int DataAccess::MemcpyDeviceCache(VirtualDeviceCache* _device_cache, int len, void* src) {
+int DataAccess::MemcpyDeviceCache(VirtualDeviceCache* _device_cache, std::size_t len, void* src) {
     int bytes_read = 0;
     int bytes_remaining = 0;
 
@@ -1147,7 +1147,7 @@ int DataAccess::SetNumberOfDeviceCachePages(int new_device_cache_page_count) {
 }
 
 // OFFSET: 0x005a9450, STATUS: COMPLETE
-void DataAccess::UpdateDeviceCache(VirtualDataDevice* device, int virtual_sector_needed, std::uint8_t* buffer, int max_read_len) {
+void DataAccess::UpdateDeviceCache(VirtualDataDevice* device, int virtual_sector_needed, std::uint8_t* buffer, std::size_t max_read_len) {
     if (buffer == nullptr) {
         UNK_00549770();
         return;
@@ -1193,7 +1193,7 @@ void DataAccess::UpdateDeviceCache(VirtualDataDevice* device, int virtual_sector
         offset += virtual_sector_needed * VirtualSectorSize;
     }
     else {
-        for (std::size_t i = 0; i < virtual_sector_needed; ++i) {
+        for (std::size_t i = 0; i < static_cast<std::size_t>(virtual_sector_needed); ++i) {
             offset += device_cache.sector_size_list[i];
         }
     }
@@ -1225,7 +1225,7 @@ void DataAccess::UpdateDeviceCache(VirtualDataDevice* device, int virtual_sector
     unsigned int sector_count = 0;
     if (should_update_sector_list) {
         std::int16_t* sector_sizes = device_cache.sector_size_list + virtual_sector_needed;
-        int total_remaining_bytes = 0;
+        std::size_t total_remaining_bytes = 0;
         while (remaining_size >= total_remaining_bytes) {
             total_remaining_bytes += *sector_sizes;
             sector_count++;

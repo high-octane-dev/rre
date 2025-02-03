@@ -39,7 +39,8 @@ ActionScript* ActionManager::CreateActionScript(char* param_1, char* param_2, ch
     {
         if (((param_1 == nullptr) || (*param_1 == '\0')) && ((param_2 == nullptr || (*param_2 == '\0'))))
         {
-            param_2 == "";
+            // FIXME: This raises a compiler warning. We probably need to create a constant for empty strings...
+            // param_2 == "";
             param_1 = local_860;
         }
         pActionScript = CreateActionScript(param_1, param_2, &local_85c);
@@ -82,7 +83,8 @@ ActionSequence* ActionManager::CreateActionSequence(char* param_1, char* param_2
     {
         if (((param_1 == nullptr) || (*param_1 == '\0')) && ((param_2 == nullptr || (*param_2 == '\0'))))
         {
-            param_2 == "";
+            // FIXME: This raises a compiler warning. We probably need to create a constant for empty strings...
+            // param_2 == "";
             param_1 = local_860;
         }
         pActionSequence = CreateActionSequence(param_1, param_2, &local_85c);

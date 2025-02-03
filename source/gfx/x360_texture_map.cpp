@@ -1,6 +1,6 @@
+#include <dxsdk-d3dx/d3dx9tex.h>
 #include "x360_texture_map.hpp"
-#include <data_access.hpp>
-#include <dxsdk-d3dx\d3dx9tex.h>
+#include "data_access.hpp"
 #include "x360_video_card.hpp"
 
 extern int g_EnableEndianSwapping;

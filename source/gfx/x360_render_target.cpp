@@ -122,7 +122,7 @@ void X360RenderTarget::ApplyViewportImpl(int clear_surface, int clear_depth_buff
 		flags |= (D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL);
 	}
 
-	D3DRECT viewport_rect{ viewport.X, viewport.Y, viewport.X + viewport.Width, viewport.Y + viewport.Height };
+	D3DRECT viewport_rect{ static_cast<long>(viewport.X), static_cast<long>(viewport.Y), static_cast<long>(viewport.X + viewport.Width), static_cast<long>(viewport.Y + viewport.Height) };
 	g_D3DDevice9->Clear(1, &viewport_rect, flags, 0, 0.0, 0);
 
 	float w = std::abs(static_cast<float>(viewport.Width));
@@ -465,18 +465,18 @@ int X360RenderTarget::Blt(FRECT* dest, TextureMap* texture, FRECT* unused0, unsi
 
 	float clip_space_dest[4]{};
 	if (dest == nullptr) {
-		clip_space_dest[0] = -1.0;
-		clip_space_dest[3] = -1.0;
-		clip_space_dest[2] = 1.0;
-		clip_space_dest[1] = 1.0;
+		clip_space_dest[0] = -1.0f;
+		clip_space_dest[3] = -1.0f;
+		clip_space_dest[2] = 1.0f;
+		clip_space_dest[1] = 1.0f;
 	}
 	else {
-		float inv_half_width = 1.0 / (g_ViewportWidth * 0.5);
-		float inv_half_height = 1.0 / (g_ViewportHeight * 0.5);
-		clip_space_dest[0] = inv_half_width * dest->x1 - 1.0;
-		clip_space_dest[2] = inv_half_width * dest->x2 - 1.0;
-		clip_space_dest[1] = 1.0 - inv_half_height * dest->y1;
-		clip_space_dest[3] = 1.0 - inv_half_height * dest->y2;
+		float inv_half_width = 1.0f / (g_ViewportWidth * 0.5f);
+		float inv_half_height = 1.0f / (g_ViewportHeight * 0.5f);
+		clip_space_dest[0] = inv_half_width * dest->x1 - 1.0f;
+		clip_space_dest[2] = inv_half_width * dest->x2 - 1.0f;
+		clip_space_dest[1] = 1.0f - inv_half_height * dest->y1;
+		clip_space_dest[3] = 1.0f - inv_half_height * dest->y2;
 	}
 
 	Vector4 shader_color_scale = {
@@ -489,28 +489,28 @@ int X360RenderTarget::Blt(FRECT* dest, TextureMap* texture, FRECT* unused0, unsi
 	float vertices[24]{};
 	vertices[0] = clip_space_dest[0]; // Vertex 0 - Position
 	vertices[1] = clip_space_dest[1];
-	vertices[2] = 0.0; // Vertex 0 - TexCoord
-	vertices[3] = 0.0;
+	vertices[2] = 0.0f; // Vertex 0 - TexCoord
+	vertices[3] = 0.0f;
 	vertices[4] = clip_space_dest[2]; // Vertex 1 - Position
 	vertices[5] = clip_space_dest[1];
-	vertices[6] = 1.0; // Vertex 1 - TexCoord
-	vertices[7] = 0.0;
+	vertices[6] = 1.0f; // Vertex 1 - TexCoord
+	vertices[7] = 0.0f;
 	vertices[8] = clip_space_dest[0]; // Vertex 2 - Position
 	vertices[9] = clip_space_dest[3];
-	vertices[10] = 0.0; // Vertex 2 - TexCoord
-	vertices[11] = 1.0;
+	vertices[10] = 0.0f; // Vertex 2 - TexCoord
+	vertices[11] = 1.0f;
 	vertices[12] = clip_space_dest[0]; // Vertex 3 - Position
 	vertices[13] = clip_space_dest[3];
-	vertices[14] = 0.0; // Vertex 3 - TexCoord
-	vertices[15] = 1.0;
+	vertices[14] = 0.0f; // Vertex 3 - TexCoord
+	vertices[15] = 1.0f;
 	vertices[16] = clip_space_dest[2]; // Vertex 4 - Position
 	vertices[17] = clip_space_dest[1];
-	vertices[18] = 1.0; // Vertex 4 - TexCoord
-	vertices[19] = 0.0;
+	vertices[18] = 1.0f; // Vertex 4 - TexCoord
+	vertices[19] = 0.0f;
 	vertices[20] = clip_space_dest[2]; // Vertex 5 - Position
 	vertices[21] = clip_space_dest[3];
-	vertices[22] = 1.0; // Vertex 5 - TexCoord
-	vertices[23] = 1.0;
+	vertices[22] = 1.0f; // Vertex 5 - TexCoord
+	vertices[23] = 1.0f;
 
 	g_D3DDevice9->SetPixelShaderConstantF(0, &shader_color_scale.x, 1);
 	g_D3DDevice9->DrawPrimitiveUP(D3DPT_TRIANGLELIST, 2, vertices, 16);

@@ -20,7 +20,7 @@ protected:
 	std::size_t user_data_stride;
 	char* string_heap;
 	void** user_data_heap;
-	int unk2;
+	std::size_t unk2;
 	std::size_t string_heap_end;
 	std::size_t initial_string_entry_count;
 	std::size_t string_entries_increment;
@@ -61,5 +61,5 @@ public:
 	void ResolveString(char* string);
 	int StoreThisLine(char* line);
 
-	void* GetUserDataAt(int index);
+	void* GetUserDataAt(std::size_t index);
 };

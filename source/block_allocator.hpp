@@ -7,11 +7,11 @@ public:
 		Block* next;
 	};
 private:
-	int max_extra_uses_per_block;
+	std::size_t max_extra_uses_per_block;
 	Block* big_blocks;
 	Block* last_block;
 	Block* small_blocks;
-	int uses_in_current_block;
+	std::size_t uses_in_current_block;
 	int used_size_per_block;
 	int block_size_bytes;
 	Block* free_block;

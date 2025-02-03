@@ -65,22 +65,22 @@ private:
 	int loaded_from_memory;
 	char** label_string_table;
 	Header* headers;
-	int label_string_table_len;
-	int headers_capacity;
+	std::size_t label_string_table_len;
+	std::size_t headers_capacity;
 	// the total capacity of all headers' parameter arrays.
-	int total_parameter_capacity;
+	std::size_t total_parameter_capacity;
 	// the total capacity of all parameters' parameter list arrays. i'm pretty sure this feature goes unused anyway /shrug
-	int total_parameter_list_capacity;
+	std::size_t total_parameter_list_capacity;
 	// the DataAccess resource handle.
 	int resource_handle;
 	// no idea what this does, at any rate the game never tries to "load a ParameterBlock from memory" so w/e
 	int successfully_loaded_from_memory;
 	// i have no clue what these were supposed to do, but as far as i know this goes unused anyway so idc
-	int unk_array_len;
-	int unk_array_capacity;
+	std::size_t unk_array_len;
+	std::size_t unk_array_capacity;
 	UnkArrayEntry* unk_array;
 
-	int value_string_table_len;
+	std::size_t value_string_table_len;
 	char** value_string_table;
 	// always equal to -1, no matter what. goes unused anyway so /shrug
 	int unk;
@@ -125,8 +125,8 @@ public:
 	int ParseIndexedHeaderFromName(char* name);
 	void ReadCommaSeparatedParams(char*, int);
 	void ResizeValueStringTable(int len);
-	void StoreNewHeader(const char*, int);
-	void StoreNewParameter(char*, int);
+	void StoreNewHeader(const char*, std::size_t);
+	void StoreNewParameter(char*, std::size_t);
 };
 
 #ifdef _M_IX86

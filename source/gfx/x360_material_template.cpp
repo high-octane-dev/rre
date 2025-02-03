@@ -62,11 +62,9 @@ X360MaterialTemplate::X360MaterialTemplate() {
 
 // OFFSET: 0x0040bb50, STATUS: COMPLETE
 void X360MaterialTemplate::LoadFromFile(const char* file_name) {
-	char* format_arg;
-	ParameterBlock parameter_block;
-	char parameter_content[64];
-	char file_name_with_extension[260];
-	char ssnprintf_dest[64];
+	ParameterBlock parameter_block{};
+	char parameter_content[64]{};
+	char file_name_with_extension[260]{};
 	int result = 0;
 
 	// originally it probably used strcpy

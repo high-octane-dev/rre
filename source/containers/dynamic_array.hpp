@@ -10,7 +10,7 @@ private:
 	int initialized;
 	T default_value;
 public:
-	DynamicArray(int initial_capacity, int _max_capacity = 100000) {
+	DynamicArray(int initial_capacity, int _max_capacity = 100000) : default_value() {
 		initialized = 0;
 		capacity = initial_capacity;
 		max_capacity = _max_capacity;

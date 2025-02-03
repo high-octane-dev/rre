@@ -57,18 +57,18 @@ public:
 	std::uint32_t flags;
 	int next_available_device;
     VirtualDataDevice* device_list;
-    int number_of_devices_in_list;
+    std::size_t number_of_devices_in_list;
     VirtualDataDevice* active_device;
     int device_stow[3];
     int* first_device_stow;
     int* last_device_stow;
     VirtualDeviceCache device_cache;
-    int num_device_cache_pages;
+    std::size_t num_device_cache_pages;
     VirtualFileCache file_cache_list[8];
     int next_available_file_cache_id;
     ContainerHashTable<char*, VirtualDataFile*>* file_list;
     VirtualDataFile** file_lookup_list;
-    int file_lookup_list_num_slots;
+    std::size_t file_lookup_list_num_slots;
     int last_get_data_or_file_handle;
 
     // the game checks if these are != 0, but they never get set to anything other than 0
@@ -110,7 +110,7 @@ public:
     int FOpen(char*, const char*);
     int FRead(int, void*, int);
     int FRead(int, void*, int, int);
-    int FREADDeviceCache(VirtualDeviceCache*, int, FILE*);
+    int FREADDeviceCache(VirtualDeviceCache*, std::size_t, FILE*);
     void FreeAllFiles();
     void FreeDevice(VirtualDataDevice*);
     void FreeDeviceCache(VirtualDeviceCache*);
@@ -125,12 +125,12 @@ public:
     int GetDeviceSlot();
     int GrowDeviceList(int);
     int GrowFileLookupList();
-    int Initialize(int, std::size_t, int, int, int);
+    int Initialize(std::size_t, std::size_t, std::size_t, std::size_t, int);
     int LoadDiskFile(char*, const char*, int*);
     int LoadResourceFile(char*, int, unsigned int*, int, int, unsigned int*, unsigned int*, int**, int**, int);
     void LoadResourceFromBuffer(unsigned int*, int, char*, int**, unsigned int, int, unsigned char*, int**, int**, int**, unsigned int*, int**, int*, int, int, long*);
     void LoadResourceFromFile(char*, unsigned int*, unsigned int, int, unsigned char*, unsigned int**, long*, unsigned int, unsigned int*, unsigned int*, int*, int, int, long*);
-    int MemcpyDeviceCache(VirtualDeviceCache*, int, void*);
+    int MemcpyDeviceCache(VirtualDeviceCache*, std::size_t, void*);
     void OpenVirtualFile(int);
     unsigned int ReadData(VirtualDataDevice*, VirtualDataFile*, void*, unsigned int);
     void ResetStow();
@@ -138,7 +138,7 @@ public:
     void SaveResourceFile(char*, int, int, int, int, void*, size_t, int);
     void SaveResourceFileList(char*, char*);
     int SetNumberOfDeviceCachePages(int);
-    void UpdateDeviceCache(VirtualDataDevice*, int, std::uint8_t*, int);
+    void UpdateDeviceCache(VirtualDataDevice*, int, std::uint8_t*, std::size_t);
 };
 
 extern DataAccess* lpDataAccess;

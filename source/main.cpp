@@ -113,7 +113,7 @@ void ReadConfigIni() {
             config.search.SetResetParameterSearch(0);
             char definition_name[32]{};
 
-            for (std::size_t i = 0; i < definition_count; i++) {
+            for (int i = 0; i < definition_count; i++) {
                 if (config.GetParameter("Definition", "", definition_name, sizeof(definition_name)) != 0) {
                     LanguageDefinition* language_definition = new LanguageDefinition();
                     RSStringUtil::Ssnprintf(language_definition->name, sizeof(language_definition->name), "%s", definition_name);
@@ -137,7 +137,7 @@ void ReadConfigIni() {
             config.search.SetResetParameterSearch(0);
             char configuration_name[32]{};
             
-            for (std::size_t i = 0; i < definition_count; i++) {
+            for (int i = 0; i < definition_count; i++) {
                 if (config.GetParameter("Configuration", "", configuration_name, sizeof(configuration_name)) != 0) {
                     LanguageConfiguration* language_configuration = new LanguageConfiguration();
                     RSStringUtil::Ssnprintf(language_configuration->name, sizeof(language_configuration->name), "%s", configuration_name);

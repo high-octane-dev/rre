@@ -78,7 +78,7 @@ int StringTable::Load(char* path) {
 
         int entry_index = 0;
         bool in_string = false;
-        for (int i = 0; i < this->string_heap_end; i++) {
+        for (std::size_t i = 0; i < this->string_heap_end; i++) {
             if (this->string_heap[i] == '\0') {
                 in_string = false;
             }
@@ -94,8 +94,8 @@ int StringTable::Load(char* path) {
     }
 
     if (this->unused_base_entries_len > 0) {
-        for (int base_index = 0; base_index < this->unused_base_entries_len; base_index++) {
-            for (int entry_index = 0; entry_index < this->len; entry_index++) {
+        for (std::size_t base_index = 0; base_index < this->unused_base_entries_len; base_index++) {
+            for (std::size_t entry_index = 0; entry_index < this->len; entry_index++) {
                 if (strcmp(this->unused_base_entries[base_index].string, this->string_entries[entry_index].string) == 0) {
                     this->string_entries[entry_index].string = this->unused_base_entries[base_index].string;
                     this->string_entries[entry_index].data = this->unused_base_entries[base_index].data;
@@ -330,7 +330,7 @@ int StringTable::GetIndex(char* string) {
             return -1;
         }
 
-        for (int i = 0; i < this->len; ++i) {
+        for (std::size_t i = 0; i < this->len; ++i) {
             if (strcmp(this->string_entries[i].string, lower_string) == 0) {
                 found_index = i;
                 break;
@@ -426,7 +426,7 @@ int StringTable::LoadStringsBufferFromFile(char* path) {
 char* StringTable::ParseThisBlock(char* input_block) {
     char* current_token;
     char* token_end;
-    int token_length;
+    std::size_t token_length;
     char include_path[260] = { 0 };
 
     TokenString token_parser{ input_block, 1, 0 };
@@ -501,14 +501,14 @@ int StringTable::StoreThisLine(char* line) {
     char current_char;
     bool has_dollar = false;
     char processed_line[260] = { 0 };
-    int processed_length = 0;
-    int input_length = strlen(line);
+    std::size_t processed_length = 0;
+    std::size_t input_length = strlen(line);
 
     if (input_length <= 0) {
         return 0;
     }
 
-    for (int i = 0; i < input_length; ++i) {
+    for (std::size_t i = 0; i < input_length; ++i) {
         current_char = line[i];
         if (current_char == -1) {
             if (input_length < 2) {
@@ -527,7 +527,7 @@ int StringTable::StoreThisLine(char* line) {
         ResolveString(processed_line);
     }
 
-    int total_length = processed_length + 1;
+    std::size_t total_length = processed_length + 1;
     if (this->string_heap_end + total_length >= this->unk2) {
         size_t new_size = this->unk2 + this->unk3;
         this->unk2 = new_size;
@@ -547,7 +547,7 @@ int StringTable::StoreThisLine(char* line) {
 }
 
 // OFFSET: INLINE, STATUS: COMPLETE
-void* StringTable::GetUserDataAt(int index) {
+void* StringTable::GetUserDataAt(std::size_t index) {
     if (index >= len) {
         return nullptr;
     }
