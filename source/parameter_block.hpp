@@ -129,8 +129,10 @@ public:
 	void StoreNewParameter(char*, int);
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(ParameterBlock::Parameter) == 8);
 static_assert(sizeof(ParameterBlock::ParameterList) == 0x144);
 static_assert(sizeof(ParameterBlock::Header) == 0x14);
 static_assert(sizeof(ParameterBlock::PBSearch) == 0x810);
 static_assert(sizeof(ParameterBlock) == 2124);
+#endif

@@ -4,6 +4,7 @@
 #include "game.hpp"
 #include "data_access.hpp"
 #include "gfx/x360_video_card.hpp"
+#include "gfx/x360_render_target.hpp"
 
 Game* lpGame = nullptr;
 X360MaterialTemplate* lpSceneObjectMaterialTemplate = nullptr;
@@ -62,8 +63,8 @@ Game::Game() {
 
     /* 
     lpMotionLibrary = new MotionLibrary();
-    g_RenderTarget = nullptr;
     */
+    g_RenderTarget = nullptr;
     g_VideoCard = nullptr;
 
 
@@ -130,12 +131,10 @@ Game::~Game() {
     if (statistics_log != nullptr) {
         DestroyStatisticsLog();
     }
-    /*
     if (g_RenderTarget != nullptr) {
         delete g_RenderTarget;
         g_RenderTarget = nullptr;
     }
-    */
     if (g_VideoCard != nullptr) {
         g_VideoCard->FreeCursor();
         delete g_VideoCard;
@@ -310,27 +309,42 @@ void Game::ReloadMaterialsAndTextures(int) {
 void Game::LoadShaders() {
 }
 
-// OFFSET: 0x00617200, STATUS: TODO
-void Game::SetCameras(Camera*, Camera*, Camera*, Camera*) {
+// OFFSET: 0x00617200, STATUS: COMPLETE
+void Game::SetCameras(Camera* camera_1, Camera* camera_2, Camera* camera_3, Camera* camera_4) {
+    cameras[0] = camera_1;
+    cameras[1] = camera_2;
+    cameras[2] = camera_3;
+    cameras[3] = camera_4;
+    camera_count = 0;
+    if (cameras[0] != nullptr) {
+        camera_count = 1;
+    }
+    if (cameras[1] != nullptr) {
+        camera_count = camera_count + 1;
+    }
+    if (cameras[2] != nullptr) {
+        camera_count = camera_count + 1;
+    }
+    if (cameras[3] != nullptr) {
+        camera_count = camera_count + 1;
+    }
 }
 
 // OFFSET: 0x00617280, STATUS: COMPLETE
 void Game::GetCameras(Camera* dest[4]) {
-    dest[0] = this->cameras[0];
-    dest[1] = this->cameras[1];
-    dest[2] = this->cameras[2];
-    dest[3] = this->cameras[3];
+    dest[0] = cameras[0];
+    dest[1] = cameras[1];
+    dest[2] = cameras[2];
+    dest[3] = cameras[3];
 }
 
 // OFFSET: 0x00617ff0, STATUS: WIP
 int Game::Terminate() {
-    // TODO: Not completely implemented
-    /*
+    // FIXME: Not completely implemented
     if (g_RenderTarget != nullptr) {
         delete g_RenderTarget;
         g_RenderTarget = nullptr;
     }
-    */
     if (g_VideoCard != nullptr) {
         g_VideoCard->FreeCursor();
         delete g_VideoCard;
@@ -374,7 +388,12 @@ void Game::UpdateLocalizedPaths() {
 void Game::UpdateTextureContentDirectories() {
 }
 
-// OFFSET: 0x006171d0, STATUS: TODO
+// OFFSET: 0x006171d0, STATUS: COMPLETE
 int Game::PostDisplayModeChange() {
-    return 0;
+    g_RenderTarget = static_cast<X360RenderTarget*>(CreateRenderTarget());
+    if (g_RenderTarget == nullptr) {
+        return 0;
+    }
+    SetBasicRenderStates();
+    return 1;
 }

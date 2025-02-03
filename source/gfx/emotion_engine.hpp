@@ -28,6 +28,7 @@ namespace EE {
 		RefObjectList(std::size_t initial_capacity) {
 			capacity = initial_capacity;
 			data = reinterpret_cast<T*>(malloc(initial_capacity * sizeof(T)));
+			len = 0;
 			std::memset(data, 0, initial_capacity);
 		}
 		RefObjectList(RefObjectList&) = delete;
@@ -74,6 +75,7 @@ namespace EE {
 		List(std::size_t initial_capacity) {
 			capacity = initial_capacity;
 			data = reinterpret_cast<T*>(malloc(initial_capacity * sizeof(T)));
+			len = 0;
 			std::memset(data, 0, initial_capacity);
 		}
 		List(List&) = delete;
@@ -115,8 +117,6 @@ namespace EE {
 		void ResolveQualityLevel(IDirect3D9* d3d9, unsigned int adapter, D3DDEVTYPE device_type, D3DFORMAT depth_stencil_format);
 	};
 
-	static_assert(sizeof(D3DDepthStencil) == 0x20);
-
 	class D3DRenderTarget : public RefObject {
 	private:
 		D3DFORMAT format;
@@ -128,8 +128,6 @@ namespace EE {
 		virtual ~D3DRenderTarget() override;
 		void CreateDepthStencils(IDirect3D9* d3d9, unsigned int adapter, D3DDEVTYPE device_type, D3DFORMAT render_target_format, D3DFORMAT surface_format, bool fullscreen, bool windowed);
 	};
-
-	static_assert(sizeof(D3DRenderTarget) == 0x1C);
 
 	class D3DBackBuffer : public RefObject {
 	public:
@@ -144,8 +142,6 @@ namespace EE {
 		void CreateRenderTargets(IDirect3D9* d3d9, unsigned int adapter, D3DFORMAT render_target_format, D3DDEVTYPE device_type);
 	};
 
-	static_assert(sizeof(D3DBackBuffer) == 0x20);
-
 	class D3DDisplayMode : public RefObject {
 	public:
 		D3DFORMAT format;
@@ -156,8 +152,6 @@ namespace EE {
 		D3DDisplayMode();
 		virtual ~D3DDisplayMode() override;
 	};
-
-	static_assert(sizeof(D3DDisplayMode) == 0x20);
 
 	class D3DAdapter : public RefObject {
 	public:
@@ -175,8 +169,6 @@ namespace EE {
 		void AddDisplayMode(D3DDISPLAYMODE* display_modes);
 	};
 
-	static_assert(sizeof(D3DAdapter) == 0x5b4);
-	
 	class D3DDeviceManager : public RefObject {
 	public:
 		IDirect3D9* d3d9;
@@ -226,8 +218,14 @@ namespace EE {
 		int Create();
 		bool CheckAdapterDisplayMode(D3DAdapter* adapter, D3DFORMAT fmt, int* w, int* h);
 	};
-
-	static_assert(sizeof(D3DDeviceManager) == 0x9c);	
+#ifdef _M_IX86
+	static_assert(sizeof(D3DDepthStencil) == 0x20);
+	static_assert(sizeof(D3DRenderTarget) == 0x1C);
+	static_assert(sizeof(D3DBackBuffer) == 0x20);
+	static_assert(sizeof(D3DDisplayMode) == 0x20);
+	static_assert(sizeof(D3DAdapter) == 0x5b4);
+	static_assert(sizeof(D3DDeviceManager) == 0x9c);
+#endif
 };
 
-extern EE::D3DDeviceManager* lpD3DDeviceManager;
+extern EE::D3DDeviceManager* g_lpD3DDeviceManager;

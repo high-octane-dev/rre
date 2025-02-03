@@ -1,5 +1,6 @@
 #include "x360_full_screen_texture_render.hpp"
 #include "panic.hpp"
+#include "x360_render_target.hpp"
 
 // OFFSET: INLINE, STATUS: COMPLETE
 X360FullScreenTextureRender::X360FullScreenTextureRender() {
@@ -15,12 +16,12 @@ X360FullScreenTextureRender::~X360FullScreenTextureRender() {
 }
 
 // OFFSET: 0x004134a0, STATUS: WIP
-void X360FullScreenTextureRender::FUN_004134a0(int index) {
+void X360FullScreenTextureRender::Draw(int index) {
     if (index != 0) {
         panic("Index is not 0!");
     }
     if (textures[index] != nullptr) {
-        // g_RenderTarget->vt[5](0, textures[index], 0, 0, 1, 1, -1);
+        g_RenderTarget->Blt(nullptr, textures[index], nullptr, 0, 1, 1, 0xFFFFFFFF);
     }
 }
 

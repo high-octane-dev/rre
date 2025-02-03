@@ -1,5 +1,6 @@
 #pragma once
 #include "x360_texture_map.hpp"
+#include "x360_full_screen_render_pass.hpp"
 
 /*
 ok, so i've labelled this `textures` member as a single-element array because, for some inexplicable reason
@@ -8,7 +9,7 @@ it *cant* be an actual array and is likely a single-element one...
 
 also if you hook those functions and print out the index youll see they never pass anything but 0 anyway so
 */
-class X360FullScreenTextureRender {
+class X360FullScreenTextureRender : public X360FullScreenRenderPass {
 private:
 	TextureMap* textures[1];
 public:
@@ -16,7 +17,7 @@ public:
 	~X360FullScreenTextureRender();
 	X360FullScreenTextureRender(const X360FullScreenTextureRender&) = delete;
 	X360FullScreenTextureRender& operator=(const X360FullScreenTextureRender&) = delete;
-	virtual void FUN_004134a0(int index);
+	virtual void Draw(int index) override;
 	void SetTexture(int index, TextureMap* texture);
 };
 

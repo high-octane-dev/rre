@@ -1,5 +1,6 @@
 #include "file_io.hpp"
 #include "globals.hpp"
+#include "util/rsstring_util.hpp"
 
 // OFFSET: 0x0040f9e0, STATUS: COMPLETE
 FILE* FOPEN(char* filename, const char* mode) {
@@ -11,7 +12,7 @@ FILE* FOPEN(char* filename, const char* mode) {
         return fopen(filename, mode);
     }
     else {
-        snprintf(resolved_path, sizeof(resolved_path), "%s%s", g_DataPCDirectory, filename);
+        RSStringUtil::Ssnprintf(resolved_path, sizeof(resolved_path), "%s%s", g_DataPCDirectory, filename);
         return fopen(resolved_path, mode);
     }
 

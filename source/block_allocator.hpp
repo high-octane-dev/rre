@@ -32,5 +32,7 @@ public:
 	void FreeBlock(void* block);
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(BlockAllocator::Block) == 4);
 static_assert(sizeof(BlockAllocator) == 60);
+#endif

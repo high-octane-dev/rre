@@ -1,6 +1,10 @@
 #include "cars_game.hpp"
-#include <globals.hpp>
+#include "data_access.hpp"
+#include "globals.hpp"
 #include "gfx/x360_tex_map.hpp"
+#include "gfx/x360_render_target.hpp"
+#include "gfx/x360_video_card.hpp"
+#include "gfx/x360_full_screen_texture_render.hpp"
 #include "util/rsstring_util.hpp"
 #include "util/resource_setup.hpp"
 
@@ -14,13 +18,14 @@ char g_BaseUIContentDirectory[260] = "C\\UI\\";
 char g_LocalizationContentDirectory[260] = "E\\Loc\\";
 char g_FontTextureContentDirectory[260] = "E\\Font\\";
 char g_AudioDialogueDirectory[260] = "E\\Audio\\";
+char g_DebugDirectory[260] = "C\\Debug\\";
 
 int g_GetActivityTypeFromActivityFile = FALSE;
 int g_FixMcqueensHeadquartersStage = FALSE;
 int g_McqueensHeadquartersStage = TRUE;
 int g_StartOnTitleScreenOnFirstBoot = TRUE;
 int g_Boost_Lvl = 1;
-int g_SuspensionLoadType = 1.0;
+float g_SuspensionLoadType = 1.0f;
 int g_EnableVehicleAudio = TRUE;
 int g_EnableVehicleMotionBlurOverlay = TRUE;
 int g_EnableAllResFiles = TRUE;
@@ -40,15 +45,141 @@ int g_ScavengerHuntPartGroupInExploreHub = FALSE;
 int g_CheckForXbox360TextureMipMaps = FALSE;
 int g_OnlyLoadXbox360LightMapsFromResourceFile = TRUE;
 
+X360FullScreenRenderPass* g_CurrentFSRP = nullptr;
+
+// OFFSET: 0x0043faf0, STATUS: COMPLETE
+CarsGame::CarsGame() : X360Game() {
+    for (std::size_t i = 0; i < sizeof(cheat_codes) / sizeof(CheatCode); i++) {
+        cheat_codes[i].index = -1;
+        cheat_codes[i].name[0] = 0;
+        cheat_codes[i].active = 0;
+    }
+    profile = nullptr;
+    brake_when_resting_threshold = 5.0;
+    hall_of_fame = nullptr;
+    personal_records = nullptr;
+    audio_manager = nullptr;
+    world = nullptr;
+    ui = nullptr;
+    video_fx_manager = nullptr;
+    settings = nullptr;
+    bolt_manager = nullptr;
+    pickup_manager = nullptr;
+    scavenger_hunt_manager = nullptr;
+    bonus_point_manager = nullptr;
+    achievement_manager = nullptr;
+    scene_database = nullptr;
+    activity_database = nullptr;
+    event_database = nullptr;
+    vehicle_database = nullptr;
+    story_manager = nullptr;
+    event_join_point_manager = nullptr;
+    ui_resource_manager = nullptr;
+    bonus_content_manager = nullptr;
+    scene[0] = 0;
+    scene_name[0] = 0;
+    use_vehicle_engine_sound = 0;
+    play_music = 0;
+    brake_when_resting = 0;
+    screen_text_font_manager = nullptr;
+    char_number = 0;
+    char_name[0] = 0;
+    char_paint_type = 0;
+    char_color1 = Vector4(0, 0, 0, 1);
+    char_color2 = Vector4(0, 0, 0, 1);
+    vehicle_manual_transmission = 0;
+    unused22 = nullptr;
+    total_laps = 3;
+    no_321 = 0;
+    build_spline_mode = 0;
+    unused26 = 0;
+    analog_gas = 0;
+    show_coords = 1;
+    dump_results = 0;
+    unused27 = 0;
+    world_paused = 0;
+    unlock_all = 0;
+    unlock_all_abilities = 0;
+    unused28 = 0;
+    enforce_free_camera_speed = 1;
+    unused29 = 0;
+    cinema_mode = 0;
+    loop_cutscenes = 0;
+    loading_tip_preview = 0;
+    unused23[0] = 0;
+    splash_screen[0] = '\0';
+    RSStringUtil::Ssnprintf(splash_screen, sizeof(splash_screen), "load_logo");
+    loading_icon = nullptr;
+    loading_screen_name[0] = 0;
+    loading_icon_name[0] = 0;
+    unlock_all_bonus_content = 0;
+    cheat_codes[0].index = 0;
+    RSStringUtil::Ssnprintf(cheat_codes[0].name, sizeof(CheatCode::name), "MATTEL07");
+    cheat_codes[1].index = 1;
+    RSStringUtil::Ssnprintf(cheat_codes[1].name, sizeof(CheatCode::name), "PAINTIT");
+    cheat_codes[2].index = 2;
+    RSStringUtil::Ssnprintf(cheat_codes[2].name, sizeof(CheatCode::name), "NCEDUDZ");
+    cheat_codes[3].index = 3;
+    RSStringUtil::Ssnprintf(cheat_codes[3].name, sizeof(CheatCode::name), "INSTYLE");
+    cheat_codes[4].index = 4;
+    RSStringUtil::Ssnprintf(cheat_codes[4].name, sizeof(CheatCode::name), "PLAYALL");
+    cheat_codes[5].index = 5;
+    RSStringUtil::Ssnprintf(cheat_codes[5].name, sizeof(CheatCode::name), "SCENZ4U");
+    cheat_codes[6].index = 6;
+    RSStringUtil::Ssnprintf(cheat_codes[6].name, sizeof(CheatCode::name), "BUYTALL");
+    cheat_codes[7].index = 7;
+    RSStringUtil::Ssnprintf(cheat_codes[7].name, sizeof(CheatCode::name), "ALLYORS");
+    cheat_codes[8].index = 8;
+    RSStringUtil::Ssnprintf(cheat_codes[8].name, sizeof(CheatCode::name), "VRYFAST");
+    cheat_codes[9].index = 9;
+    RSStringUtil::Ssnprintf(cheat_codes[9].name, sizeof(CheatCode::name), "ZZOOOOM");
+    cheat_codes[10].index = 10;
+    RSStringUtil::Ssnprintf(cheat_codes[10].name, sizeof(CheatCode::name), "0TO200X");
+
+    // This does basically nothing, since the return value from DataAccess::FileExists gets discarded.
+    char dont_share_me[260]{};
+    RSStringUtil::Ssnprintf(dont_share_me, sizeof(dont_share_me), "%sDontShareMe.txt", g_DebugDirectory);
+    lpDataAccess->FileExists(dont_share_me);
+
+    ai_names[0] = 0;
+    difficulty = 0;
+    time_of_day = 0;
+    starting_bolt_banners = 0;
+    starting_bonus_points = 0;
+}
+
 // OFFSET: 0x004f50a0, STATUS: WIP
 int CarsGame::InitializeRenderer(char (&quit_message)[260]) {
     SetLanguageToDefault();
-    if (X360Game::InitializeRenderer(quit_message) == 0) {
-        snprintf(quit_message, sizeof(quit_message), "Failed to initialize renderer!");
-        return 0;
+    int renderer_initialized = X360Game::InitializeRenderer(quit_message);
+    if (renderer_initialized == 0) {
+        // The original game does not populate the quit message, but we do.
+        RSStringUtil::Ssnprintf(quit_message, sizeof(quit_message), "Failed to initialize renderer!");
     }
+    /*
+    Activity::Registry->Create();
+    Actor::Registry->Create();
+    ActorInterface::Registry->Create();
+    if (g_lpVirtualNetwork == nullptr) {
+        CreateVirtualNetwork();
+    }
+    if (g_lpGlobalStreamManager == nullptr && g_lpGlobalCarsUIStreamManager == nullptr) {
+        CreateStreamManager();
+    }
+    */
+    g_VideoCard->initialized = 1;
+    flags |= 32;
+    MapAllGameKeys();
+    /*
+    screen_text_font_manager = new ScreenTextFontManager();
+    screen_text_font_manager = screen_text_font_manager->Create(); // Does nothing but return itself
+    */
     unk_game_state = 1;
-    return 1;
+    /*
+    managers->AddChild(FlowChartEngine::GetInstance(), 2);
+    managers->AddChild(TRCEngine::GetInstance(), 2);
+    */
+    return renderer_initialized;
 }
 
 // OFFSET: 0x0051c130, STATUS: WIP
@@ -59,7 +190,8 @@ int CarsGame::Initialize() {
 
     char game_info_path[260];
     RSStringUtil::Ssnprintf(game_info_path, sizeof(game_info_path), "%s%sGameInfo.%s.res", "Res\\Data\\", "C\\Appstart\\", "x360");
-    ResourceSetup::ResourceSetup(game_info_path, -1, 1, 8, 0, 0, -1, 1, 0);
+    // Until we implement RES file loading, we should keep any ResourceSetup stuff commented out.
+    // ResourceSetup::ResourceSetup(game_info_path, -1, 1, 8, 0, 0, -1, 1, 0);
     /*
     cars_settings = new CarsSettings();
     cars_settings->Create();
@@ -70,7 +202,7 @@ int CarsGame::Initialize() {
 
 // OFFSET: 0x0043fe80, STATUS: WIP
 int CarsGame::PreGameInitialize(DisplayMode*) {
-    // TODO: Not completely implemented
+    // FIXME: Not completely implemented
     char material_file_content[260]{};
     char debug_str_file[260]{};
     char material_template_file[260]{};
@@ -80,16 +212,15 @@ int CarsGame::PreGameInitialize(DisplayMode*) {
     /*
     _timeGameInit = timeGetTime();
     */
-    RSStringUtil::Ssnprintf(debug_str_file,sizeof(debug_str_file),"%sDebugStr.mst","C\\Debug\\");
+    RSStringUtil::Ssnprintf(debug_str_file,sizeof(debug_str_file),"%sDebugStr.mst", g_DebugDirectory);
     /*
     (*((lpMaterialStringTable->StringTable).vtable)->Load)(%sDebugStr.mst);
     */
-    RSStringUtil::Ssnprintf(material_template_file,sizeof(material_template_file),"%s%sMaterialTemplate.%s.res", "Res\\Data\\", "C\\Appstart\\","x360");
+    RSStringUtil::Ssnprintf(material_template_file, sizeof(material_template_file), "%s%sMaterialTemplate.%s.res", "Res\\Data\\", "C\\Appstart\\", "x360");
 
-    bool bVar2 = g_ResBuilding == 0;
-    if (bVar2)
-    {
-        ResourceSetup::ResourceSetup(material_template_file,0xffffffff,1,8,0,0,-1,1,0);
+    if (g_ResBuilding == 0) {
+        // Until we implement RES file loading, we should keep any ResourceSetup stuff commented out.
+        // ResourceSetup::ResourceSetup(material_template_file,0xffffffff,1,8,0,0,-1,1,0);
     }
 
     RSStringUtil::Ssnprintf(material_file_content, sizeof(material_file_content), "%sDfltMT", "C\\AppStart\\");
@@ -97,9 +228,9 @@ int CarsGame::PreGameInitialize(DisplayMode*) {
     RSStringUtil::Ssnprintf(material_file_content, sizeof(material_file_content), "%sIconMT", "C\\AppStart\\");
     lpIconMaterialTemplate->LoadFromFile(material_file_content);
 	
-    if (bVar2)
-    {
-        ResourceSetup::ResourceFinish(material_template_file,1);
+    if (g_ResBuilding == 0) {
+        // Until we implement RES file loading, we should keep any ResourceSetup stuff commented out.
+        // ResourceSetup::ResourceFinish(material_template_file,1);
     }
 
     return 1;
@@ -226,7 +357,7 @@ void CarsGame::LoadConfigFile(ParameterBlock* parameter_block) {
 	    parameter_block->GetParameter("Boost_Lvl", 1, &g_Boost_Lvl);
 	    g_Boost_Lvl = min(g_Boost_Lvl, 3);
 
-	    parameter_block->GetParameter("SuspensionLoadType", 1.0, &g_SuspensionLoadType);
+	    parameter_block->GetParameter("SuspensionLoadType", 1.0f, &g_SuspensionLoadType);
 	    parameter_block->GetParameter("EnableVehicleAudio", TRUE, &g_EnableVehicleAudio);
 	    parameter_block->GetParameter("EnableVehicleMotionBlurOverlay", TRUE, &g_EnableVehicleMotionBlurOverlay);
 	    parameter_block->GetParameter("EnableAllResFiles", FALSE, &g_EnableAllResFiles);
@@ -277,7 +408,7 @@ void CarsGame::EndAutoTest(int) {
 
 // OFFSET: 0x004f51d0, STATUS: TODO
 int CarsGame::Tick() {
-    return 0;
+    return 1;
 }
 
 // OFFSET: 0x00440320, STATUS: TODO
@@ -379,18 +510,23 @@ void CarsGame::CreateLoadingScreen(const char* name) {
 
     char package_name[260]{};
     RSStringUtil::Ssnprintf(package_name,0x104,"%s%s%s.%s.res","Res\\Data\\", g_UILocalizedTextureContentDirectory, name,"x360");
-    ResourceSetup::ResourceSetup(package_name,-1,1,8,0,0,-1,1,0);
+    // Until we implement RES file loading, we should keep any ResourceSetup stuff commented out.
+    // ResourceSetup::ResourceSetup(package_name,-1,1,8,0,0,-1,1,0);
 
     char texture_name[260]{};
-    snprintf(texture_name, sizeof(texture_name), "%s%s", g_UILocalizedTextureContentDirectory, name);
+    RSStringUtil::Ssnprintf(texture_name, sizeof(texture_name), "%s%s", g_UILocalizedTextureContentDirectory, name);
     TextureMap* texture_map = X360TexMap::GetTextureMapFromResourceName(texture_name, 555, 0);
     if (texture_map != nullptr) {
+        // FIXME: This is a hack. See definition for `g_CurrentFSRP`.
+        g_FullscreenRender.SetTexture(0, texture_map);
+        g_CurrentFSRP = &g_FullscreenRender;
+        texture_map->Release();
         /*
         // always zero
         iVar2 = FUN_00413600();
         
         FUN_00413620(iVar2);
-        X360FullScreenTextureRender::FUN_00413460(&g_FullscreenRender,iVar2,texture_map);
+        g_FullscreenRender.SetTexture(0, texture_map);
         X360FullScreenTextureRender_ARRAY_006fd378[iVar2 * 4 + 3].unk = &g_FullscreenRender;
         FUN_00413670(iVar2);
         
@@ -460,7 +596,28 @@ void CarsGame::PrepareDeferredLoad(DeferredLoad) {
 }
 
 // OFFSET: 0x004237a0, STATUS: TODO
-void CarsGame::PresentFrame(int) {
+void CarsGame::PresentFrame(int draw_fullscreen_render_pass) {
+    // FIXME: This entire implementation is a hack. See definition for ``g_CurrentFSRP``.
+    if (g_CurrentFSRP == nullptr) {
+        // FIXME: Implement this.
+    }
+    else {
+        D3DVIEWPORT9 fullscreen_viewport{
+            .X = 0,
+            .Y = 0,
+            .Width = g_ViewportWidth,
+            .Height = g_ViewportHeight,
+            .MinZ = 0.0f,
+            .MaxZ = 1.0f,
+        };
+        g_RenderTarget->SetViewport(&fullscreen_viewport);
+        g_RenderTarget->ApplyViewportImpl(1, 1, 1, draw_fullscreen_render_pass);
+        if (draw_fullscreen_render_pass != 0) {
+            g_CurrentFSRP->Draw(0);
+            g_RenderTarget->DrawCursor();
+        }
+    }
+    g_VideoCard->DisplayToScreen(1);
 }
 
 // OFFSET: 0x00441b40, STATUS: TODO
@@ -485,7 +642,7 @@ void CarsGame::SetConfigArguments() {
     start[0] = '\0';
     scene[0] = '\0';
     scene_name[0] = '\0';
-    snprintf(splash_screen, sizeof(splash_screen), "load_logo");
+    RSStringUtil::Ssnprintf(splash_screen, sizeof(splash_screen), "load_logo");
     unused24 = 0;
     char_number = 0;
     strncpy(char_name, "McQ", 4);
@@ -591,14 +748,14 @@ int CarsGame::ShowLoadingScreen(const char* _loading_screen, const char* _loadin
     }
     else {
         CreateLoadingScreen(_loading_screen);
-        snprintf(loading_screen_name, sizeof(loading_screen_name), "%s", _loading_screen);
+        RSStringUtil::Ssnprintf(loading_screen_name, sizeof(loading_screen_name), "%s", _loading_screen);
     }
     if (_loading_icon == nullptr) {
         loading_icon_name[0] = '\0';
         return 1;
     }
     CreateLoadingIcon(_loading_icon);
-    snprintf(loading_icon_name, sizeof(loading_screen_name), "%s", _loading_icon);
+    RSStringUtil::Ssnprintf(loading_icon_name, sizeof(loading_screen_name), "%s", _loading_icon);
     return 1;
 }
 

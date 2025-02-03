@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "x360_game.hpp"
+#include "gfx/x360_full_screen_render_pass.hpp"
 
 enum class XboxLocale {
     None = 0,
@@ -114,7 +115,7 @@ public:
     struct CarsSettings* settings;
     struct CarsBoltManager* bolt_manager;
     struct Cars2PickupManager* pickup_manager;
-    struct CarsScavengerHuntManager* scavanger_hunt_manager;
+    struct CarsScavengerHuntManager* scavenger_hunt_manager;
     struct Cars2BonusPointManager* bonus_point_manager;
     struct CarsAchievementManager* achievement_manager;
     struct Cars2SceneDatabase* scene_database;
@@ -185,6 +186,8 @@ public:
     CheatCode cheat_codes[11];
     int unused30;
 public:
+    CarsGame();
+
     virtual int InitializeRenderer(char(&quit_message)[260]) override;
     virtual int Initialize() override;
     virtual int PreGameInitialize(DisplayMode*) override;
@@ -263,12 +266,15 @@ extern char g_FontTextureContentDirectory[260];
 // E\Audio
 extern char g_AudioDialogueDirectory[260];
 
+// C\Debug
+extern char g_DebugDirectory[260];
+
 extern int g_GetActivityTypeFromActivityFile;
 extern int g_FixMcqueensHeadquartersStage;
 extern int g_McqueensHeadquartersStage;
 extern int g_StartOnTitleScreenOnFirstBoot;
 extern int g_Boost_Lvl;
-extern int g_SuspensionLoadType;
+extern float g_SuspensionLoadType;
 extern int g_EnableVehicleAudio;
 extern int g_EnableVehicleMotionBlurOverlay;
 extern int g_EnableAllResFiles;
@@ -287,3 +293,10 @@ extern int g_ShowScavengerHuntOverlayInExploreHub;
 extern int g_ScavengerHuntPartGroupInExploreHub;
 extern int g_CheckForXbox360TextureMipMaps;
 extern int g_OnlyLoadXbox360LightMapsFromResourceFile;
+
+// FIXME: So, in the original game, this is actually a 1-sized array of X360FullScreenRenderPass* es;
+// Every function that accesses that array does so by retrieving an index from some function, but
+// those functions always return 0. There is a decent amount of code sprinkled throughout the
+// rendering classes in the game that use 1-sized arrays like this, but at the moment we do not
+// know enough about the game to declare them as such.
+extern X360FullScreenRenderPass* g_CurrentFSRP;

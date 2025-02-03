@@ -13,7 +13,7 @@ X360VideoCard::X360VideoCard() : VideoCard()
 {
     unused = nullptr;
     g_D3DDevice9 = nullptr;
-    lpD3DStateManager = nullptr;
+    g_lpD3DStateManager = nullptr;
     flags = flags & 0xfc;
     current_frame = 0;
     unk_refresh_rate_param = 2;
@@ -22,38 +22,38 @@ X360VideoCard::X360VideoCard() : VideoCard()
 
 // OFFSET: 0x00673260, STATUS: COMPLETE
 void free_device_manager() {
-    if (lpD3DDeviceManager != nullptr) {
-        lpD3DDeviceManager->Release();
-        lpD3DDeviceManager = nullptr;
+    if (g_lpD3DDeviceManager != nullptr) {
+        g_lpD3DDeviceManager->Release();
+        g_lpD3DDeviceManager = nullptr;
     }
 }
 
 // OFFSET: 0x00414fc0, STATUS: COMPLETE
 void X360VideoCard::Create() {
-    lpD3DDeviceManager = new EE::D3DDeviceManager(lpCarsGame->d3d9);
-    lpD3DDeviceManager->AddRef();
-    lpD3DDeviceManager->behavior_flag_1 = lpD3DDeviceManager->behavior_flag_1 | 4;
-    lpD3DDeviceManager->windowed = g_IsWindowed;
-    lpD3DDeviceManager->back_buffer_width = g_WindowWidth;
-    lpD3DDeviceManager->back_buffer_height = g_WindowHeight;
+    g_lpD3DDeviceManager = new EE::D3DDeviceManager(lpCarsGame->d3d9);
+    g_lpD3DDeviceManager->AddRef();
+    g_lpD3DDeviceManager->behavior_flag_1 = g_lpD3DDeviceManager->behavior_flag_1 | 4;
+    g_lpD3DDeviceManager->windowed = g_IsWindowed;
+    g_lpD3DDeviceManager->back_buffer_width = g_WindowWidth;
+    g_lpD3DDeviceManager->back_buffer_height = g_WindowHeight;
     // This is an innacuracy. In the original game, this atexit call occurs during static initialization.
     atexit(free_device_manager);
 
-    if (lpD3DDeviceManager->Create() != 0) {
-        if (lpD3DDeviceManager->CreateAdapters(lpCarsGame->hwnd) != 0) {
-            g_D3DDevice9 = lpD3DDeviceManager->device;
+    if (g_lpD3DDeviceManager->Create() != 0) {
+        if (g_lpD3DDeviceManager->CreateAdapters(lpCarsGame->hwnd) != 0) {
+            g_D3DDevice9 = g_lpD3DDeviceManager->device;
             g_D3DDevice9->AddRef();
-            capabilites = lpD3DDeviceManager->adapter_list.data[lpD3DDeviceManager->adapter_index]->capabilities;
+            capabilities = g_lpD3DDeviceManager->adapter_list.data[g_lpD3DDeviceManager->adapter_index]->capabilities;
             g_TargetFrameRate = 60.0;
-            lpD3DStateManager = new D3DStateManager();
+            g_lpD3DStateManager = new D3DStateManager();
         }
     }
 }
 
 // OFFSET: 0x00415440, STATUS: COMPLETE
 bool X360VideoCard::IsFXEnabled() {
-    auto pixel_shader_version_satisfied = 0xffff01ff < (lpD3DDeviceManager->adapter_list.data[lpD3DDeviceManager->adapter_index]->capabilities).PixelShaderVersion;
-    auto vertex_shader_version_satisfied = 0xfffe01ff < (lpD3DDeviceManager->adapter_list.data[lpD3DDeviceManager->adapter_index]->capabilities).VertexShaderVersion;
+    auto pixel_shader_version_satisfied = 0xffff01ff < (g_lpD3DDeviceManager->adapter_list.data[g_lpD3DDeviceManager->adapter_index]->capabilities).PixelShaderVersion;
+    auto vertex_shader_version_satisfied = 0xfffe01ff < (g_lpD3DDeviceManager->adapter_list.data[g_lpD3DDeviceManager->adapter_index]->capabilities).VertexShaderVersion;
     return enable_fullscreen_effects && pixel_shader_version_satisfied && vertex_shader_version_satisfied;
 }
 
@@ -63,13 +63,13 @@ X360VideoCard::~X360VideoCard() {
         g_D3DDevice9->Release();
     }
 
-    if (lpD3DStateManager != nullptr) {
-        delete lpD3DStateManager;
-        lpD3DDeviceManager = nullptr;
+    if (g_lpD3DStateManager != nullptr) {
+        delete g_lpD3DStateManager;
+        g_lpD3DDeviceManager = nullptr;
     }
 
-    if (lpD3DDeviceManager != nullptr) {
-        lpD3DDeviceManager->ReleaseResources();
+    if (g_lpD3DDeviceManager != nullptr) {
+        g_lpD3DDeviceManager->ReleaseResources();
     }
 
     if (unused != nullptr) {
@@ -87,7 +87,7 @@ void X360VideoCard::FreeCursor() {
 
 // OFFSET: 0x00414e00, STATUS: COMPLETE
 int X360VideoCard::ResetStateManager() {
-    lpD3DStateManager->Reset();
+    g_lpD3DStateManager->Reset();
     return 1;
 }
 

@@ -55,4 +55,4 @@ public:
 	IDirect3DPixelShader9* LoadPixelShader(const char*);
 };
 
-extern X360ShaderManager* lpX360ShaderManager;
+extern X360ShaderManager* g_lpX360ShaderManager;

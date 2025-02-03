@@ -2,8 +2,9 @@
 #include "containers/container_list.hpp"
 
 class VideoCard {
-protected:
+public:
 	int initialized;
+protected:
 	int unused;
 	int should_inc_frame_count;
 	int unk_refresh_rate_param;

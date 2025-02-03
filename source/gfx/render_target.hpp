@@ -1,18 +1,22 @@
 #pragma once
+#include "math/frect.hpp"
 #include "x360_texture_map.hpp"
+#include "video_card.hpp"
+#include "camera.hpp"
 
 enum class UnkPixelFormat {
+    AlsoInvalid = -1,
     Invalid = 0,
     A8 = 8,
     R5G6B5 = 565,
-    A1R5G6B5 = 1565,
+    A1R5G5B5 = 1555,
     A4R4G4B4 = 4444,
     A8R8G8B8 = 8888
 };
 
 class RenderTarget {
 protected:
-    struct Camera* camera;
+    Camera* camera;
     int width;
     int height;
     int unk_camera_related;
@@ -37,11 +41,11 @@ public:
 	RenderTarget& operator=(const RenderTarget&) = delete;
 
 	virtual ~RenderTarget();
-    virtual void Create(int unused) = 0;
-    virtual void SetDimensions(int unused0, int unused1) = 0;
+    virtual void Create(VideoCard* unused) = 0;
+    virtual void SetDimensions(VideoCard* unused) = 0;
     virtual void ApplyViewport() = 0;
     virtual void DrawCursor() = 0;
-    virtual void Blt(unsigned int unused, TextureMap* tex, int alpha_blend, D3DCOLOR color) = 0;
+    virtual int Blt(FRECT* dest, TextureMap* texture, FRECT* unused0, unsigned int unused1, int use_linear, int alpha_blend, D3DCOLOR color) = 0;
     virtual int Unk6(int, int, int) = 0;
     virtual int Unk7(int) = 0;
     virtual void Unk8(int) = 0;

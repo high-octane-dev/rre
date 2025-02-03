@@ -1,11 +1,13 @@
 #pragma once
-#include "gfx/video_card.hpp"
 #include <d3d9.h>
+#include "video_card.hpp"
 
-class X360VideoCard : VideoCard {
+class X360VideoCard : public VideoCard {
 private:
 	IUnknown* unused;
-	D3DCAPS9 capabilites;
+public:
+	D3DCAPS9 capabilities;
+private:
 	int current_frame;
 	std::uint8_t flags;
 	bool enable_fullscreen_effects;

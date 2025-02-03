@@ -19,7 +19,7 @@ bool X360PixelShader::Create(const char* _name, int unused) {
         inner = nullptr;
     }
 
-    inner = lpX360ShaderManager->GetPixelShader(_name);
+    inner = g_lpX360ShaderManager->GetPixelShader(_name);
     if (inner != nullptr) {
         inner->AddRef();
     }
@@ -50,7 +50,7 @@ bool X360VertexShader::Create(const char* _name, int index) {
         inner[index]->Release();
     }
 
-    inner[index] = lpX360ShaderManager->GetVertexShader(_name);
+    inner[index] = g_lpX360ShaderManager->GetVertexShader(_name);
     if (inner[index] != nullptr) {
         inner[index]->AddRef();
     }

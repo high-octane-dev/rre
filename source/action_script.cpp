@@ -1,5 +1,5 @@
 #include "action_script.hpp"
-#include <format>
+#include "util/rsstring_util.hpp"
 
 // OFFSET: 0x0056eee0, STATUS: WIP
 ActionScript::ActionScript() : GameObject(true) {
@@ -34,9 +34,9 @@ void ActionScript::ReadActionScript(char* param_1, char* param_2) {
 void ActionScript::ReadActionScript(char* param_1, ParameterBlock* file) {
     char temp[64];
 
-    snprintf(temp, sizeof(temp), "%sPreAction", param_1);
+    RSStringUtil::Ssnprintf(temp, sizeof(temp), "%sPreAction", param_1);
     ReadNonBodySequence(file, temp);
-    snprintf(temp, sizeof(temp), "%sPostAction", param_1);
+    RSStringUtil::Ssnprintf(temp, sizeof(temp), "%sPostAction", param_1);
     ReadNonBodySequence(file, temp);
 }
 
@@ -44,7 +44,7 @@ void ActionScript::ReadActionScript(char* param_1, ParameterBlock* file) {
 void ActionScript::ReadNonBodySequence(ParameterBlock* param_1, char* param_2) {
     char temp[32];
 
-    snprintf(temp, sizeof(temp), "%s1", param_2);
+    RSStringUtil::Ssnprintf(temp, sizeof(temp), "%s1", param_2);
 
     if (param_1->ReadParameterBlock(temp) != 0)
     {

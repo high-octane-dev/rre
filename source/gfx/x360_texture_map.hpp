@@ -1,29 +1,31 @@
 #pragma once
-#include "base_object.hpp"
+#include <cstddef>
 #include <d3d9.h>
+#include "base_object.hpp"
 
-class BaseTextureMap : public BaseObject
-{
-	int unk1;
-	short unk2;
-	short unk3;
-	float unk4;
-
+class BaseTextureMap : public BaseObject {
+protected:
+	unsigned int unk1;
+	unsigned short pool;
+	unsigned short multi_sample_type;
+	float max_projected_size;
+public:
 	virtual void ClearMaxProjectedSize();
 };
 
-class TextureMap : public BaseTextureMap
-{
-public:
+class TextureMap : public BaseTextureMap /*, StreamingComponent */ {
+protected:
 	int unk1;
 	int unk2;
 	D3DFORMAT format;
 	int unk3;
 	int unk4;
+public:
 	char texture_filename[128];
+protected:
 	short unk5;
 	short unk6;
-
+public:
 	virtual TextureMap* GetData();
 	virtual void Unk1() = 0;
 	virtual int Unk2(unsigned int) = 0;
@@ -44,12 +46,11 @@ public:
 	virtual int Unk17() = 0;
 };
 
-class X360TextureMap : public TextureMap
-{
+class X360TextureMap : public TextureMap {
 public:
 	IDirect3DTexture9* texture;
 	IDirect3DCubeTexture9* cube_texture;
-
+public:
 	void Unk1();
 	int Unk2(unsigned int);
 	int Unk3();
@@ -67,4 +68,7 @@ public:
 	int Unk15(int);
 	void Unk16(int);
 	int Unk17();
+
+	int LoadViaD3DX(std::uint8_t*, std::size_t);
+	void ReadDesc();
 };
