@@ -15,13 +15,13 @@ public:
     SearchNode* search_node;
     SearchMethod* search_method;
     unsigned int box_placement_code;
-
+public:
     SearchPlacement();
     SearchPlacement(const SearchPlacement&) = delete;
     SearchPlacement& operator=(const SearchPlacement&) = delete;
     ~SearchPlacement();
 
-	void FreeBlockAllocator();
+    void FreeBlockAllocator();
     void PerformInitialPlacement(SearchableObject*, SearchNode*, unsigned int, Vector4 const*, Vector4 const*, float, int, char*);
     void Remove(SearchableObject*);
     void UpdateNeighbors(SearchableObject*, Vector4 const*, Vector4 const*, float);
@@ -32,10 +32,10 @@ class DynamicSearchableObject : public SearchableObject {
 protected:
     SearchPlacement* placement;
 public:
-	DynamicSearchableObject();
-	DynamicSearchableObject(const DynamicSearchableObject&) = delete;
-	DynamicSearchableObject& operator=(const DynamicSearchableObject&) = delete;
-	virtual ~DynamicSearchableObject() override;
+    DynamicSearchableObject();
+    DynamicSearchableObject(const DynamicSearchableObject&) = delete;
+    DynamicSearchableObject& operator=(const DynamicSearchableObject&) = delete;
+    virtual ~DynamicSearchableObject() override;
 
     void PerformInitialPlacement(SearchNode*, unsigned int, Vector4 const*, Vector4 const*, float, int, int, char*);
     void RemoveFromSearch();
