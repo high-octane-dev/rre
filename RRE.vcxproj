@@ -217,6 +217,7 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClInclude Include="source\loading_icon.hpp" />
     <ClInclude Include="source\material_string_table.hpp" />
     <ClInclude Include="source\math\frect.hpp" />
+    <ClInclude Include="source\math\matrix4x4.hpp" />
     <ClInclude Include="source\math\vector4.hpp" />
     <ClInclude Include="source\panic.hpp" />
     <ClInclude Include="source\parameter_block.hpp" />

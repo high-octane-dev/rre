@@ -1,4 +1,5 @@
 #pragma once
+#include <cstddef>
 #include "base_object.hpp"
 
 class BlockAllocator : public BaseObject {
