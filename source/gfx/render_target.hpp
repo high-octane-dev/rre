@@ -6,11 +6,12 @@
 #include "image_data_format.hpp"
 
 class RenderTarget {
-protected:
+public:
     Camera* camera;
     int width;
     int height;
     int unk_camera_related;
+protected:
     int frame_count;
     int unused;
     int unused2;

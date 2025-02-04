@@ -1,7 +1,7 @@
 #pragma once
 
 class SearchableObject {
-protected:
+private:
 	unsigned short search_time_stamp;
 	unsigned char unk_type;
 	unsigned char flags;

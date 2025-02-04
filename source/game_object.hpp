@@ -24,6 +24,7 @@ private:
 	std::uint32_t wantedEventMask;
 	std::uint32_t descendantsWantedEventMask;
 	std::uint8_t typeID;
+protected:
 	GameObjectFlags flags;
 public:
 	virtual ~GameObject() override;
