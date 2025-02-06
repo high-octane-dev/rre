@@ -1,6 +1,7 @@
 #include "cars_game.hpp"
 #include "data_access.hpp"
 #include "globals.hpp"
+#include "gfx/renderer.hpp"
 #include "gfx/x360_tex_map.hpp"
 #include "gfx/x360_render_target.hpp"
 #include "gfx/x360_video_card.hpp"
@@ -44,8 +45,6 @@ int g_ShowScavengerHuntOverlayInExploreHub = FALSE;
 int g_ScavengerHuntPartGroupInExploreHub = FALSE;
 int g_CheckForXbox360TextureMipMaps = FALSE;
 int g_OnlyLoadXbox360LightMapsFromResourceFile = TRUE;
-
-X360FullScreenRenderPass* g_CurrentFSRP = nullptr;
 
 // OFFSET: 0x0043faf0, STATUS: COMPLETE
 CarsGame::CarsGame() : X360Game() {
@@ -509,7 +508,7 @@ void CarsGame::CreateLoadingIcon(const char* name) {
 void CarsGame::CreateLoadingScreen(const char* name) {
 
     char package_name[260]{};
-    RSStringUtil::Ssnprintf(package_name,0x104,"%s%s%s.%s.res","Res\\Data\\", g_UILocalizedTextureContentDirectory, name,"x360");
+    RSStringUtil::Ssnprintf(package_name, sizeof(package_name), "%s%s%s.%s.res", "Res\\Data\\", g_UILocalizedTextureContentDirectory, name, "x360");
     // Until we implement RES file loading, we should keep any ResourceSetup stuff commented out.
     // ResourceSetup::ResourceSetup(package_name,-1,1,8,0,0,-1,1,0);
 
@@ -517,22 +516,15 @@ void CarsGame::CreateLoadingScreen(const char* name) {
     RSStringUtil::Ssnprintf(texture_name, sizeof(texture_name), "%s%s", g_UILocalizedTextureContentDirectory, name);
     TextureMap* texture_map = X360TexMap::GetTextureMapFromResourceName(texture_name, 555, 0);
     if (texture_map != nullptr) {
-        // FIXME: This is a hack. See definition for `g_CurrentFSRP`.
+        int index = Renderer::PrepareNextRenderFrame();
+        Renderer::PrepareNextRenderDrawList(index);
         g_FullscreenRender.SetTexture(0, texture_map);
-        g_CurrentFSRP = &g_FullscreenRender;
+        Renderer::g_RenderFrameData[index].fullscreen_render_pass = static_cast<X360FullScreenRenderPass*>(&g_FullscreenRender);
+        Renderer::CompleteNextRenderFrame();
         texture_map->Release();
-        /*
-        // always zero
-        iVar2 = FUN_00413600();
-        
-        FUN_00413620(iVar2);
-        g_FullscreenRender.SetTexture(0, texture_map);
-        X360FullScreenTextureRender_ARRAY_006fd378[iVar2 * 4 + 3].unk = &g_FullscreenRender;
-        FUN_00413670(iVar2);
-        
-        texture_map->Release();
-        */
     }
+    // Until we implement RES file loading, we should keep any ResourceSetup stuff commented out.
+    // ResourceSetup::ResourceFinish(package_name,1);
 }
 
 // OFFSET: 0x00487990, STATUS: TODO
@@ -576,7 +568,7 @@ void CarsGame::CreateVirtualNetwork() {
 }
 
 // OFFSET: 0x00422c80, STATUS: TODO
-void CarsGame::UNK_00422c80(int, int) {
+void CarsGame::UNK_00422c80(int render_frame_index, int camera_index) {
 }
 
 // OFFSET: 0x00487470, STATUS: TODO
@@ -595,11 +587,18 @@ void CarsGame::MapAllGameKeys() {
 void CarsGame::PrepareDeferredLoad(DeferredLoad) {
 }
 
-// OFFSET: 0x004237a0, STATUS: TODO
+// OFFSET: 0x004237a0, STATUS: COMPLETE
 void CarsGame::PresentFrame(int draw_fullscreen_render_pass) {
-    // FIXME: This entire implementation is a hack. See definition for ``g_CurrentFSRP``.
-    if (g_CurrentFSRP == nullptr) {
-        // FIXME: Implement this.
+    constexpr auto render_frame_index = 0;
+    if (Renderer::g_RenderFrameData[render_frame_index].fullscreen_render_pass == nullptr) {
+        int next_camera_index = Renderer::g_RenderFrameData[render_frame_index].next_camera;
+        if (Renderer::g_RenderFrameData[render_frame_index].next_camera == 0) {
+            g_VideoCard->DisplayToScreen(1);
+            return;
+        }
+        for (int i = 0; i < Renderer::g_RenderFrameData[render_frame_index].next_camera; i++) {
+            UNK_00422c80(render_frame_index, Renderer::g_RenderFrameData[render_frame_index].camera_indices[i]);
+        }
     }
     else {
         D3DVIEWPORT9 fullscreen_viewport{
@@ -613,11 +612,11 @@ void CarsGame::PresentFrame(int draw_fullscreen_render_pass) {
         g_RenderTarget->SetViewport(&fullscreen_viewport);
         g_RenderTarget->ApplyViewportImpl(1, 1, 1, draw_fullscreen_render_pass);
         if (draw_fullscreen_render_pass != 0) {
-            g_CurrentFSRP->Draw(0);
+            Renderer::g_RenderFrameData->fullscreen_render_pass->Draw(0);
             g_RenderTarget->DrawCursor();
         }
     }
-    g_VideoCard->DisplayToScreen(1);
+    g_VideoCard->DisplayToScreen(0);
 }
 
 // OFFSET: 0x00441b40, STATUS: TODO

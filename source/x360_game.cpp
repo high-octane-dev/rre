@@ -1,5 +1,6 @@
 #include <d3d9.h>
 #include "x360_game.hpp"
+#include "gfx/renderer.hpp"
 #include "gfx/x360_video_card.hpp"
 #include "gfx/x360_shader_manager.hpp"
 #include "gfx/d3d_state_manager.hpp"
@@ -83,11 +84,11 @@ X360Game::X360Game() : Game() {
 X360Game::~X360Game() {
 }
 
-// OFFSET: 0x00421ee0, STATUS: WIP
+// OFFSET: 0x00421ee0, STATUS: COMPLETE
 int X360Game::InitializeRenderer(char(&quit_message)[260]) {
     d3d9 = Direct3DCreate9(D3D_SDK_VERSION);
     if (d3d9 != nullptr) {
-        // FUN_004134e0(); // This function is responsible for initializing a shit-load of globals.
+        Renderer::InitRenderer();
         g_VideoCard = new X360VideoCard();
         if (g_VideoCard != nullptr) {
             g_VideoCard->Create();
