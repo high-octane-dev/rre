@@ -212,9 +212,7 @@ int CarsGame::PreGameInitialize(DisplayMode*) {
     _timeGameInit = timeGetTime();
     */
     RSStringUtil::Ssnprintf(debug_str_file,sizeof(debug_str_file),"%sDebugStr.mst", g_DebugDirectory);
-    /*
-    (*((lpMaterialStringTable->StringTable).vtable)->Load)(%sDebugStr.mst);
-    */
+    // lpMaterialStringTable->Load(debug_str_file);
     RSStringUtil::Ssnprintf(material_template_file, sizeof(material_template_file), "%s%sMaterialTemplate.%s.res", "Res\\Data\\", "C\\Appstart\\", "x360");
 
     if (g_ResBuilding == 0) {
