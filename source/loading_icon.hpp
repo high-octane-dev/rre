@@ -1,9 +1,14 @@
 #pragma once
 #include "parameter_block.hpp"
+#include "gfx/x360_texture_map.hpp"
 
 class LoadingImageIcon {
 public:
-
+    TextureMap* texture_map;
+    unsigned int unk;
+    unsigned int unk2;
+    unsigned int unk3;
+    unsigned int unk4;
 public:
 	LoadingImageIcon();
 	LoadingImageIcon(const LoadingImageIcon&) = delete;
@@ -32,8 +37,8 @@ public:
     bool loop_opacity;
     bool reversable_anim;
     bool reversable_movement;
-    bool reversible_sizing;
-    bool reverse_opacity;
+    bool reversable_sizing;
+    bool reversable_opacity;
     bool end_frame_lt_start;
     bool end_pos_x_lt_start;
     bool end_pos_y_lt_start;
@@ -55,13 +60,16 @@ public:
     float size_y;
     float opacity;
     unsigned int color;
-    float start_time;
+    unsigned int start_time_ms;
     bool color_set;
 public:
 	LoadingIconAnim();
 	LoadingIconAnim(const LoadingIconAnim&) = delete;
 	LoadingIconAnim& operator=(const LoadingIconAnim&) = delete;
 	~LoadingIconAnim();
+    
+    void SetMoveTime(float);
+    void SetSizeTime(float);
 };
 
 class LoadingIcon {

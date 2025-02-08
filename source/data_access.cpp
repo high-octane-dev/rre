@@ -1015,7 +1015,7 @@ void DataAccess::OpenVirtualFile(int resource_handle) {
 // OFFSET: 0x005a96a0, STATUS: TODO
 unsigned int DataAccess::ReadData(VirtualDataDevice* device, VirtualDataFile* file, void* dst, unsigned int dst_len) {
     // "I AM LAZY AND JUST WANT SOMETHING WORKING RAAAAAAAH"
-    // This implementation is just temporarily in place for now... a proper implementation is REQUIRED for loading from a .res file.
+    // FIXME: This implementation is just temporarily in place for now... a proper implementation is REQUIRED for loading from a .res file.
     // Therefore this only works for files loaded from disk.
     fseek(device->file_pointer, device->primary_data_offset + device->offset, 0);
     std::size_t bytes_read = fread(dst, 1, dst_len, device->file_pointer);
