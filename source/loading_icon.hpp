@@ -13,7 +13,50 @@ public:
 
 class LoadingIconAnim {
 public:
-	char* reference_anim;
+	char* reference_name;
+    short start_frame;
+    short end_frame;
+    float start_pos_x;
+    float start_pos_y;
+    float end_pos_x;
+    float end_pos_y;
+    float start_size_x;
+    float start_size_y;
+    float end_size_x;
+    float end_size_y;
+    float start_opacity;
+    float end_opacity;
+    bool loop_anim;
+    bool loop_movement;
+    bool loop_sizing;
+    bool loop_opacity;
+    bool reversable_anim;
+    bool reversable_movement;
+    bool reversible_sizing;
+    bool reverse_opacity;
+    bool end_frame_lt_start;
+    bool end_pos_x_lt_start;
+    bool end_pos_y_lt_start;
+    bool end_size_x_lt_start;
+    bool end_size_y_lt_start;
+    bool end_opacity_lt_start;
+    bool enable_alpha_blending;
+    unsigned short flags;
+    float animate_time;
+    float move_increment_x;
+    float move_increment_y;
+    float size_increment_x;
+    float size_increment_y;
+    float opacity_time;
+    float start_frame_copy;
+    float location_x;
+    float location_y;
+    float size_x;
+    float size_y;
+    float opacity;
+    unsigned int color;
+    float start_time;
+    bool color_set;
 public:
 	LoadingIconAnim();
 	LoadingIconAnim(const LoadingIconAnim&) = delete;
@@ -47,5 +90,5 @@ public:
 	virtual void Update();
 	virtual void RenderIcon(LoadingIconAnim*, LoadingImageIcon*, float, float, float, float, unsigned int) = 0;
 	virtual int Load(ParameterBlock *);
-	virtual void LoadAnimation(ParameterBlock*, struct LoadingIconAnim*);
+	virtual void LoadAnimation(ParameterBlock*, LoadingIconAnim*);
 };

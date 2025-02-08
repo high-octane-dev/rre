@@ -12,18 +12,18 @@ LoadingImageIcon::LoadingImageIcon() {
 LoadingImageIcon::~LoadingImageIcon() {
 }
 
-// OFFSET: 0x005502e0, STATUS: TODO
+// OFFSET: 0x005502e0, STATUS: COMPLETE
 LoadingIconAnim::LoadingIconAnim() {
-	reference_anim = nullptr;
+	reference_name = nullptr;
+	color_set = false;
 }
 
 // OFFSET: INLINE, STATUS: COMPLETE
 LoadingIconAnim::~LoadingIconAnim() {
-	if (reference_anim != nullptr) {
-		delete reference_anim;
+	if (reference_name != nullptr) {
+		delete[] reference_name;
 	}
 }
-
 
 // OFFSET: 0x005503b0, STATUS: COMPLETE
 LoadingIcon::LoadingIcon() {
@@ -40,6 +40,9 @@ LoadingIcon::LoadingIcon() {
 
 // OFFSET: 0x00585de0, STATUS: TODO
 LoadingIcon::~LoadingIcon() {
+	if (animations != nullptr) {
+		delete[] animations;
+	}
 }
 
 // OFFSET: 0x005ed180, STATUS: COMPLETE
@@ -87,20 +90,67 @@ void LoadingIcon::Disable() {
 	unused_callback_data = 0;
 }
 
-// OFFSET: 0x00550410, STATUS: TODO
-void LoadingIcon::SetAnimationLocation(char*, float, float) {
+// OFFSET: 0x00550410, STATUS: COMPLETE
+void LoadingIcon::SetAnimationLocation(char* name, float x, float y) {
+	if (animation_count < 1) {
+		return;
+	}
+	for (std::size_t i = 0; i < animation_count; i++) {
+		if (animations[i].reference_name != nullptr) {
+			if (strcmp(animations[i].reference_name, name) == 0) {
+				animations[i].location_x = x;
+				animations[i].location_y = x;
+			}
+		}
+	}
+	return;
 }
 
-// OFFSET: 0x00550490, STATUS: TODO
-void LoadingIcon::SetAnimationSize(char*, float, float) {
+// OFFSET: 0x00550490, STATUS: COMPLETE
+void LoadingIcon::SetAnimationSize(char* name, float size_x, float size_y) {
+	if (animation_count < 1) {
+		return;
+	}
+	for (std::size_t i = 0; i < animation_count; i++) {
+		if (animations[i].reference_name != nullptr) {
+			if (strcmp(animations[i].reference_name, name) == 0) {
+				animations[i].size_x = size_x;
+				animations[i].size_y = size_y;
+			}
+		}
+	}
+	return;
 }
 
-// OFFSET: 0x00550510, STATUS: TODO
-void LoadingIcon::SetAnimationOpacity(char*, float) {
+// OFFSET: 0x00550510, STATUS: COMPLETE
+void LoadingIcon::SetAnimationOpacity(char* name, float opacity) {
+	if (animation_count < 1) {
+		return;
+	}
+	for (std::size_t i = 0; i < animation_count; i++) {
+		if (animations[i].reference_name != nullptr) {
+			if (strcmp(animations[i].reference_name, name) == 0) {
+				animations[i].opacity = opacity;
+			}
+		}
+	}
+	return;
 }
 
-// OFFSET: 0x00550580, STATUS: TODO
-void LoadingIcon::SetAnimationColor(char*, unsigned int) {
+// OFFSET: 0x00550580, STATUS: COMPLETE
+void LoadingIcon::SetAnimationColor(char* name, unsigned int color) {
+	if (animation_count < 1) {
+		return;
+	}
+	for (std::size_t i = 0; i < animation_count; i++) {
+		if (animations[i].reference_name != nullptr) {
+			if (strcmp(animations[i].reference_name, name) == 0) {
+				animations[i].color = color;
+				animations[i].color_set = true;
+			}
+		}
+	}
+	return;
 }
 
 // OFFSET: 0x00550a90, STATUS: COMPLETE
