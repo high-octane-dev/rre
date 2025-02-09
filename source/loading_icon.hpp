@@ -1,14 +1,13 @@
 #pragma once
-#include "parameter_block.hpp"
 #include "gfx/x360_texture_map.hpp"
+#include "parameter_block.hpp"
 
 class LoadingImageIcon {
 public:
     TextureMap* texture_map;
-    unsigned int unk;
-    unsigned int unk2;
-    unsigned int unk3;
-    unsigned int unk4;
+    unsigned int width;
+    unsigned int height;
+    D3DFORMAT format;
 public:
 	LoadingImageIcon();
 	LoadingImageIcon(const LoadingImageIcon&) = delete;

@@ -162,6 +162,7 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClCompile Include="source\util\rsstring_util.cpp" />
     <ClCompile Include="source\x360_camera.cpp" />
     <ClCompile Include="source\x360_game.cpp" />
+    <ClCompile Include="source\x360_loading_icon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\action_manager.hpp" />
@@ -230,6 +231,7 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClInclude Include="source\util\token_string.hpp" />
     <ClInclude Include="source\x360_camera.hpp" />
     <ClInclude Include="source\x360_game.hpp" />
+    <ClInclude Include="source\x360_loading_icon.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,6 +2,7 @@
 #include <memory>
 #include "x360_game.hpp"
 #include "gfx/x360_full_screen_render_pass.hpp"
+#include "x360_loading_icon.hpp"
 
 enum class XboxLocale {
     None = 0,
@@ -171,7 +172,7 @@ public:
     int enforce_free_camera_speed;
     int unused29;
     int cinema_mode;
-    struct X360LoadingIcon* loading_icon;
+    X360LoadingIcon* loading_icon;
     char loading_screen_name[260];
     char loading_icon_name[260];
     Vector4 char_color1;
