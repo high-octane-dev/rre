@@ -52,7 +52,7 @@ public:
     float size_increment_x;
     float size_increment_y;
     float opacity_time;
-    float start_frame_copy;
+    float current_frame;
     float location_x;
     float location_y;
     float size_x;
@@ -76,7 +76,7 @@ public:
 	std::size_t frame_count;
 	std::size_t animation_count;
 	int refresh_display;
-	int should_lock;
+	int enabled;
 	LoadingIconAnim* animations;
 	LoadingImageIcon* frames;
 	void (*unused_callback)(float, unsigned int);

@@ -36,7 +36,7 @@ LoadingIconAnim::~LoadingIconAnim() {
 void LoadingIconAnim::SetMoveTime(float move_time) {
 	if (0.0 < move_time) {
 		flags = flags & 0xFFF9;
-		float move_time_frame = (move_time * 1000.0f) / 16.66667f;
+		float move_time_frame = (move_time * 1000.0f) / 17.0f;
 		move_increment_x = (end_pos_x - start_pos_x) / move_time_frame;
 		move_increment_y = (end_pos_y - start_pos_y) / move_time_frame;
 		return;
@@ -50,7 +50,7 @@ void LoadingIconAnim::SetMoveTime(float move_time) {
 void LoadingIconAnim::SetSizeTime(float size_time) {
 	if (0.0 < size_time) {
 		flags = flags & 0xFFE7;
-		float size_time_frame = (size_time * 1000.0f) / 16.66667f;
+		float size_time_frame = (size_time * 1000.0f) / 17.0f;
 		size_increment_x = (end_size_x - start_size_x) / size_time_frame;
 		size_increment_y = (end_size_y - start_size_y) / size_time_frame;
 		return;
@@ -65,7 +65,7 @@ LoadingIcon::LoadingIcon() {
 	frame_count = 0;
 	animation_count = 0;
 	refresh_display = 1;
-	should_lock = 0;
+	enabled = 0;
 	frames = nullptr;
 	animations = nullptr;
 	unused_callback = nullptr;
@@ -118,12 +118,12 @@ void LoadingIcon::Create(char* name) {
 // OFFSET: 0x005503e0, STATUS: COMPLETE
 void LoadingIcon::Enable() {
 	enable_timestamp = timeGetTime();
-	should_lock = 1;
+	enabled = 1;
 }
 
 // OFFSET: 0x00550400, STATUS: COMPLETE
 void LoadingIcon::Disable() {
-	should_lock = 0;
+	enabled = 0;
 	enable_timestamp = 0;
 	unused_callback = nullptr;
 	unused_callback_data = 0;
@@ -254,7 +254,7 @@ void LoadingIcon::LoadAnimation(ParameterBlock* file, LoadingIconAnim* anim) {
 	if (end_frame - 1 < start_frame - 1) {
 		anim->end_frame = start_frame - 1;
 	}
-	anim->start_frame_copy = static_cast<float>(std::abs(anim->start_frame));
+	anim->current_frame = static_cast<float>(std::abs(anim->start_frame));
 	anim->end_frame_lt_start = end_frame < start_frame;
 
 	int temp = 0;
@@ -269,7 +269,7 @@ void LoadingIcon::LoadAnimation(ParameterBlock* file, LoadingIconAnim* anim) {
 		anim->animate_time = 0.0f;
 	}
 	else {
-		anim->animate_time = static_cast<float>(std::abs(anim->end_frame - anim->start_frame)) / (1000.0f * animate_time) / 16.66667f;
+		anim->animate_time = static_cast<float>(std::abs(anim->end_frame - anim->start_frame)) / ((1000.0f * animate_time) / 17.0f);
 	}
 
 	float start_pos_x = 0.0f;
@@ -366,6 +366,6 @@ void LoadingIcon::LoadAnimation(ParameterBlock* file, LoadingIconAnim* anim) {
 		anim->flags |= 32;
 	}
 	else {
-		anim->opacity_time = static_cast<float>(std::abs(anim->end_opacity - anim->start_opacity)) / (1000.0f * opacity_time) / 16.66667f;
+		anim->opacity_time = static_cast<float>(std::abs(anim->end_opacity - anim->start_opacity)) / ((1000.0f * opacity_time) / 17.0f);
 	}
 }

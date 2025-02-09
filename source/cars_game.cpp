@@ -500,6 +500,14 @@ void CarsGame::CreateEventDatabase() {
 
 // OFFSET: 0x00441470, STATUS: TODO
 void CarsGame::CreateLoadingIcon(const char* name) {
+    if (loading_icon == nullptr) {
+        loading_icon = new X360LoadingIcon();
+    }
+    char icon_lsi[260]{};
+    RSStringUtil::Ssnprintf(icon_lsi, sizeof(icon_lsi), "%s%s", g_UILocalizedTextureContentDirectory, name);
+    loading_icon->Disable();
+    loading_icon->Create(icon_lsi);
+    loading_icon->Enable();
 }
 
 // OFFSET: 0x00441370, STATUS: WIP

@@ -18,7 +18,7 @@ HANDLE g_GameMutex;
 int g_IsWindowed = 1;
 int g_WindowWidth = 1280;
 int g_WindowHeight = 720;
-float g_TargetFrameRate = 60.0;
+float g_TargetFrameRate = 60.0f;
 char g_ClassName[256]{};
 char g_Caption[256]{};
 char g_DataPCDirectory[256] = {"e:\\dev_Cars2\\DataPC\\"};

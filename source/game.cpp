@@ -5,6 +5,7 @@
 #include "data_access.hpp"
 #include "gfx/x360_video_card.hpp"
 #include "gfx/x360_render_target.hpp"
+#include "gfx/renderer.hpp"
 
 Game* lpGame = nullptr;
 X360MaterialTemplate* lpSceneObjectMaterialTemplate = nullptr;
@@ -257,13 +258,26 @@ int Game::Deactivate() {
 void Game::PrepareFrame() {
 }
 
-// OFFSET: 0x00617370, STATUS: TODO
+// OFFSET: 0x00617370, STATUS: COMPLETE
 int Game::UpdateScreen() {
-    return 0;
+    g_RenderTarget->Unk8(1);
+    g_VideoCard->DisplayToScreen(0);
+    return 1;
 }
 
 // OFFSET: 0x006173c0, STATUS: TODO
 int Game::Tick() {
+    /*
+    int index = unk;
+    while (index != 0) {
+        index = Renderer::PrepareNextRenderFrame();
+        Renderer::CompleteNextRenderFrame();
+        index = unk;
+    }
+    if ((flags & 8) == 0) {
+        g_RenderTarget->IncrementFrameCount();
+    }
+    */
     return 0;
 }
 

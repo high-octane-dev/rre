@@ -474,9 +474,9 @@ int X360RenderTarget::Blt(FRECT* dest, TextureMap* texture, FRECT* unused0, unsi
 		float inv_half_width = 1.0f / (g_ViewportWidth * 0.5f);
 		float inv_half_height = 1.0f / (g_ViewportHeight * 0.5f);
 		clip_space_dest[0] = inv_half_width * dest->x1 - 1.0f;
-		clip_space_dest[2] = inv_half_width * dest->x2 - 1.0f;
+		clip_space_dest[2] = inv_half_width * dest->y2 - 1.0f;
 		clip_space_dest[1] = 1.0f - inv_half_height * dest->y1;
-		clip_space_dest[3] = 1.0f - inv_half_height * dest->y2;
+		clip_space_dest[3] = 1.0f - inv_half_height * dest->x2;
 	}
 
 	Vector4 shader_color_scale = {

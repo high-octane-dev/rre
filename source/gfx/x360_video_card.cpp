@@ -44,7 +44,7 @@ void X360VideoCard::Create() {
             g_D3DDevice9 = g_lpD3DDeviceManager->device;
             g_D3DDevice9->AddRef();
             capabilities = g_lpD3DDeviceManager->adapter_list.data[g_lpD3DDeviceManager->adapter_index]->capabilities;
-            g_TargetFrameRate = 60.0;
+            g_TargetFrameRate = 60.0f;
             g_lpD3DStateManager = new D3DStateManager();
         }
     }

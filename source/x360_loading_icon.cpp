@@ -27,7 +27,7 @@ static void ClearLoadingTips() {
 
 // OFFSET: 0x00405fe0, STATUS: COMPLETE
 X360LoadingIcon::~X360LoadingIcon() {
-    if (should_lock != 0) {
+    if (enabled != 0) {
         Disable();
     }
     ClearLoadingTips();
@@ -35,7 +35,7 @@ X360LoadingIcon::~X360LoadingIcon() {
 
 // OFFSET: 0x00405370, STATUS: COMPLETE
 void X360LoadingIcon::Enable() {
-    if (loading_screen == NULL) {
+    if (loading_screen == nullptr) {
         char loading_screen_name[260]{};
         // This is an intentional innacuracy to fix load_logo erroneously always being used (this bug is in the original game).
         RSStringUtil::Ssnprintf(loading_screen_name, sizeof(loading_screen_name), "%s\\%s", g_UILocalizedTextureContentDirectory, lpCarsGame->loading_screen_name);
@@ -52,57 +52,101 @@ void X360LoadingIcon::Enable() {
     LoadingIcon::Enable();
 }
 
-// OFFSET: 0x00405d30, STATUS: TODO
+// OFFSET: 0x00405d30, STATUS: WIP
 void X360LoadingIcon::Disable() {
+    if (enabled != 0) {
+        SetEvent(present_frame_lock);
+        WaitForSingleObject(thread_handle, INFINITE);
+        CloseHandle(thread_handle);
+        CloseHandle(present_frame_lock);
+        DeleteCriticalSection(&lock);
+        if (loading_screen != nullptr) {
+            loading_screen->Release();
+            loading_screen = nullptr;
+        }
+        if (duplicate_proc_handle != nullptr) {
+            CloseHandle(duplicate_proc_handle);
+        }
+        thread_handle = nullptr;
+        duplicate_proc_handle = nullptr;
+        present_frame_lock = nullptr;
+        LoadingIcon::Disable();
+        if (footer_bar != nullptr) {
+            footer_bar->Release();
+            footer_bar = nullptr;
+        }
+        if (font_texture != nullptr) {
+            font_texture->Release();
+            font_texture = nullptr;
+        }
+        /*
+        if (text_icons[0] != nullptr) {
+            delete text_icons[0];
+        }
+        if (text_icons[1] != nullptr) {
+            delete text_icons[1];
+        }
+        */
+        if (icon_vertex != nullptr) {
+            delete icon_vertex;
+            icon_vertex = nullptr;
+        }
+        if (icon_pixel != nullptr) {
+            delete icon_pixel;
+            icon_pixel = nullptr;
+        }
+        return;
+    }
+    return;
 }
 
 // OFFSET: 0x004050c0, STATUS: COMPLETE
 void X360LoadingIcon::SetAnimationLocation(char* name, float x, float y) {
-    if (should_lock != 0) {
+    if (enabled != 0) {
         EnterCriticalSection(&lock);
     }
     LoadingIcon::SetAnimationLocation(name, x, y);
-    if (should_lock != 0) {
+    if (enabled != 0) {
         LeaveCriticalSection(&lock);
     }
 }
 
 // OFFSET: 0x00405110, STATUS: COMPLETE
 void X360LoadingIcon::SetAnimationSize(char* name, float size_x, float size_y) {
-    if (should_lock != 0) {
+    if (enabled != 0) {
         EnterCriticalSection(&lock);
     }
     LoadingIcon::SetAnimationSize(name, size_x, size_y);
-    if (should_lock != 0) {
+    if (enabled != 0) {
         LeaveCriticalSection(&lock);
     }
 }
 
 // OFFSET: 0x00405160, STATUS: COMPLETE
 void X360LoadingIcon::SetAnimationOpacity(char* name, float opacity) {
-    if (should_lock != 0) {
+    if (enabled != 0) {
         EnterCriticalSection(&lock);
     }
     LoadingIcon::SetAnimationOpacity(name, opacity);
-    if (should_lock != 0) {
+    if (enabled != 0) {
         LeaveCriticalSection(&lock);
     }
 }
 
 // OFFSET: 0x004051a0, STATUS: COMPLETE
 void X360LoadingIcon::SetAnimationColor(char* name, unsigned int color) {
-    if (should_lock != 0) {
+    if (enabled != 0) {
         EnterCriticalSection(&lock);
     }
     LoadingIcon::SetAnimationColor(name, color);
-    if (should_lock != 0) {
+    if (enabled != 0) {
         LeaveCriticalSection(&lock);
     }
 }
 
 // OFFSET: 0x00405270, STATUS: COMPLETE
 void X360LoadingIcon::Update() {
-    EnterCriticalSection(&this->lock);
+    EnterCriticalSection(&lock);
     if (loading_screen != nullptr) {
         g_RenderTarget->Blt(nullptr, loading_screen, nullptr, 0, 1, 1, 0xFFFFFFFF);
     }
@@ -111,11 +155,18 @@ void X360LoadingIcon::Update() {
         UpdateAnimationState(&animations[i]);
         RenderAnimation(&animations[i]);
     }
-    LeaveCriticalSection(&this->lock);
+    LeaveCriticalSection(&lock);
 }
 
-// OFFSET: 0x004051e0, STATUS: TODO
-void X360LoadingIcon::RenderIcon(LoadingIconAnim*, LoadingImageIcon*, float, float, float, float, unsigned int) {
+// OFFSET: 0x004051e0, STATUS: COMPLETE
+void X360LoadingIcon::RenderIcon(LoadingIconAnim* anim, LoadingImageIcon* icon, float x, float y, float width, float height, unsigned int color) {
+    FRECT rect{
+        g_UIScaleX * x,
+        g_UIScaleY * y,
+        (x + width) * g_UIScaleX,
+        g_UIScaleY * (y + height),
+    };
+    g_RenderTarget->Blt(&rect, icon->texture_map, nullptr, 0, 1, anim->enable_alpha_blending, color);
 }
 
 // OFFSET: 0x00404d50, STATUS: WIP
@@ -124,7 +175,7 @@ int X360LoadingIcon::Load(ParameterBlock* file) {
         for (std::size_t i = 0; i < frame_count; i++) {
             char texture_name[260]{};
             // FIXME: make texture loader change extension to match original game, and change it here to .xnt
-            RSStringUtil::Ssnprintf(texture_name, sizeof(texture_name), "frame%02d.dds", i + 1);
+            RSStringUtil::Ssnprintf(texture_name, sizeof(texture_name), "frame%02d", i + 1);
             frames[i].texture_map = X360TexMap::GetTextureMapFromResourceName(texture_name, 1555, 0);
             D3DSURFACE_DESC desc{};
             static_cast<X360TextureMap*>(frames[i].texture_map)->texture->GetLevelDesc(0, &desc);
@@ -139,7 +190,7 @@ int X360LoadingIcon::Load(ParameterBlock* file) {
 
 // OFFSET: 0x00405d10, STATUS: COMPLETE
 void X360LoadingIcon::Draw(int index) {
-    if (should_lock != 0) {
+    if (enabled != 0) {
         Update();
         SetRenderStates();
     }
@@ -153,14 +204,133 @@ void X360LoadingIcon::InitLoadingTips(unsigned int, char*) {
 void X360LoadingIcon::InitFooterResources() {
 }
 
-// OFFSET: 0x005509e0, STATUS: TODO
-void X360LoadingIcon::RenderAnimation(LoadingIconAnim*) {
+// OFFSET: 0x005509e0, STATUS: COMPLETE
+void X360LoadingIcon::RenderAnimation(LoadingIconAnim* anim) {
+    int frame = static_cast<int>(std::nearbyint(std::roundf(anim->current_frame)));
+    unsigned int color = 0xFFFFFFFF;
+    if (anim->color_set) {
+        color = anim->color;
+    }
+    RenderIcon(anim, &frames[frame], anim->location_x - anim->size_x * 0.5f, anim->location_y - anim->size_y * 0.5f, anim->size_x, anim->size_y, color);
 }
 
 // OFFSET: 0x00405550, STATUS: TODO
 void X360LoadingIcon::SetRenderStates()	{
 }
 
-// OFFSET: 0x005505f0, STATUS: TODO
-void X360LoadingIcon::UpdateAnimationState(LoadingIconAnim*) {
+// OFFSET: 0x005505f0, STATUS: COMPLETE
+void X360LoadingIcon::UpdateAnimationState(LoadingIconAnim* anim) {
+    if (anim->flags == 0x7F) {
+        return;
+    }
+
+    if ((anim->flags & 0x40) != 0) {
+        if (timeGetTime() - enable_timestamp < anim->start_time_ms) {
+            return;
+        }
+        anim->flags &= 0xFFBF;
+    }
+
+    if (!(anim->flags & 1)) {
+        if (!anim->end_frame_lt_start) {
+            anim->current_frame += anim->animate_time;
+            if ((anim->end_frame < anim->current_frame) != (anim->end_frame == anim->current_frame)) {
+                if (!anim->loop_anim) {
+                    anim->flags |= 1;
+                    anim->current_frame = anim->end_frame;
+                }
+                else if (!anim->reversable_anim) {
+                    anim->current_frame -= (anim->end_frame - anim->start_frame);
+                }
+                else {
+                    anim->end_frame_lt_start = true;
+                    anim->current_frame = anim->end_frame;
+                }
+            }
+        }
+        else {
+            anim->current_frame -= anim->animate_time;
+            if (anim->current_frame <= anim->start_frame) {
+                if (!anim->loop_anim) {
+                    anim->flags |= 1;
+                    anim->current_frame = anim->start_frame;
+                }
+                else if (!anim->reversable_anim) {
+                    anim->current_frame = anim->end_frame;
+                }
+                else {
+                    anim->end_frame_lt_start = false;
+                    anim->current_frame = anim->start_frame;
+                }
+            }
+        }
+    }
+
+    if (!(anim->flags & 2)) {
+        if (!anim->end_pos_x_lt_start) {
+            anim->location_x += anim->move_increment_x;
+            if ((anim->end_pos_x < anim->location_x) != (anim->end_pos_x == anim->location_x)) {
+                if (!anim->loop_movement) {
+                    anim->flags |= 2;
+                }
+                else if (!anim->reversable_movement) {
+                    anim->location_x = anim->start_pos_x;
+                }
+                else {
+                    anim->end_pos_x_lt_start = true;
+                    anim->location_x = anim->end_pos_x;
+                }
+            }
+        }
+        else {
+            anim->location_x -= anim->move_increment_x;
+            if (anim->location_x <= anim->start_pos_x) {
+                if (!anim->loop_movement) {
+                    anim->flags |= 2;
+                    anim->location_x = anim->start_pos_x;
+                }
+                else if (!anim->reversable_movement) {
+                    anim->location_x = anim->end_pos_x;
+                }
+                else {
+                    anim->end_pos_x_lt_start = false;
+                    anim->location_x = anim->start_pos_x;
+                }
+            }
+        }
+    }
+
+    if (!(anim->flags & 4)) {
+        anim->location_y += anim->move_increment_y;
+        if ((anim->end_pos_y_lt_start && anim->location_y <= anim->end_pos_y) ||
+            (!anim->end_pos_y_lt_start && anim->location_y >= anim->end_pos_y)) {
+            if (!anim->loop_movement) {
+                anim->flags |= 4;
+            }
+            else if (!anim->reversable_movement) {
+                anim->location_y = anim->start_pos_y;
+            }
+            else {
+                anim->end_pos_y_lt_start = !anim->end_pos_y_lt_start;
+                anim->location_y = anim->end_pos_y;
+            }
+        }
+    }
+
+    if (!(anim->flags & 0x20)) {
+        anim->opacity += anim->opacity_time;
+        if ((anim->end_opacity_lt_start && anim->opacity <= anim->start_opacity) ||
+            (!anim->end_opacity_lt_start && anim->opacity >= anim->end_opacity)) {
+            if (!anim->loop_opacity) {
+                anim->flags |= 0x20;
+            }
+            else if (!anim->reversable_opacity) {
+                anim->opacity = anim->start_opacity;
+            }
+            else {
+                anim->end_opacity_lt_start = !anim->end_opacity_lt_start;
+                anim->opacity = anim->end_opacity;
+            }
+        }
+    }
 }
