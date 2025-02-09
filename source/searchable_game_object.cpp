@@ -14,5 +14,5 @@ SearchableGameObject::SearchableGameObject(bool startEnabled) : game_object(star
 int SearchableGameObject::DoPrepareGeometry()
 {
 	game_object.PrepareGeometry();
-    return 1;
+	return 1;
 }
