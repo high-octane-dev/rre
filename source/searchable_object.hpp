@@ -1,11 +1,11 @@
 #pragma once
 
 class SearchableObject {
-private:
+public:
 	unsigned short search_time_stamp;
 	unsigned char unk_type;
 	unsigned char flags;
-public:
+
 	virtual ~SearchableObject();
 	inline void SetSearchTimeStamp(unsigned short time_stamp) {
 		search_time_stamp = time_stamp;
