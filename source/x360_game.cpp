@@ -72,11 +72,11 @@ void SetDisplayModeGlobal(DisplayMode* display_mode) {
 
 // OFFSET: 0x00421cd0, STATUS: COMPLETE
 X360Game::X360Game() : Game() {
-    unused17 = 0;
-    d3d9 = nullptr;
-    unused18 = 0;
     unused19 = 0;
+    d3d9 = nullptr;
     unused20 = 0;
+    unused21 = 0;
+    unused22 = 0;
     hwnd = nullptr;
 }
 
@@ -109,7 +109,8 @@ int X360Game::PreGameInitialize(DisplayMode* desired_display_mode) {
     hwnd = g_HWNDReal;
     UpdateLocalizedPaths();
     if (desired_display_mode == nullptr) {
-        DisplayMode display_mode{ .field0_0x0 = 0, .screen_mode = 1, .fps = 60.0 };
+        // FIXME: This is an intentional innacuracy to get the game running in widescreen by default.
+        DisplayMode display_mode{ .field0_0x0 = 0, .screen_mode = 2, .fps = 60.0f };
         SetDisplayModeGlobal(&display_mode);
         g_ViewportWidth = g_WindowWidth;
         g_ViewportHeight = g_WindowHeight;
@@ -210,6 +211,13 @@ int X360Game::SetBasicRenderStates() {
 
 // OFFSET: 0x00423060, STATUS: TODO
 void X360Game::PrepareFrame() {
+    unused10 = unused11;
+    unused11 = 0;
+    rendered_objects = 0;
+    // Disable all cameras
+
+    int index = Renderer::PrepareNextRenderFrame();
+    Renderer::g_RenderFrameData[index].should_unk = 1;
 }
 
 // OFFSET: 0x00422010, STATUS: TODO

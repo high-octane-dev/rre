@@ -65,23 +65,23 @@ public:
     int viewport_index;
     int paused_frame_count;
     GameObject* parent_game_object;
-    int unused20;
-    int unused21;
+    int unused10;
+    int unused11;
     int rendered_objects;
     LinkedList<TimeIntervalCallback*> time_interval_callbacks;
     int enable_statistics_logging;
     struct StatisticsLog* statistics_log;
-    int unused10;
-    struct ScreenTextFontManager* screen_text_font_manager;
-    int unused11;
     int unused12;
+    struct ScreenTextFontManager* screen_text_font_manager;
+    int unused13;
+    int unused14;
     float smoothed_fractional_sec_game_time;
     float min_fractional_sec_game_time;
     float max_fractional_sec_game_time;
     int frames_in_sec;
-    float unused13;
-    float unused14;
-    int unused15;
+    float unused15;
+    float unused16;
+    int unused17;
     int should_calc_time_within_sec;
     ContainerList<char*> language_prefixes;
     ContainerList<LanguageDefinition*> lang_defs;
@@ -89,7 +89,7 @@ public:
     char selected_language_configuration_name[32];
     LanguageConfiguration* selected_language_configuration;
     int use_dashboard_locale;
-    int unused16;
+    int unused18;
 public:
     Game();
 

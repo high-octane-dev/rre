@@ -270,11 +270,15 @@ int Game::Tick() {
     /*
     int index = unk;
     while (index != 0) {
-        index = Renderer::PrepareNextRenderFrame();
+        Renderer::PrepareNextRenderFrame();
         Renderer::CompleteNextRenderFrame();
         index = unk;
     }
+    if (screen_fade_complete == 0 && 10 < this->world_ticks) {
+        flags = flags ^ ((unk & 0xFF) * 8 ^ flags) & 8;
+    }
     if ((flags & 8) == 0) {
+        PrepareFrame();
         g_RenderTarget->IncrementFrameCount();
     }
     */

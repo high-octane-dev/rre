@@ -87,25 +87,25 @@ CarsGame::CarsGame() : X360Game() {
     char_color1 = Vector4(0, 0, 0, 1);
     char_color2 = Vector4(0, 0, 0, 1);
     vehicle_manual_transmission = 0;
-    unused22 = nullptr;
+    unused24 = nullptr;
     total_laps = 3;
     no_321 = 0;
     build_spline_mode = 0;
-    unused26 = 0;
+    unused28 = 0;
     analog_gas = 0;
     show_coords = 1;
     dump_results = 0;
-    unused27 = 0;
+    unused29 = 0;
     world_paused = 0;
     unlock_all = 0;
     unlock_all_abilities = 0;
-    unused28 = 0;
+    unused30 = 0;
     enforce_free_camera_speed = 1;
-    unused29 = 0;
+    unused31 = 0;
     cinema_mode = 0;
     loop_cutscenes = 0;
     loading_tip_preview = 0;
-    unused23[0] = 0;
+    unused25[0] = 0;
     splash_screen[0] = '\0';
     RSStringUtil::Ssnprintf(splash_screen, sizeof(splash_screen), "load_logo");
     loading_icon = nullptr;
@@ -299,7 +299,7 @@ int CarsGame::PreGameInitialize(DisplayMode*) {
         // Until we implement RES file loading, we should keep any ResourceSetup stuff commented out.
         // ResourceSetup::ResourceFinish(material_template_file,1);
     }
-
+    
     return 1;
 }
 
@@ -475,7 +475,7 @@ void CarsGame::EndAutoTest(int) {
 
 // OFFSET: 0x004f51d0, STATUS: TODO
 int CarsGame::Tick() {
-    return 1;
+    return 0;
 }
 
 // OFFSET: 0x00440320, STATUS: TODO
@@ -645,6 +645,33 @@ void CarsGame::CreateVirtualNetwork() {
 
 // OFFSET: 0x00422c80, STATUS: TODO
 void CarsGame::UNK_00422c80(int render_frame_index, int camera_index) {
+    g_RenderTarget->SetViewport(&Renderer::g_Viewports[camera_index]);
+    // g_RenderTarget->used_camera = &g_Cameras[camera_index];
+    g_RenderTarget->unk_filter_index = 0;
+    if (Renderer::g_RenderFrameData[render_frame_index].should_unk != 0) {
+        if (g_RenderTarget->used_camera->enable_perspective == 0) {
+            int should_draw_cursor = SetBasicRenderStates();
+            g_RenderTarget->ApplyViewportImpl(1, 1, 1, 1);
+            if (should_draw_cursor != 0) {
+                // SurfaceShaderList::FUN_0040cd00(lpSurfaceShaderList, camera_index, 0);
+                g_RenderTarget->DrawCursorImpl();
+            }
+        }
+        else {
+            if (g_VideoCard->IsFXEnabled()) {
+                SetBasicRenderStates();
+                int should_end = g_RenderTarget->DrawFullscreenEffects();
+                if (should_end != 0) {
+                    // SurfaceShaderList::FUN_0040cd00(lpSurfaceShaderList, camera_index, 1);
+                    g_RenderTarget->EndFrame();
+                }
+            }
+        }
+    }
+    g_RenderTarget->Clear();
+    unused11 += g_RenderTarget->unk_increment;
+    unk_game_state = 0;
+    return;
 }
 
 // OFFSET: 0x00487470, STATUS: TODO
@@ -718,7 +745,7 @@ void CarsGame::SetConfigArguments() {
     scene[0] = '\0';
     scene_name[0] = '\0';
     RSStringUtil::Ssnprintf(splash_screen, sizeof(splash_screen), "load_logo");
-    unused24 = 0;
+    unused26 = 0;
     char_number = 0;
     strncpy(char_name, "McQ", 4);
     char_paint_type = 1;
@@ -804,20 +831,18 @@ void CarsGame::SetLanguageToDefault() {
     }
 }
 
-// OFFSET: 0x00441570, STATUS: WIP
+// OFFSET: 0x00441570, STATUS: COMPLETE
 int CarsGame::ShowLoadingScreen(const char* _loading_screen, const char* _loading_icon, int is_first) {
     if (is_first == 0 && _loading_icon != nullptr && _loading_screen != nullptr) {
         if (_stricmp(_loading_screen, loading_screen_name) == 0 && _stricmp(_loading_icon, loading_icon_name) == 0) {
             return 1;
         }
     }
-    /*
     if (loading_icon != nullptr) {
         loading_icon->Disable();
         delete loading_icon;
         loading_icon = nullptr;
     }
-    */
     if (_loading_screen == nullptr) {
         loading_screen_name[0] = '\0';
     }

@@ -126,17 +126,17 @@ public:
     struct Cars2StoryManager* story_manager;
     struct Cars2EventJoinPointManager* event_join_point_manager;
     struct Cars2UIResourceManager* ui_resource_manager;
-    GameObject* unused22;
+    GameObject* unused24;
     char scene[64];
     char scene_name[64];
     char activity[64];
     char start[64];
-    char unused23[64];
+    char unused25[64];
     char splash_screen[64];
     char player_start[64];
     char ai_names[64];
-    int unused24;
-    int unused25;
+    int unused26;
+    int unused27;
     int no_321;
     int total_laps;
     int use_vehicle_engine_sound;
@@ -153,13 +153,13 @@ public:
     int vehicle_manual_transmission;
     int number_of_players;
     int number_of_ai;
-    int unused26;
+    int unused28;
     int load_ai;
     unsigned int viewport_type;
     int analog_gas;
     int show_coords;
     int dump_results;
-    int unused27;
+    int unused29;
     unsigned int control_type;
     unsigned int camera_type;
     DeferredLoad deferred_load;
@@ -168,9 +168,9 @@ public:
     int force_stub_mode;
     int unlock_all_abilities;
     int unlock_all_bonus_content;
-    int unused28;
+    int unused30;
     int enforce_free_camera_speed;
-    int unused29;
+    int unused31;
     int cinema_mode;
     X360LoadingIcon* loading_icon;
     char loading_screen_name[260];
@@ -185,7 +185,7 @@ public:
     int always_show_gps;
     int show_lap_timer;
     CheatCode cheat_codes[11];
-    int unused30;
+    int unused32;
 public:
     CarsGame();
 

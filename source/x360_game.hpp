@@ -20,12 +20,12 @@ extern float g_AspectRatios[3];
 
 class X360Game : public Game {
 public:
+	int unused21;
+	int unused22;
 	int unused19;
 	int unused20;
-	int unused17;
-	int unused18;
 	HWND hwnd;
-	char unused21[16];
+	char unused23[16];
 	IDirect3D9* d3d9;
 public:
 	X360Game();
