@@ -147,6 +147,76 @@ CarsGame::CarsGame() : X360Game() {
     starting_bonus_points = 0;
 }
 
+// OFFSET: 0x0051a420, STATUS: TODO
+CarsGame::~CarsGame() {
+    /*
+    if (screen_text_font_manager != nullptr) {
+        delete screen_text_font_manager;
+        screen_text_font_manager = nullptr;
+    }
+    if (settings != nullptr) {
+        delete settings;
+        settings = nullptr;
+    }
+    if (bolt_manager != nullptr) {
+        delete bolt_manager;
+        bolt_manager = nullptr;
+    }
+    if (pickup_manager != nullptr) {
+        delete pickup_manager;
+        pickup_manager = nullptr;
+    }
+    if (scavenger_hunt_manager != nullptr) {
+        delete scavenger_hunt_manager;
+        scavenger_hunt_manager = nullptr;
+    }
+    if (bonus_point_manager != nullptr) {
+        delete bonus_point_manager;
+        bonus_point_manager = nullptr;
+    }
+    if (event_join_point_manager != nullptr) {
+        delete event_join_point_manager;
+        event_join_point_manager = nullptr;
+    }
+    if (ui_resource_manager != nullptr) {
+        delete ui_resource_manager;
+        ui_resource_manager = nullptr;
+    }
+    if (event_database != nullptr) {
+        delete event_database;
+        event_database = nullptr;
+    }
+    if (activity_database != nullptr) {
+        delete activity_database;
+        activity_database = nullptr;
+    }
+    if (scene_database != nullptr) {
+        delete scene_database;
+        scene_database = nullptr;
+    }
+    if (vehicle_database != nullptr) {
+        delete vehicle_database;
+        vehicle_database = nullptr;
+    }
+    if (story_manager != nullptr) {
+        delete story_manager;
+        story_manager = nullptr;
+    }
+    if (hall_of_fame != nullptr) {
+        delete hall_of_fame;
+        hall_of_fame = nullptr;
+    }
+    if (personal_records != nullptr) {
+        delete personal_records;
+        personal_records = nullptr;
+    }
+    if (g_lpVirtualNetwork != nullptr) {
+        g_lpVirtualNetwork->Release();
+        g_lpVirtualNetwork = nullptr;
+    }
+    */
+}
+
 // OFFSET: 0x004f50a0, STATUS: WIP
 int CarsGame::InitializeRenderer(char (&quit_message)[260]) {
     SetLanguageToDefault();

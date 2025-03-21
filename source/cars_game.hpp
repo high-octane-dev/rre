@@ -189,6 +189,7 @@ public:
 public:
     CarsGame();
 
+    virtual ~CarsGame() override;
     virtual int InitializeRenderer(char(&quit_message)[260]) override;
     virtual int Initialize() override;
     virtual int PreGameInitialize(DisplayMode*) override;
