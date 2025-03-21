@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include "renderer.hpp"
+#include "x360_game.hpp"
 
 Renderer::RenderFrameData Renderer::g_RenderFrameData[1] = {};
 int Renderer::s_NextFrameBufferToPrepare = 0;

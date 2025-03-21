@@ -35,8 +35,8 @@ private:
     RBVIEWPORT viewport;
 public:
     Camera* used_camera;
-private:
     int unk_filter_index;
+private:
     int unused13;
     X360VertexBufferManager* vertex_buffer_manager;
     X360IndexBufferManager* index_buffer_manager;

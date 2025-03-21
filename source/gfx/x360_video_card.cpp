@@ -4,6 +4,7 @@
 #include "cars_game.hpp"
 #include "globals.hpp"
 #include "cursor.hpp"
+#include "renderer.hpp"
 
 X360VideoCard* g_VideoCard = nullptr;
 IDirect3DDevice9* g_D3DDevice9 = nullptr;
@@ -100,7 +101,7 @@ int X360VideoCard::DisplayToScreen(int inc_frame_count) {
     if (should_inc_frame_count == 0 && inc_frame_count == 0) {
         current_frame = current_frame + 1;
     }
-    Sleep(0);
+    Renderer::UNK_00413690();
     return 1;
 }
 

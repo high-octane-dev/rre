@@ -24,7 +24,9 @@ protected:
     int unused5;
     int unused6;
     int unused7;
+public:
     int unk_increment;
+protected:
     float minimum_fog_distance;
     float maximum_fog_distance;
 public:

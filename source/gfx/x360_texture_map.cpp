@@ -30,8 +30,8 @@ int X360TextureMap::LoadFromContainer(int resource_handle) {
 	D3DSURFACE_DESC desc{};
 
 	unused_zero = 0;
-	std::size_t file_size = 0;
-	lpDataAccess->FRead(resource_handle, &file_size, 4, 1);
+	std::uint32_t file_size = 0;
+	lpDataAccess->FRead(resource_handle, &file_size, sizeof(std::uint32_t), 1);
 	if (g_EnableEndianSwapping == 0) {
 		file_size = std::byteswap(file_size);
 	}
