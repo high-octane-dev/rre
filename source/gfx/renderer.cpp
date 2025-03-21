@@ -4,6 +4,7 @@
 Renderer::RenderFrameData Renderer::g_RenderFrameData[1] = {};
 int Renderer::s_NextFrameBufferToPrepare = 0;
 int Renderer::g_X360TotalFramesPrepared = 0;
+D3DVIEWPORT9 Renderer::g_Viewports[4] = {};
 
 // OFFSET: 0x00413670, STATUS: COMPLETE
 void Renderer::CompleteNextRenderFrame() {
@@ -21,15 +22,17 @@ void Renderer::InitRenderer() {
     g_RenderFrameData[0].next_camera = 0;
     g_RenderFrameData[0].camera_indices[0] = 0;
     g_RenderFrameData[0].should_unk = 0;
-    g_RenderFrameData[0].fullscreen_render_pass = NULL;
+    g_RenderFrameData[0].fullscreen_render_pass = nullptr;
     g_RenderFrameData[0].camera_indices[1] = 1;
     g_RenderFrameData[0].camera_indices[2] = 2;
     g_RenderFrameData[0].camera_indices[3] = 3;
+
     /*
     InitializeCriticalSection(&lpCriticalSection_006fd398);
     InitializeCriticalSection(&lpCriticalSection_006fd3b0);
     InitializeCriticalSection(&lpCriticalSection_006fd360);
     InitializeCriticalSection(&lpCriticalSection_006fd348);
+    */
     g_Viewports[0].X = PlatformGraphics_BackBufferViewport_OffsetX;
     g_Viewports[0].Y = PlatformGraphics_BackBufferViewport_OffsetY;
     g_Viewports[0].MinZ = 0.0;
@@ -57,7 +60,6 @@ void Renderer::InitRenderer() {
     g_Viewports[3].MaxZ = 1.0;
     g_Viewports[3].Height = g_CameraHeight;
     g_Viewports[3].Width = g_CameraWidth;
-    */
 }
 
 // OFFSET: 0x00413600, STATUS: COMPLETE
