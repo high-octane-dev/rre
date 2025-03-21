@@ -25,6 +25,20 @@ static unsigned int __stdcall LoadingIconThreadEntryPoint(X360LoadingIcon* _this
 static void ClearLoadingTips() {
 }
 
+// OFFSET: 0x004052f0, STATUS: WIP
+X360LoadingIcon::X360LoadingIcon() : LoadingIcon() {
+    loading_screen = nullptr;
+    thread_handle = nullptr;
+    duplicate_proc_handle = nullptr;
+    present_frame_lock = nullptr;
+    footer_bar = nullptr;
+    font_texture = nullptr;
+    text_icons[0] = nullptr;
+    text_icons[1] = nullptr;
+    icon_vertex = nullptr;
+    icon_pixel = nullptr;
+}
+
 // OFFSET: 0x00405fe0, STATUS: COMPLETE
 X360LoadingIcon::~X360LoadingIcon() {
     if (enabled != 0) {

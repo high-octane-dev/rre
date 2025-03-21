@@ -20,6 +20,7 @@ public:
 	unsigned int footer_state;
 	int loading_tip_index;
 public:
+	X360LoadingIcon();
 	virtual ~X360LoadingIcon() override;
 	virtual void Enable() override;
 	virtual void Disable() override;
