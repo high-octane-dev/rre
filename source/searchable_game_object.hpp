@@ -1,10 +1,8 @@
 #include "game_object.hpp"
 #include "dynamic_searchable_object.hpp"
 
-class SearchableGameObject : public DynamicSearchableObject
-{
+class SearchableGameObject : public DynamicSearchableObject, public GameObject {
 public:
 	SearchableGameObject(bool startEnabled);
-	GameObject game_object;
 	virtual int DoPrepareGeometry();
 };

@@ -28,8 +28,12 @@ void SearchPlacement::UpdateNeighbors(SearchableObject*, Vector4 const*, Vector4
 void SearchPlacement::UpdatePlacement(SearchableObject*, Vector4 const*, Vector4 const*, float) {
 }
 
-// OFFSET: INLINE, STATUS: TODO
+// OFFSET: INLINE, STATUS: COMPLETE
 DynamicSearchableObject::DynamicSearchableObject() {
+	searchable_object_flags &= 0x8F;
+	unk_type = 9;
+	search_time_stamp = 0;
+	placement = nullptr;
 }
 
 // OFFSET: 0x005c7d30, STATUS: TODO
