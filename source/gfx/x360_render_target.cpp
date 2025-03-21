@@ -127,9 +127,10 @@ void X360RenderTarget::ApplyViewportImpl(int clear_surface, int clear_depth_buff
 
 	float w = std::abs(static_cast<float>(viewport.Width));
 	float h = std::abs(static_cast<float>(viewport.Height));
-	Vector4 constant{ 2.0f / w, -2.0f / h, -1.0f, 1.0f };
-	g_D3DDevice9->SetVertexShaderConstantF(34, &constant.x, 1);
-	g_D3DDevice9->SetVertexShaderConstantF(35, &constant.x, 1);
+	Vector4 constant_34{ 2.0f / w, -2.0f / h, -1.0f, 1.0f };
+	Vector4 constant_35{ -w / 2.0f, -h / 2.0f, -1.0f, 0.0f };
+	g_D3DDevice9->SetVertexShaderConstantF(34, &constant_34.x, 1);
+	g_D3DDevice9->SetVertexShaderConstantF(35, &constant_35.x, 1);
 	StartFrame(0);
 }
 
