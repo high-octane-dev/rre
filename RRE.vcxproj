@@ -227,6 +227,7 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClInclude Include="source\parameter_block.hpp" />
     <ClInclude Include="source\searchable_game_object.hpp" />
     <ClInclude Include="source\searchable_object.hpp" />
+    <ClInclude Include="source\serializable_interface.hpp" />
     <ClInclude Include="source\string_block_allocator.hpp" />
     <ClInclude Include="source\util\resource_setup.hpp" />
     <ClInclude Include="source\util\rsstring_util.hpp" />
