@@ -783,9 +783,9 @@ void CarsGame::SetConfigArguments() {
 
 // OFFSET: 0x00440c90, STATUS: COMPLETE
 void CarsGame::SetLanguageToDefault() {
-    XboxLanguage selected_dash_lang = GetSystemLanguage();
+    XboxLanguage selected_dash_lang = XGetLanguage();
     if (selected_dash_lang == XboxLanguage::None) {
-        XboxLocale selected_locale = GetSystemLocale();
+        XboxLocale selected_locale = XGetLocale();
         if (selected_locale == XboxLocale::None) {
             SetLanguageConfiguration("English");
             return;

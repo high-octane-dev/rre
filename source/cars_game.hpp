@@ -81,8 +81,8 @@ inline XboxLocale TryGetLocale(const std::string_view& str) {
 }
 
 #ifdef _WIN32
-#define GetSystemLanguage() TryGetLanguage(g_LanguageName)
-#define GetSystemLocale() TryGetLocale(g_LanguageName)
+#define XGetLanguage() TryGetLanguage(g_LanguageName)
+#define XGetLocale() TryGetLocale(g_LanguageName)
 #endif // _WIN32
 
 enum DeferredLoad {
