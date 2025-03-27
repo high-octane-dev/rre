@@ -431,7 +431,7 @@ int ParameterBlock::GetParameter(const char* parameter, char* dest, std::size_t 
 	if (loaded_from_memory == 0) {
 		return search.GetParameter(parameter, dest, dest_len);
 	}
-	panic("ParameterBlock is 'loaded from memory'.");
+	panic("[ParameterBlock::GetParameter] ParameterBlock is 'loaded from memory'.");
 }
 
 // OFFSET: 0x00588300, STATUS: COMPLETE
@@ -476,7 +476,7 @@ int ParameterBlock::GetHeaderIndex(const char* name) {
 		}
 		return -1;
 	}
-	panic("ParameterBlock is 'loaded from memory'.");
+	panic("[ParameterBlock::GetHeaderIndex] ParameterBlock is 'loaded from memory'.");
 }
 
 // OFFSET: 0x00588310, STATUS: COMPLETE
@@ -500,7 +500,7 @@ void ParameterBlock::GetHeaderList(char* dest, int len) {
 		}
 		return;
 	}
-	panic("ParameterBlock is 'loaded from memory'.");
+	panic("[ParameterBlock::GetHeaderList] ParameterBlock is 'loaded from memory'.");
 }
 
 // Returns 0 if Header, 1 if Parameter, 2 if comma-separated-value.
@@ -607,7 +607,7 @@ int ParameterBlock::ReadParameterBlock(const char* header) {
 	if (loaded_from_memory == 0) {
 		return search.ReadParameterBlock(header);
 	}
-	panic("ParameterBlock is 'loaded from memory'.");
+	panic("[ParameterBlock::ReadParameterBlock] ParameterBlock is 'loaded from memory'.");
 }
 
 // OFFSET: 0x00553e00, STATUS: COMPLETE

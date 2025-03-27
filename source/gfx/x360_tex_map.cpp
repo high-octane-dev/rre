@@ -25,11 +25,11 @@ TextureMap* X360TexMap::GetTextureMapFromResourceName(char* path, int, unsigned 
             return map;
         }
         else {
-            panic("Failed to acquire resource handle! We have recieved an object instead.");
+            panic("[X360TexMap::GetTextureMapFromResourceName] Failed to acquire resource handle! We have recieved an object instead.");
         }
     }
     else {
-        panic("Failed to acquire either a resource handle or an attached object!");
+        panic("[X360TexMap::GetTextureMapFromResourceName] Failed to acquire either a resource handle or an attached object!");
     }
     return nullptr;
 }

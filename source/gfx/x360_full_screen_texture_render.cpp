@@ -18,7 +18,7 @@ X360FullScreenTextureRender::~X360FullScreenTextureRender() {
 // OFFSET: 0x004134a0, STATUS: COMPLETE
 void X360FullScreenTextureRender::Draw(int index) {
     if (index != 0) {
-        panic("Index is not 0!");
+        panic("[X360FullScreenTextureRender::Draw] Index is not 0!");
     }
     if (textures[index] != nullptr) {
         g_RenderTarget->Blt(nullptr, textures[index], nullptr, 0, 1, 1, 0xFFFFFFFF);
@@ -28,7 +28,7 @@ void X360FullScreenTextureRender::Draw(int index) {
 // OFFSET: 0x00413460, STATUS: COMPLETE
 void X360FullScreenTextureRender::SetTexture(int index, TextureMap* texture) {
     if (index != 0) {
-        panic("Index is not 0!");
+        panic("[X360FullScreenTextureRender::SetTexture] Index is not 0!");
     }
 
     if (texture != nullptr) {
