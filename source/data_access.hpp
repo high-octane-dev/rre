@@ -127,9 +127,9 @@ public:
     int GrowFileLookupList();
     int Initialize(std::size_t, std::size_t, std::size_t, std::size_t, int);
     int LoadDiskFile(char*, const char*, int*);
-    int LoadResourceFile(char*, int, unsigned int*, int, int, unsigned int*, unsigned int*, int**, int**, int);
-    void LoadResourceFromBuffer(unsigned int*, int, char*, int**, unsigned int, int, unsigned char*, int**, int**, int**, unsigned int*, int**, int*, int, int, long*);
-    void LoadResourceFromFile(char*, unsigned int*, unsigned int, int, unsigned char*, unsigned int**, long*, unsigned int, unsigned int*, unsigned int*, int*, int, int, long*);
+    int LoadResourceFile(char*, int, void*, std::size_t, int, unsigned int*, void*, std::size_t, std::size_t*, int);
+    int LoadResourceFromBuffer(void*, std::size_t, char*, unsigned int*, unsigned int*, int, std::uint8_t*, unsigned int*, int*, std::size_t, void*, std::size_t*, int*, int, int, unsigned int*);
+    int LoadResourceFromFile(char*, unsigned int*, unsigned int*, int, unsigned char*, unsigned int*, int*, std::size_t, void*, std::size_t*, int*, int, int, unsigned int*);
     int MemcpyDeviceCache(VirtualDeviceCache*, std::size_t, void*);
     void OpenVirtualFile(int);
     unsigned int ReadData(VirtualDataDevice*, VirtualDataFile*, void*, unsigned int);

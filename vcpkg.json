@@ -1,5 +1,6 @@
 {
 	"dependencies": [
-		"dxsdk-d3dx"
+		"dxsdk-d3dx",
+		"zlib"
 	]
 }
