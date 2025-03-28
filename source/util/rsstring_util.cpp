@@ -27,3 +27,14 @@ const char* RSStringUtil::stristr(const char* string, const char* sub_string) {
 
 	return strstr(string, sub_string);
 }
+
+// OFFSET: 0x00409ec0, STATUS: COMPLETE
+void RSStringUtil::ChangeExtension(char* path, char* string) {
+	char* extension_position = strrchr(path, '.');
+	if (extension_position != nullptr) {
+		strcpy(extension_position, string);
+	}
+	else {
+		strcat(path, string);
+	}
+}

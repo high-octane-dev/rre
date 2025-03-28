@@ -1,3 +1,4 @@
+#include "util/rsstring_util.hpp"
 #include "x360_tex_map.hpp"
 #include "data_access.hpp"
 #include "panic.hpp"
@@ -7,8 +8,9 @@ TextureMap* X360TexMap::GetTextureMapFromResourceName(char* path, int, unsigned 
     // FIXME: This entire implementation is a hack.
     char copy[260]{};
     char mode[] = "rb\0";
+    char dds_ext[] = ".dds\0";
     strcpy(copy, path);
-    strcat(copy, ".dds");
+    RSStringUtil::ChangeExtension(copy, dds_ext);
 
     int out_res_handle = 0;
     void* out_object = nullptr;
