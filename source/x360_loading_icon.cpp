@@ -183,13 +183,12 @@ void X360LoadingIcon::RenderIcon(LoadingIconAnim* anim, LoadingImageIcon* icon, 
     g_RenderTarget->Blt(&rect, icon->texture_map, nullptr, 0, 1, anim->enable_alpha_blending, color);
 }
 
-// OFFSET: 0x00404d50, STATUS: WIP
+// OFFSET: 0x00404d50, STATUS: COMPLETE
 int X360LoadingIcon::Load(ParameterBlock* file) {
     if (LoadingIcon::Load(file) != 0) {
         for (std::size_t i = 0; i < frame_count; i++) {
             char texture_name[260]{};
-            // FIXME: make texture loader change extension to match original game, and change it here to .xnt
-            RSStringUtil::Ssnprintf(texture_name, sizeof(texture_name), "frame%02d", i + 1);
+            RSStringUtil::Ssnprintf(texture_name, sizeof(texture_name), "frame%02d.xnt", i + 1);
             frames[i].texture_map = X360TexMap::GetTextureMapFromResourceName(texture_name, 1555, 0);
             D3DSURFACE_DESC desc{};
             static_cast<X360TextureMap*>(frames[i].texture_map)->texture->GetLevelDesc(0, &desc);
