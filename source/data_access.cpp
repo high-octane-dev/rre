@@ -14,6 +14,24 @@ constexpr std::ptrdiff_t VirtualSectorMarkerSize = 1;
 
 extern int g_EnableEndianSwapping;
 
+enum DataAccessFlag {
+    Available = 1, // File/Device is available.
+    ResourceFile = 2, // Device represents a .res file.
+    Open = 4, // Virtual file is open.
+    AddToResourceFile = 8, // File should be added to the next resource file when saving.
+    OpenWritable = 16, // Device is open for writing.
+    Compromised = 32, // Device is missing files.
+    Compressed = 64, // Device has compressed data.
+    Encrypted = 128, // Device has encrypted data.
+    VirtualSectors = 256, // Device has virtual sectors.
+    SectorMarkers = 512, // Device has sector markers.
+    EncrpytXor = 1024, // Files are encrypted via an XOR cypher.
+    AllowFallbackToDisk = 2048, // Allow falling back to loading from disk if an expected "file within a .res file" does not exist.
+    DisallowLoadingFromDisk = 4096, // Don't let the game open non-bundled assets.
+    BundledAccessOnly = 8192, // WTFRB: Also.. don't let the game open non-bundled assets?? 
+    ResourceFileIsMemMapped = 16384, // Device's .res file is memory mapped
+};
+
 // OFFSET: 0x00548d10, STATUS: TODO
 std::uint8_t GenerateKeyXOR(char* file_path) {
     // Not a single .res file in ANY of these games uses this stupid encrpytion scheme anyway, so this does not matter at all.
@@ -102,7 +120,7 @@ DataAccess::~DataAccess() {
 
 // OFFSET: 0x00580ed0, STATUS: COMPLETE
 int DataAccess::ActivateDevice(VirtualDataDevice* device, int offset) {
-    if ((device->flag_data & 0x4000U) == 0) {
+    if ((device->flag_data & DataAccessFlag::ResourceFileIsMemMapped) == 0) {
         if (*first_device_stow != device->id) {
             bool swapped_devices = false;
             int* current_device = first_device_stow;
@@ -121,7 +139,7 @@ int DataAccess::ActivateDevice(VirtualDataDevice* device, int offset) {
             if (!swapped_devices) {
                 if (*last_device_stow != -1) {
                     VirtualDataDevice* close_device = &device_list[*last_device_stow];
-                    if ((close_device->flag_data & 0x12) == 0 && close_device->file_pointer != nullptr) {
+                    if ((close_device->flag_data & (DataAccessFlag::OpenWritable | DataAccessFlag::ResourceFile)) == 0 && close_device->file_pointer != nullptr) {
                         fclose(close_device->file_pointer);
                         close_device->file_pointer = nullptr;
                     }
@@ -134,7 +152,7 @@ int DataAccess::ActivateDevice(VirtualDataDevice* device, int offset) {
                 *first_device_stow = device->id;
             }
         }
-        if ((device->flag_data & 0x100U) != 0) {
+        if ((device->flag_data & DataAccessFlag::VirtualSectors) != 0) {
             (this->device_cache).first_sector = -1;
             (this->device_cache).last_sector = -1;
             (this->device_cache).device_id = device->id;
@@ -231,14 +249,14 @@ int DataAccess::AllocateDeviceCache(VirtualDeviceCache* _device_cache, int size_
 
 // OFFSET: 0x005492f0, STATUS: COMPLETE
 int DataAccess::AllowBundledAccessOnly(int should_allow_only_bundled_access) {
-    unsigned int was_allowed = this->flags & 0x2000;
+    unsigned int was_allowed = this->flags & DataAccessFlag::BundledAccessOnly;
     if (should_allow_only_bundled_access == 0) {
-        if ((this->flags & 0x2000) != 0) {
-            this->flags = this->flags & 0xFFFFDFFF;
+        if ((this->flags & DataAccessFlag::BundledAccessOnly) != 0) {
+            this->flags = this->flags & ~DataAccessFlag::BundledAccessOnly;
         }
     }
-    else if ((this->flags & 0x2000) == 0) {
-        this->flags = this->flags | 0x2000;
+    else if ((this->flags & DataAccessFlag::BundledAccessOnly) == 0) {
+        this->flags = this->flags | DataAccessFlag::BundledAccessOnly;
         return 0;
     }
     return was_allowed;
@@ -363,7 +381,7 @@ int DataAccess::DropDevice(char* name, int force_delete) {
 // OFFSET: 0x005c0b70, STATUS: COMPLETE
 int DataAccess::DropDevice(VirtualDataDevice* device, int force_delete) {
     int free_device_slot = 1;
-    device->flag_data |= 0x20;
+    device->flag_data |= DataAccessFlag::Compromised;
     
     ContainerHashTable<char*, VirtualDataFile*>::Node* node = nullptr;
     VirtualDataFile* current_file = nullptr;
@@ -372,7 +390,7 @@ int DataAccess::DropDevice(VirtualDataDevice* device, int force_delete) {
     while (file_list->GetNextValue(&node, &current_key, &current_file) != 0) {
         if (current_file != nullptr) {
             if (current_file->device_id == device->id) {
-                if (!force_delete && (current_file->resource_data != nullptr || (current_file->flag_data & 4) != 0)) {
+                if (!force_delete && (current_file->resource_data != nullptr || (current_file->flag_data & DataAccessFlag::Open) != 0)) {
                     free_device_slot = 0;
                 }
                 else {
@@ -426,38 +444,38 @@ int DataAccess::FClose(int resource_handle) {
 
     VirtualDataFile* current_file = file_lookup_list[resource_handle];
 
-    if ((current_file->flag_data & 4U) == 0) {
+    if ((current_file->flag_data & DataAccessFlag::Open) == 0) {
         return 0;
     }
 
     VirtualDataDevice* device = &device_list[current_file->device_id];
 
-    if ((device->flag_data & 0x4000U) != 0) {
-        device->flag_data &= ~4U;
-        current_file->flag_data &= ~4U;
+    if ((device->flag_data & DataAccessFlag::ResourceFileIsMemMapped) != 0) {
+        device->flag_data &= ~DataAccessFlag::Open;
+        current_file->flag_data &= ~DataAccessFlag::Open;
         return 1;
     }
 
     current_file->current_offset = 0;
-    current_file->flag_data &= ~4U;
+    current_file->flag_data &= ~DataAccessFlag::Open;
 
     if (current_file->cache_id >= 0 && file_cache_list[current_file->cache_id].resource_handle == resource_handle) {
         next_available_file_cache_id = current_file->cache_id;
     }
 
-    if ((device->flag_data & 2U) == 0) {
+    if ((device->flag_data & DataAccessFlag::ResourceFile) == 0) {
         if (device->file_pointer != nullptr) {
-            if ((device->flag_data & 0x10U) != 0) {
+            if ((device->flag_data & DataAccessFlag::OpenWritable) != 0) {
                 fseek(device->file_pointer, 0, SEEK_END);
                 long file_size = ftell(device->file_pointer);
                 current_file->size = file_size;
                 device->size = file_size;
             }
             fclose(device->file_pointer);
-            device->flag_data &= ~4U;
+            device->flag_data &= ~DataAccessFlag::Open;
             device->file_pointer = nullptr;
         }
-        if (current_file->resource_data == 0 && ((current_file->flag_data & 8) == 0)) {
+        if (current_file->resource_data == 0 && ((current_file->flag_data & DataAccessFlag::AddToResourceFile) == 0)) {
             FreeDevice(device);
             FreeFile(current_file->resource_handle);
         }
@@ -529,7 +547,7 @@ int DataAccess::FileExists(char* path) {
     if (FindVirtualFile(path) != -1) {
         return 1;
     }
-    if (((this->flags & 0x1000) == 0)) {
+    if (((this->flags & DataAccessFlag::DisallowLoadingFromDisk) == 0)) {
         FILE* fp = FOPEN(path, "rb");
         if (fp != nullptr) {
             fclose(fp);
@@ -574,7 +592,7 @@ int DataAccess::FOpen(char* file_name, const char* mode) {
     int resource_handle = FindVirtualFile(file_name);
     *last_resource_handle = resource_handle;
     if (resource_handle != -1) {
-        if ((this->flags & 0x800) == 0) {
+        if ((this->flags & DataAccessFlag::AllowFallbackToDisk) == 0) {
             OpenVirtualFile(*last_resource_handle);
             return *last_resource_handle;
         }
@@ -605,8 +623,8 @@ int DataAccess::FRead(int resource_handle, void* dst, int size) {
         return 0;
     }
 
-    if ((file->flag_data & 0x4000) != 0) {
-        // WHAT IN THE UB IS THIS
+    if ((file->flag_data & DataAccessFlag::ResourceFileIsMemMapped) != 0) {
+        // WTFRB: WHAT IN THE UB IS THIS
         std::memcpy(dst, reinterpret_cast<const void*>(device->primary_data_offset + file->start_offset + file->current_offset), size_to_read);
         file->current_offset += size_to_read;
         return size_to_read;
@@ -665,7 +683,7 @@ void DataAccess::FreeAllFiles() {
 // OFFSET: 0x005a9360, STATUS: COMPLETE
 void DataAccess::FreeDevice(VirtualDataDevice* device) {
     bool found_device = false;
-    if ((device->flag_data & 0x4000U) == 0) {
+    if ((device->flag_data & DataAccessFlag::ResourceFileIsMemMapped) == 0) {
         int* current_device_ptr = this->first_device_stow;
 
         do {
@@ -707,7 +725,7 @@ void DataAccess::FreeDevice(VirtualDataDevice* device) {
         device->file_name = nullptr;
     }
     device->file_pointer = nullptr;
-    device->flag_data = 1;
+    device->flag_data = DataAccessFlag::Available;
     device->offset = 0;
     device->size = 0;
     device->primary_data_offset = 0;
@@ -831,14 +849,14 @@ int DataAccess::GetDataOrFileHandle(char* path, char* mode, int* resource_handle
     int file_found = FindVirtualFile(path);
     *last_handle_ptr = file_found;
 
-    if (file_found == -1 || (((flags & 0x800) != 0) && ((device_list[file_lookup_list[file_found]->device_id].flag_data & 2) != 0))) {
+    if (file_found == -1 || (((flags & DataAccessFlag::AllowFallbackToDisk) != 0) && ((device_list[file_lookup_list[file_found]->device_id].flag_data & DataAccessFlag::ResourceFile) != 0))) {
         disk_file_loaded = LoadDiskFile(path, mode, last_handle_ptr);
         if (disk_file_loaded == 0 && file_found == -1) {
             return false;
         }
     }
 
-    VirtualDataFile*  virtual_file = file_lookup_list[*last_handle_ptr];
+    VirtualDataFile* virtual_file = file_lookup_list[*last_handle_ptr];
 
     if (disk_file_loaded != 0 && virtual_file->resource_data != 0) {
         virtual_file->resource_data = 0;
@@ -850,8 +868,8 @@ int DataAccess::GetDataOrFileHandle(char* path, char* mode, int* resource_handle
     if (virtual_file->resource_data == 0 || always_return_handle != 0) {
         OpenVirtualFile(*last_handle_ptr);
     }
-    else if ((flags & 0x2000) != 0) {
-        virtual_file->flag_data |= 8;
+    else if ((flags & DataAccessFlag::BundledAccessOnly) != 0) {
+        virtual_file->flag_data |= DataAccessFlag::AddToResourceFile;
         return true;
     }
 
@@ -879,7 +897,7 @@ int DataAccess::GetDeviceSlot() {
             break;
         }
 
-        if ((device_list[current_slot].flag_data & 1) != 0) {
+        if ((device_list[current_slot].flag_data & DataAccessFlag::Available) != 0) {
             next_available_device = current_slot;
             return initial_slot;
         }
@@ -901,7 +919,7 @@ int DataAccess::GrowDeviceList(int capacity_add) {
     number_of_devices_in_list += capacity_add;
     if (device_list != nullptr) {
         for (std::size_t i = old_len; i < number_of_devices_in_list; i++) {
-            device_list[i].flag_data = 1;
+            device_list[i].flag_data = DataAccessFlag::Available;
             device_list[i].file_name = 0;
             device_list[i].offset = 0;
             device_list[i].size = 0;
@@ -980,7 +998,7 @@ int DataAccess::Initialize(std::size_t initial_device_count, std::size_t initial
 
 // OFFSET: 0x005d3270, STATUS: WIP
 int DataAccess::LoadDiskFile(char* file_name, const char* mode, int* out_handle) {
-    if ((flags & 0x1000) != 0) {
+    if ((flags & DataAccessFlag::DisallowLoadingFromDisk) != 0) {
         return 0;
     }
 
@@ -1002,12 +1020,12 @@ int DataAccess::LoadDiskFile(char* file_name, const char* mode, int* out_handle)
             VirtualDataDevice* device = &device_list[device_id];
             device->size = file_size;
             device->file_pointer = fp;
-            device->flag_data = 4;
+            device->flag_data = DataAccessFlag::Open;
             device->offset = 0;
             device->file_name = string_block_allocator->StringBlockAllocator_AllocStringByString(file_name, 0);
             strcpy(device->file_name, file_name);
             if (strchr(mode, 'w') || strchr(mode, 'a') || strchr(mode, '+')) {
-                device->flag_data |= 0x10;
+                device->flag_data |= DataAccessFlag::OpenWritable;
             }
             device->primary_data_offset = 0;
             device->size_of_sector_list = 0;
@@ -1043,7 +1061,7 @@ int DataAccess::LoadResourceFile(char* file_name, int force_read, void* out_buff
 
         for (; device <= last_device; ++device) {
             if (device->file_name && _stricmp(device->file_name, file_name) == 0) {
-                if (!(device->flag_data & 0x20)) {
+                if (!(device->flag_data & DataAccessFlag::Compromised)) {
                     return 1;
                 }
                 DropDevice(device, 1);
@@ -1064,7 +1082,7 @@ int DataAccess::LoadResourceFile(char* file_name, int force_read, void* out_buff
                 cache_id = i;
                 break;
             }
-            if ((file_lookup_list[handle]->flag_data & 4) == 0) {
+            if ((file_lookup_list[handle]->flag_data & DataAccessFlag::Open) == 0) {
                 file_cache_list[i].resource_handle = -1;
                 file_cache_list[i].offset = -VirtualSectorSize;
                 found_slot = true;
@@ -1108,7 +1126,7 @@ int DataAccess::LoadResourceFile(char* file_name, int force_read, void* out_buff
     }
 
     VirtualDataDevice* device = &device_list[device_id];
-    device->flag_data = resource_file_flags | 2;
+    device->flag_data = resource_file_flags | DataAccessFlag::ResourceFile;
     device->file_pointer = nullptr;
 
     device->file_name = string_block_allocator->StringBlockAllocator_AllocStringByLength(strlen(file_name) + 1, 0);
@@ -1121,7 +1139,7 @@ int DataAccess::LoadResourceFile(char* file_name, int force_read, void* out_buff
     device->sector_list_offset = sector_list_offset;
     device->original_key = original_key;
 
-    if (force_read) {
+    if (force_read != 0) {
         ActivateDevice(device, 0);
         UpdateDeviceCache(device, 0, reinterpret_cast<std::uint8_t*>(out_buffer), out_buffer_len);
     }
@@ -1154,11 +1172,11 @@ int DataAccess::LoadResourceFromFile(char* file_name, unsigned int* resource_fil
     std::uint32_t header_len = 0;
     std::int32_t remaining_header_len = 0;
 
-    if (fread(&version, sizeof(std::uint32_t), 1, fp) != sizeof(std::uint32_t)) {
+    if (fread(&version, sizeof(std::uint32_t), 1, fp) != 1) {
         fclose(fp);
         return 0;
     }
-    if (fread(&header_len, sizeof(std::uint32_t), 1, fp) != sizeof(std::uint32_t)) {
+    if (fread(&header_len, sizeof(std::uint32_t), 1, fp) != 1) {
         fclose(fp);
         return 0;
     }
@@ -1207,14 +1225,14 @@ int DataAccess::LoadResourceFromFile(char* file_name, unsigned int* resource_fil
         remaining_header_len -= sizeof(unsigned int);
     }
     if (encrypted_only != 0) {
-        if ((*resource_file_type_flags & 0x80) == 0 || (*resource_file_type_flags & 0x400) == 0) {
+        if ((*resource_file_type_flags & DataAccessFlag::Encrypted) == 0 || (*resource_file_type_flags & DataAccessFlag::EncrpytXor) == 0) {
             fclose(fp);
             return 0;
         }
         *original_key = GenerateKeyXOR(file_name);
     }
 
-    if ((*resource_file_type_flags & 0x40) != 0) {
+    if ((*resource_file_type_flags & DataAccessFlag::Compressed) != 0) {
         fread(sector_list_size, sizeof(unsigned int), 1, fp);
         if (g_EnableEndianSwapping) {
             *sector_list_size = std::byteswap(*sector_list_size);
@@ -1244,11 +1262,11 @@ int DataAccess::LoadResourceFromFile(char* file_name, unsigned int* resource_fil
     std::uint32_t offset_table_len = 0;
     std::uint32_t offset_table_size = 0;
 
-    if (fread(&offset_table_len, sizeof(std::uint32_t), 1, fp) != sizeof(std::uint32_t)) {
+    if (fread(&offset_table_len, sizeof(std::uint32_t), 1, fp) != 1) {
         fclose(fp);
         return 0;
     }
-    if (fread(&offset_table_size, sizeof(std::uint32_t), 1, fp) != sizeof(std::uint32_t)) {
+    if (fread(&offset_table_size, sizeof(std::uint32_t), 1, fp) != 1) {
         fclose(fp);
         return 0;
     }
@@ -1283,7 +1301,7 @@ int DataAccess::LoadResourceFromFile(char* file_name, unsigned int* resource_fil
                 current_position += name_len;
                 virtual_file_name[name_len] = 0;
 
-                if ((*resource_file_type_flags & 0x400) != 0) {
+                if ((*resource_file_type_flags & DataAccessFlag::EncrpytXor) != 0) {
                     DecryptXOR(virtual_file_name, name_len, *original_key);
                 }
                 
@@ -1335,7 +1353,7 @@ int DataAccess::LoadResourceFromFile(char* file_name, unsigned int* resource_fil
                             current_position += name_len;
                             virtual_file_name[name_len] = 0;
 
-                            if ((*resource_file_type_flags & 0x400) != 0) {
+                            if ((*resource_file_type_flags & DataAccessFlag::EncrpytXor) != 0) {
                                 DecryptXOR(virtual_file_name, name_len, *original_key);
                             }
 
@@ -1379,7 +1397,7 @@ int DataAccess::LoadResourceFromFile(char* file_name, unsigned int* resource_fil
             fread(virtual_file_name, 1, name_len, fp);
             virtual_file_name[name_len] = 0;
 
-            if ((*resource_file_type_flags & 0x400) != 0) {
+            if ((*resource_file_type_flags & DataAccessFlag::EncrpytXor) != 0) {
                 DecryptXOR(virtual_file_name, name_len, *original_key);
             }
 
@@ -1450,10 +1468,10 @@ void DataAccess::OpenVirtualFile(int resource_handle) {
     }
 
     VirtualDataFile* file = file_lookup_list[resource_handle];
-    file->flag_data |= 4;
+    file->flag_data |= DataAccessFlag::Open;
     file->current_offset = 0;
 
-    if (!(device_list[file->device_id].flag_data & 0x4000U)) {
+    if (!(device_list[file->device_id].flag_data & DataAccessFlag::ResourceFileIsMemMapped)) {
         int cache_id = file->cache_id;
 
         if (cache_id < 0 || file_cache_list[cache_id].resource_handle != resource_handle) {
@@ -1469,7 +1487,7 @@ void DataAccess::OpenVirtualFile(int resource_handle) {
                         cache_allocated = true;
                         break;
                     }
-                    if ((file_lookup_list[file_cache_list[i].resource_handle]->flag_data & 4) == 0) {
+                    if ((file_lookup_list[file_cache_list[i].resource_handle]->flag_data & DataAccessFlag::Open) == 0) {
                         file->cache_id = i;
                         file_cache_list[i].offset = -VirtualSectorSize;
                         file_cache_list[i].resource_handle = resource_handle;
@@ -1493,8 +1511,8 @@ void DataAccess::OpenVirtualFile(int resource_handle) {
             next_available_file_cache_id = -1;
         }
 
-        if ((flags & 0x2000) != 0) {
-            file->flag_data |= 8;
+        if ((flags & DataAccessFlag::BundledAccessOnly) != 0) {
+            file->flag_data |= DataAccessFlag::AddToResourceFile;
         }
     }
 }
@@ -1514,12 +1532,12 @@ unsigned int DataAccess::ReadData(VirtualDataDevice* device, VirtualDataFile* fi
     return dst_len;
     */
 
-    if ((device->flag_data & 0x4000) != 0) {
+    if ((device->flag_data & DataAccessFlag::ResourceFileIsMemMapped) != 0) {
         std::memcpy(dst, reinterpret_cast<const void*>(device->primary_data_offset + file->current_offset + file->start_offset), dst_len);
         return dst_len;
     }
     UNK_00549770();
-    if ((device->flag_data & 0x100) == 0) {
+    if ((device->flag_data & DataAccessFlag::VirtualSectors) == 0) {
         if (file->cache_id == -1 || dst_len >= VirtualSectorSize) {
             fseek(device->file_pointer, device->primary_data_offset + device->offset, 0);
             std::size_t bytes_read = fread(dst, 1, dst_len, device->file_pointer);
@@ -1601,9 +1619,9 @@ unsigned int DataAccess::ReadData(VirtualDataDevice* device, VirtualDataFile* fi
             std::int16_t sector_data_size = 0;
             std::uint32_t read_start_offset = 0;
 
-            if ((device->flag_data & 0x40) != 0) {
+            if ((device->flag_data & DataAccessFlag::Compressed) != 0) {
                 std::size_t padding = 0;
-                if ((device->flag_data & 0x200) != 0) {
+                if ((device->flag_data & DataAccessFlag::SectorMarkers) != 0) {
                     padding = VirtualSectorMarkerSize;
                 }
                 std::int16_t* start_sector_size = device_cache.sector_size_list + device_cache.first_sector;
@@ -1617,7 +1635,7 @@ unsigned int DataAccess::ReadData(VirtualDataDevice* device, VirtualDataFile* fi
                 sector_data_size = *start_sector_size;
             }
             else {
-                if ((device->flag_data & 0x200) != 0) {
+                if ((device->flag_data & DataAccessFlag::SectorMarkers) != 0) {
                     read_start_offset += sectors_into_cache * (VirtualSectorSize + VirtualSectorMarkerSize);
                 }
                 else {
@@ -1628,7 +1646,7 @@ unsigned int DataAccess::ReadData(VirtualDataDevice* device, VirtualDataFile* fi
             }
 
             // WTFRB: what the hell does this even do????
-            if ((device->flag_data & 0x200) != 0 && unk1 != 0) {
+            if ((device->flag_data & DataAccessFlag::SectorMarkers) != 0 && unk1 != 0) {
                 do {
                     if ((sector_data_size + read_start_offset) < 1) {
                         break;
@@ -1639,7 +1657,7 @@ unsigned int DataAccess::ReadData(VirtualDataDevice* device, VirtualDataFile* fi
 
             cache->offset = virtual_sector_load_start * VirtualSectorSize;
 
-            if ((device->flag_data & 0x40) == 0) {
+            if ((device->flag_data & DataAccessFlag::Compressed) == 0) {
                 CopyDeviceCache(&device_cache, cache, read_start_offset);
             }
             else {
@@ -1651,7 +1669,7 @@ unsigned int DataAccess::ReadData(VirtualDataDevice* device, VirtualDataFile* fi
                 }
             }
 
-            if ((device->flag_data & 0x80) != 0 && (device->flag_data & 0x400) != 0) {
+            if ((device->flag_data & DataAccessFlag::Encrypted) != 0 && (device->flag_data & DataAccessFlag::EncrpytXor) != 0) {
                 DecryptXOR(cache->cache_data, VirtualSectorSize, static_cast<std::uint8_t>((static_cast<std::uint32_t>(device->original_key) + virtual_sector_load_start) % 255));
             }
 
@@ -1747,14 +1765,14 @@ int DataAccess::SetNumberOfDeviceCachePages(int new_device_cache_page_count) {
 void DataAccess::UpdateDeviceCache(VirtualDataDevice* device, int virtual_sector_needed, std::uint8_t* buffer, std::size_t max_read_len) {
     if (buffer == nullptr) {
         UNK_00549770();
-        return;
     }
-    
-    bool should_clear_cache = (device->flag_data & 0x200) != 0;
-    bool should_update_sector_list = (device->flag_data & 0x40) != 0;
+
+    bool has_sector_markers = (device->flag_data & DataAccessFlag::SectorMarkers) != 0;
+    int padding_byte = has_sector_markers ? 1 : 0;
+    bool is_compressed = (device->flag_data & DataAccessFlag::Compressed) != 0;
     std::uint8_t* buffer_position = buffer;
 
-    if (device_cache.first_sector == -1 && should_update_sector_list) {
+    if (device_cache.first_sector == -1 && is_compressed) {
         short* sector_size_list = device_cache.sector_size_list;
         if (sector_size_list != nullptr) {
             free(sector_size_list);
@@ -1765,43 +1783,41 @@ void DataAccess::UpdateDeviceCache(VirtualDataDevice* device, int virtual_sector
 
         if (buffer == nullptr) {
             fseek(device->file_pointer, device->sector_list_offset, SEEK_SET);
-            fread(sector_size_list, 1, device->size_of_sector_list, device->file_pointer);
+            fread(device_cache.sector_size_list, 1, device->size_of_sector_list, device->file_pointer);
         }
         else {
-            buffer_position += device->sector_list_offset;
-            std::memcpy(sector_size_list, buffer_position, device->size_of_sector_list);
-            buffer_position += device->size_of_sector_list;
+            std::memcpy(sector_size_list, buffer + device->sector_list_offset, device->size_of_sector_list);
+            buffer_position = buffer + device->sector_list_offset + device->size_of_sector_list;
         }
-        
-        if (g_EnableEndianSwapping != 0 && device->size_of_sector_list > 0) {
-            for (std::size_t offset = 0; offset < device->size_of_sector_list; offset += 2) {
-                std::uint16_t* entry = reinterpret_cast<std::uint16_t*>(reinterpret_cast<uintptr_t>(sector_size_list) + offset);
-                *entry = std::byteswap(*entry);
+
+        if (g_EnableEndianSwapping != 0) {
+            for (std::size_t i = 0; i < device->size_of_sector_list / sizeof(std::int16_t); i++) {
+                sector_size_list[i] = std::byteswap(sector_size_list[i]);
             }
         }
     }
 
-    if (should_clear_cache) {
+    if (has_sector_markers) {
         ClearDeviceCache(&device_cache);
     }
 
     std::intptr_t offset = device->primary_data_offset;
-    if (!should_update_sector_list || virtual_sector_needed < 1) {
-        offset += virtual_sector_needed * VirtualSectorSize;
+    if (!is_compressed || virtual_sector_needed < 1) {
+        offset += virtual_sector_needed * (VirtualSectorSize + padding_byte);
     }
     else {
-        for (std::size_t i = 0; i < static_cast<std::size_t>(virtual_sector_needed); ++i) {
-            offset += device_cache.sector_size_list[i];
+        for (std::size_t i = 0; i < static_cast<std::size_t>(virtual_sector_needed); i++) {
+            offset += device_cache.sector_size_list[i] + padding_byte;
         }
     }
 
-    if (buffer == 0) {
+    if (buffer == nullptr) {
         fseek(device->file_pointer, offset, SEEK_SET);
-        max_read_len = INT_MAX;
+        max_read_len = std::numeric_limits<std::int32_t>::max();
     }
     else {
-        buffer_position = offset + buffer;
-        max_read_len = reinterpret_cast<uintptr_t>(buffer) - reinterpret_cast<uintptr_t>(buffer_position) + max_read_len;
+        buffer_position = buffer + offset;
+        max_read_len = max_read_len - offset;
     }
 
     std::size_t remaining_size = device->size - offset;
@@ -1820,17 +1836,28 @@ void DataAccess::UpdateDeviceCache(VirtualDataDevice* device, int virtual_sector
     }
 
     unsigned int sector_count = 0;
-    if (should_update_sector_list) {
-        std::int16_t* sector_sizes = device_cache.sector_size_list + virtual_sector_needed;
-        std::size_t total_remaining_bytes = 0;
-        while (remaining_size >= total_remaining_bytes) {
-            total_remaining_bytes += *sector_sizes;
-            sector_count++;
-            sector_sizes++;
+    if (!is_compressed) {
+        sector_count = (remaining_size / (VirtualSectorSize + padding_byte));
+        if (remaining_size % (VirtualSectorSize + padding_byte) > 0) {
+            sector_count--;
         }
     }
     else {
-        sector_count = remaining_size / VirtualSectorSize;
+        std::int16_t* sector_sizes = device_cache.sector_size_list + virtual_sector_needed;
+        int current_sector_len = (*sector_sizes + padding_byte);
+        if (current_sector_len > remaining_size) {
+            device_cache.first_sector = -1;
+            device_cache.last_sector = -1;
+            return;
+        }
+        do {
+            sector_count = sector_count + 1;
+            sector_sizes++;
+            if (current_sector_len == remaining_size) {
+                break;
+            }
+            current_sector_len += padding_byte + *sector_sizes;
+        } while (current_sector_len <= remaining_size);
     }
 
     if (sector_count > 0) {
