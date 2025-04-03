@@ -1154,7 +1154,7 @@ int DataAccess::LoadResourceFromBuffer(void* buffer, std::size_t buffer_len, cha
 
 }
 
-// OFFSET: 0x005c16b0, STATUS: TODO
+// OFFSET: 0x005c16b0, STATUS: COMPLETE
 int DataAccess::LoadResourceFromFile(char* file_name, unsigned int* resource_file_type_flags, unsigned int* user_data_type, int encrypted_only, unsigned char* original_key, unsigned int* sector_list_size, int* sector_list_offset, std::size_t user_data_buffer_size, void* user_data, std::size_t* user_data_bytes_read, int* primary_data_offset, int desired_cache_id, int desired_device_id, unsigned int* resource_size) {
     if (file_name == nullptr || resource_file_type_flags == nullptr || original_key == nullptr || sector_list_size == nullptr || sector_list_offset == nullptr || primary_data_offset == nullptr || resource_size == nullptr) {
         panic("[DataAccess::LoadResourceFromFile] nullptr was passed as a non-optional argument.");
@@ -1517,21 +1517,8 @@ void DataAccess::OpenVirtualFile(int resource_handle) {
     }
 }
 
-// OFFSET: 0x005a96a0, STATUS: TODO
+// OFFSET: 0x005a96a0, STATUS: COMPLETE
 unsigned int DataAccess::ReadData(VirtualDataDevice* device, VirtualDataFile* file, void* dst, unsigned int dst_len) {
-    /*
-    // "I AM LAZY AND JUST WANT SOMETHING WORKING RAAAAAAAH"
-    // FIXME: This implementation is just temporarily in place for now... a proper implementation is REQUIRED for loading from a .res file.
-    // Therefore this only works for files loaded from disk.
-    fseek(device->file_pointer, device->primary_data_offset + device->offset, 0);
-    std::size_t bytes_read = fread(dst, 1, dst_len, device->file_pointer);
-    if (bytes_read != dst_len) {
-        return 0;
-    }
-    device->offset = device->offset + dst_len;
-    return dst_len;
-    */
-
     if ((device->flag_data & DataAccessFlag::ResourceFileIsMemMapped) != 0) {
         std::memcpy(dst, reinterpret_cast<const void*>(device->primary_data_offset + file->current_offset + file->start_offset), dst_len);
         return dst_len;
