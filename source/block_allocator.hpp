@@ -25,8 +25,11 @@ private:
 	int block_data_offset;
 public:
 	BlockAllocator(int _used_size_per_block, int _block_size_bytes);
+	BlockAllocator(const BlockAllocator&) = delete;
+	BlockAllocator& operator=(const BlockAllocator&) = delete;
 	virtual ~BlockAllocator();
 
+	void Purge();
 	void* AllocBlock(int* allocated_new_block);
 	int AllocBigBlock();
 	void* AllocBlockComplex();

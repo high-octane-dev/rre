@@ -42,6 +42,20 @@ BlockAllocator::~BlockAllocator() {
     uses_in_current_block = this->max_extra_uses_per_block;
 }
 
+// OFFSET: 0x0053dcf0, STATUS: COMPLETE
+void BlockAllocator::Purge() {
+    if (big_blocks != nullptr) {
+        if (small_blocks != nullptr && last_block != nullptr) {
+            last_block->next = small_blocks;
+        }
+        small_blocks = big_blocks;
+    }
+    big_blocks = nullptr;
+    last_block = nullptr;
+    uses_in_current_block = max_extra_uses_per_block;
+    free_block = nullptr;
+}
+
 // OFFSET: 0x005a4d10, STATUS: COMPLETE
 void* BlockAllocator::AllocBlock(int* allocated_new_block) {
     Block* block;
