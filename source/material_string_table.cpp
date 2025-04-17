@@ -7,9 +7,38 @@ MaterialStringTable::MaterialStringTable(std::size_t user_data_stride, LookupTyp
 	flags = 0;
 }
 
-// OFFSET: 0x00585fa0, STATUS: TODO
-void MaterialStringTable::AddItem(char const*, int) {
-	// FIXME: Implement This!
+// OFFSET: 0x00585fa0, STATUS: COMPLETE
+int MaterialStringTable::GetIndexOrFirstDataSlot(char const* label, int _unk) {
+	if (lut == nullptr) {
+		for (std::size_t i = 0; i < len; i++) {
+			if (_stricmp(label, string_entries[i].string) == 0) {
+				return i;
+			}
+		}
+	}
+	else {
+		char lower_string[260]{};
+		for (std::size_t i = 0; i < sizeof(lower_string); i++) {
+			if (label[i] == 0) {
+				break;
+			}
+			lower_string[i] = std::tolower(label[i]);
+		}
+		int index = 0;
+		if (lut->Lookup(lower_string, &index) != 0) {
+			return index;
+		}
+	}
+	if (_unk != 0) {
+		for (std::size_t i = 0; i < len; i++) {
+			if (string_entries[i].data != nullptr) {
+				if (*string_entries[i].data != nullptr) {
+					return i;
+				}
+			}
+		}
+	}
+	return -1;
 }
 
 // OFFSET: 0x00586140, STATUS: COMPLETE
