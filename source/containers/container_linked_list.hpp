@@ -103,7 +103,7 @@ public:
 	}
 	
 	inline int PreInsert(ContainerLinkedListNode<T>* pre_node, T elem) {
-		auto new_node = reinterpret_cast<ContainerLinkedList<T>*>(operator_new(sizeof(ContainerLinkedList<T>)));
+		ContainerLinkedListNode<T>* new_node = new ContainerLinkedListNode<T>();
 		if (new_node == nullptr) {
 			return 0;
 		}
@@ -216,7 +216,7 @@ public:
 		auto node = start_node;
 		while (node != nullptr) {
 			auto next_node = node->next;
-			operator_delete(node);
+			delete node;
 			node = next_node;
 		}
 		len = 0;
