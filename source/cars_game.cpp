@@ -6,6 +6,7 @@
 #include "gfx/x360_render_target.hpp"
 #include "gfx/x360_video_card.hpp"
 #include "gfx/x360_full_screen_texture_render.hpp"
+#include "gfx/surface_shader_list.hpp"
 #include "util/rsstring_util.hpp"
 #include "util/resource_setup.hpp"
 
@@ -653,7 +654,9 @@ void CarsGame::UNK_00422c80(int render_frame_index, int camera_index) {
             int should_draw_cursor = SetBasicRenderStates();
             g_RenderTarget->ApplyViewportImpl(1, 1, 1, 1);
             if (should_draw_cursor != 0) {
-                // SurfaceShaderList::FUN_0040cd00(lpSurfaceShaderList, camera_index, 0);
+                if (g_lpSurfaceShaderList != nullptr) {
+                    g_lpSurfaceShaderList->UNK_0040cd00(camera_index, 0);
+                }
                 g_RenderTarget->DrawCursorImpl();
             }
         }
@@ -662,7 +665,7 @@ void CarsGame::UNK_00422c80(int render_frame_index, int camera_index) {
                 SetBasicRenderStates();
                 int should_end = g_RenderTarget->DrawFullscreenEffects();
                 if (should_end != 0) {
-                    // SurfaceShaderList::FUN_0040cd00(lpSurfaceShaderList, camera_index, 1);
+                    if (g_lpSurfaceShaderList != nullptr) g_lpSurfaceShaderList->UNK_0040cd00(camera_index, 1);
                     g_RenderTarget->EndFrame();
                 }
             }

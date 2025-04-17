@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include "renderer.hpp"
 #include "x360_game.hpp"
+#include "surface_shader_list.hpp"
 
 Renderer::RenderFrameData Renderer::g_RenderFrameData[1] = {};
 int Renderer::s_NextFrameBufferToPrepare = 0;
@@ -72,16 +73,14 @@ int Renderer::PrepareNextRenderFrame() {
     return 0;
 }
 
-// OFFSET: 0x00413620, STATUS: WIP
+// OFFSET: 0x00413620, STATUS: COMPLETE
 int Renderer::PrepareNextRenderDrawList(int index) {
     int next_camera_index = g_RenderFrameData[index].camera_indices[g_RenderFrameData[index].next_camera];
     g_RenderFrameData[index].next_camera = g_RenderFrameData[index].next_camera + 1;
-    /*
-    if (g_lpSurfaceShaderList != NULL) {
-        BlockAllocator::Purge(g_lpSurfaceShaderList->shaders[next_camera_index].block_allocator);
+    if (g_lpSurfaceShaderList != nullptr) {
+        g_lpSurfaceShaderList->shaders[next_camera_index].block_allocator->Purge();
         g_lpSurfaceShaderList->shaders[next_camera_index].next_index = g_lpSurfaceShaderList->shaders[next_camera_index].next_index + 1;
     }
-    */
     return 0;
 }
 
