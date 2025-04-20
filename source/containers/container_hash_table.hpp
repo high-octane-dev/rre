@@ -102,7 +102,7 @@ inline void ContainerHashTable<TKey, TVal>::CHTCreateFull(int _bucket_count, int
 {
     bucket_count = _bucket_count;
     initialized = true;
-    buckets = new Node* [bucket_count];//reinterpret_cast<Node**>(operator_new(sizeof(Node*) * bucket_count));
+    buckets = new Node* [bucket_count];
 
     for (int i = 0; i < bucket_count; i++) {
         buckets[i] = nullptr;
@@ -127,7 +127,6 @@ ContainerHashTable<TKey, TVal>::~ContainerHashTable()
             while (curr) {
                 last = curr;
                 curr = curr->next;
-                // operator_delete(last);
                 block_allocator->FreeBlock(last);
             }
         }
@@ -189,7 +188,6 @@ void ContainerHashTable<TKey, TVal>::CHTAdd(TKey key, TVal value)
     int hv = std::abs(origHash) % bucket_count;
 
     // add this node to the head of the linked lists of nodes that is bucket[hv]
-    // Node* node = reinterpret_cast<Node*>(operator_new(sizeof(Node)));
     int allocated_new_block = 0;
     Node* node = reinterpret_cast<Node*>(block_allocator->AllocBlock(&allocated_new_block));
     node->next = buckets[hv];
@@ -225,8 +223,7 @@ void ContainerHashTable<TKey, TVal>::CHTRemove(TKey key, TKey* retKey /* = nullp
                 if (retVal) {
                     *retVal = node->value;
                 }
-
-                // operator_delete(node);
+                
                 block_allocator->FreeBlock(node);
                 return;
             }
@@ -269,7 +266,6 @@ void ContainerHashTable<TKey, TVal>::RemoveNode(Node* node)
 {
     if (node) {
         RemoveNode(node->next);
-        // operator_delete(node);
         block_allocator->FreeBlock(node);
     }
 }

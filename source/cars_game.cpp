@@ -541,8 +541,13 @@ void CarsGame::ClearCheatCodes() {
     }
 }
 
-// OFFSET: 0x00487ac0, STATUS: TODO
+// OFFSET: 0x00487ac0, STATUS: COMPLETE
 void CarsGame::CreateActivityDatabase() {
+    if (activity_database != nullptr) {
+        return;
+    }
+    activity_database = new Cars2ActivityDatabase();
+    activity_database->Create();
 }
 
 // OFFSET: 0x004873c0, STATUS: TODO
@@ -565,8 +570,13 @@ void CarsGame::CreateBonusPointManager() {
 void CarsGame::CreateControllerSettings() {
 }
 
-// OFFSET: 0x00487b20, STATUS: TODO
+// OFFSET: 0x00487b20, STATUS: COMPLETE
 void CarsGame::CreateEventDatabase() {
+    if (event_database != nullptr) {
+        return;
+    }
+    event_database = new Cars2EventDatabase();
+    event_database->Create();
 }
 
 // OFFSET: 0x00441470, STATUS: TODO
@@ -620,8 +630,12 @@ void CarsGame::CreateRecordLibraries() {
 void CarsGame::CreateScavengerHuntManager() {
 }
 
-// OFFSET: 0x004f5560, STATUS: TODO
+// OFFSET: 0x004f5560, STATUS: COMPLETE
 void CarsGame::CreateStoryManager() {
+    if (story_manager == nullptr) {
+        story_manager = new Cars2StoryManager();
+        story_manager->Create();
+    }
 }
 
 // OFFSET: 0x004c3aa0, STATUS: TODO

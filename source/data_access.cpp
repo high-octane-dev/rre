@@ -908,6 +908,68 @@ int DataAccess::GetDeviceSlot() {
     return initial_slot;
 }
 
+// OFFSET: 0x00548e70, STATUS: TODO
+int DataAccess::AddMemoryResource(char* name, FILE* resource) {
+    return 0;
+    /*
+    VirtualDataDevice* device = device_list;
+    VirtualDataDevice* last_device = device + number_of_devices_in_list - 1;
+
+    for (; device <= last_device; ++device) {
+        if (device->file_name != nullptr && _stricmp(device->file_name, name) == 0) {
+            device->file_pointer = resource;
+            return 1;
+        }
+    }
+
+    if (next_available_device == -1) {
+        number_of_devices_in_list = number_of_devices_in_list + 1;
+        device_list = reinterpret_cast<VirtualDataDevice*>(realloc(device_list, number_of_devices_in_list * sizeof(VirtualDataDevice)));
+        if (device_list == nullptr) {
+            return 0;
+        }
+        next_available_device = -1;
+        device_list[number_of_devices_in_list - 1].flag_data = 0x4000;
+        device_list[number_of_devices_in_list - 1].file_pointer = resource;
+        device_list[number_of_devices_in_list - 1].id = number_of_devices_in_list - 1;
+        device_list[number_of_devices_in_list - 1].file_name = name;
+        device_list[number_of_devices_in_list - 1].offset = 0;
+        device_list[number_of_devices_in_list - 1].size = 0;
+        device_list[number_of_devices_in_list - 1].original_key = 0;
+        device_list[number_of_devices_in_list - 1].primary_data_offset = 0;
+        return 1;
+    }
+    else {
+        int desired_device_id = next_available_device;
+        int i = next_available_device;
+        next_available_device = -1;
+        if (number_of_devices_in_list > 1) {
+            do {
+                i++;
+                if (number_of_devices_in_list <= i) {
+                    i = 0;
+                }
+                if (i == desired_device_id) {
+                    device_list[desired_device_id].flag_data = 0x4000;
+                    device_list[desired_device_id].file_pointer = resource;
+                    device_list[desired_device_id].file_name = name;
+                    device_list[desired_device_id].id = desired_device_id;
+                    device_list[desired_device_id].primary_data_offset = 0;
+                    return 1;
+                }
+            } while ((device_list[i].flag_data & 1) == 0);
+            next_available_device = i;
+        }
+        device_list[desired_device_id].flag_data = 0x4000;
+        device_list[desired_device_id].file_pointer = resource;
+        device_list[desired_device_id].file_name = name;
+        device_list[desired_device_id].id = desired_device_id;
+        device_list[desired_device_id].primary_data_offset = 0;
+    }
+    return 1;
+    */
+}
+
 // OFFSET: 0x00548f90, STATUS: COMPLETE
 int DataAccess::GrowDeviceList(int capacity_add) {
     if (capacity_add <= 0) {

@@ -123,6 +123,7 @@ public:
 
     int GetDataOrFileHandle(char*, char*, int*, void**, int);
     int GetDeviceSlot();
+    int AddMemoryResource(char* param_2, FILE* param_3);
     int GrowDeviceList(int);
     int GrowFileLookupList();
     int Initialize(std::size_t, std::size_t, std::size_t, std::size_t, int);

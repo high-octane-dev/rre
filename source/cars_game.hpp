@@ -3,6 +3,10 @@
 #include "x360_game.hpp"
 #include "gfx/x360_full_screen_render_pass.hpp"
 #include "x360_loading_icon.hpp"
+#include "cars2_event_database.hpp"
+#include "cars2_activity_database.hpp"
+#include "cars2_story_manager.hpp"
+#include "cars_audio_manager.hpp"
 
 enum class XboxLocale {
     None = 0,
@@ -61,7 +65,7 @@ enum class XboxLanguage {
     Russian = 12, // UNUSED
 };
 
-// OFFSET: 0x00427420
+// OFFSET: 0x00427420, STATUS: COMPLETE
 inline XboxLanguage TryGetLanguage(const std::string_view& str) {
     if (str == "English") return XboxLanguage::English;
     if (str == "German") return XboxLanguage::German;
@@ -71,7 +75,7 @@ inline XboxLanguage TryGetLanguage(const std::string_view& str) {
     return XboxLanguage::None;
 }
 
-// OFFSET: 0x004274b0
+// OFFSET: 0x004274b0, STATUS: COMPLETE
 inline XboxLocale TryGetLocale(const std::string_view& str) {
     if (str == "Danish") return XboxLocale::Denmark;
     if (str == "Dutch") return XboxLocale::Netherlands;
@@ -106,7 +110,7 @@ public:
     struct CarsGlobalProfile* global_profile;
     struct CarsRecordLibrary* hall_of_fame;
     struct CarsRecordLibrary* personal_records;
-    struct CarsAudioManager* audio_manager;
+    CarsAudioManager* audio_manager;
     struct CarsActivityManager* activity_manager;
     struct CarsWorld* world;
     struct CarsUI* ui;
@@ -120,10 +124,10 @@ public:
     struct Cars2BonusPointManager* bonus_point_manager;
     struct CarsAchievementManager* achievement_manager;
     struct Cars2SceneDatabase* scene_database;
-    struct Cars2ActivityDatabase* activity_database;
-    struct Cars2EventDatabase* event_database;
+    Cars2ActivityDatabase* activity_database;
+    Cars2EventDatabase* event_database;
     struct Cars2VehicleDatabase* vehicle_database;
-    struct Cars2StoryManager* story_manager;
+    Cars2StoryManager* story_manager;
     struct Cars2EventJoinPointManager* event_join_point_manager;
     struct Cars2UIResourceManager* ui_resource_manager;
     GameObject* unused24;
