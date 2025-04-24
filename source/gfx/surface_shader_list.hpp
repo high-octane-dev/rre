@@ -1,7 +1,7 @@
 #pragma once
 #include <cstddef>
 #include <array>
-#include "block_allocator.hpp"
+#include "allocators/block_allocator.hpp"
 #include "shader_pass_descriptor.hpp"
 
 constexpr std::size_t MAX_SURFACE_SHADER_PASSES = 4096;

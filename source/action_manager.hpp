@@ -2,7 +2,7 @@
 #include "game_object.hpp"
 #include "containers/container_linked_list.hpp"
 #include "containers/dynamic_array.hpp"
-#include "string_block_allocator.hpp"
+#include "allocators/string_block_allocator.hpp"
 #include "parameter_block.hpp"
 #include "action_script.hpp"
 #include "action_sequence.hpp"
@@ -13,7 +13,6 @@ struct MakeActionTestInfo {};
 class ActionManager : public GameObject
 {
 public:
-	ActionManager();
 	LinkedList<ActionSequence*> action_sequences;
 	LinkedList<ActionScript*> action_scripts;
 	int unk1;
@@ -24,6 +23,7 @@ public:
 	int unk4;
 	StringBlockAllocator* string_block_allocator;
 public:
+	ActionManager();
 	virtual int Tick(float) override;
 
 	ActionScript* CreateActionScript(char *, char *, char*);

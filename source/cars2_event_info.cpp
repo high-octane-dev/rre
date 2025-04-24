@@ -1,5 +1,5 @@
 #include "cars2_event_info.hpp"
-#include "string_block_allocator.hpp"
+#include "allocators/string_block_allocator.hpp"
 #include "cars2_event_database.hpp"
 #include <cars2_activity_database.hpp>
 

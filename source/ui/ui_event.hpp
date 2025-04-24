@@ -27,11 +27,19 @@ public:
 	}
 };
 
+class UIControllerEvent;
+
 class UIInputEventListener {
 public:
 	inline virtual ~UIInputEventListener() {}
 	virtual void ProcessKeydown(UIInputEvent*) = 0;
 	virtual void ProcessKeyup(UIInputEvent*) = 0;
+};
+
+class UIControllerEventListener {
+	inline virtual ~UIControllerEventListener() {}
+	virtual void ControllerDetached(UIControllerEvent*) = 0;
+	virtual void ControllerAttached(UIControllerEvent*) = 0;
 };
 
 static_assert(sizeof(UIFlashAnimationListener) == 4);

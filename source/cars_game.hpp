@@ -7,6 +7,7 @@
 #include "cars2_activity_database.hpp"
 #include "cars2_story_manager.hpp"
 #include "cars_audio_manager.hpp"
+#include "ui/cars_ui.hpp"
 
 enum class XboxLocale {
     None = 0,
@@ -113,7 +114,7 @@ public:
     CarsAudioManager* audio_manager;
     struct CarsActivityManager* activity_manager;
     struct CarsWorld* world;
-    struct CarsUI* ui;
+    CarsUI* ui;
     struct VideoFXManager* video_fx_manager;
     struct CarsBonusContentManager* bonus_content_manager;
     struct CarsControllerSettings* controller_settings;
@@ -151,7 +152,7 @@ public:
     int loading_tip_preview;
     float brake_when_resting_threshold;
     char char_name[32];
-    char char2_Name[32];
+    char char2_name[32];
     int char_number;
     unsigned int char_paint_type;
     int vehicle_manual_transmission;

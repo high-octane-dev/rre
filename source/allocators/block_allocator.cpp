@@ -1,6 +1,6 @@
 #include <cstdlib>
 #include <cstddef>
-#include "block_allocator.hpp"
+#include "allocators/block_allocator.hpp"
 
 // OFFSET: 0x0053db80, STATUS: COMPLETE
 BlockAllocator::BlockAllocator(int _used_size_per_block, int _block_size_bytes) : BaseObject() {

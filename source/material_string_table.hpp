@@ -1,6 +1,7 @@
 #pragma once
 #include "containers/string_table.hpp"
 
+// Maps strings to X360SurfaceMaterial*s.
 class MaterialStringTable : public StringTable {
 private:
 	std::uint8_t flags;

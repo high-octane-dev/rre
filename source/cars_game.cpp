@@ -328,7 +328,7 @@ void CarsGame::LoadConfigFile(ParameterBlock* parameter_block) {
 	    parameter_block->GetParameter("Start", "Player1Start", start, sizeof(start));
 	    parameter_block->GetParameter("CharNumber", char_number, &char_number);
 	    parameter_block->GetParameter("CharName", "*NONE*", char_name, sizeof(char_name));
-	    parameter_block->GetParameter("Char2Name", "*NONE*", char2_Name, sizeof(char2_Name));
+	    parameter_block->GetParameter("Char2Name", "*NONE*", char2_name, sizeof(char2_name));
 	    parameter_block->GetParameter("CharPaintType", "SOLID", char_paint_type_parameter, sizeof(char_paint_type_parameter));
 	    parameter_block->GetParameter("CharColor1", &empty_vector, &char_color1);
 	    parameter_block->GetParameter("CharColor2", &empty_vector, &char_color2);
@@ -642,8 +642,10 @@ void CarsGame::CreateStoryManager() {
 void CarsGame::CreateStreamManager() {
 }
 
-// OFFSET: 0x004877d0, STATUS: TODO
+// OFFSET: 0x004877d0, STATUS: COMPLETE
 void CarsGame::CreateUI() {
+    ui = new CarsUI();
+    ui->Create();
 }
 
 // OFFSET: 0x004c3bd0, STATUS: TODO

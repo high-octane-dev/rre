@@ -120,7 +120,7 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClCompile Include="source\action_script.cpp" />
     <ClCompile Include="source\action_sequence.cpp" />
     <ClCompile Include="source\base_object.cpp" />
-    <ClCompile Include="source\block_allocator.cpp" />
+    <ClCompile Include="source\allocators\block_allocator.cpp" />
     <ClCompile Include="source\camera.cpp" />
     <ClCompile Include="source\cars2_activity_database.cpp" />
     <ClCompile Include="source\cars2_activity_info.cpp" />
@@ -177,8 +177,9 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClCompile Include="source\parameter_block.cpp" />
     <ClCompile Include="source\searchable_game_object.cpp" />
     <ClCompile Include="source\searchable_object.cpp" />
-    <ClCompile Include="source\string_block_allocator.cpp" />
+    <ClCompile Include="source\allocators\string_block_allocator.cpp" />
     <ClCompile Include="source\ui\cars_base_layer.cpp" />
+    <ClCompile Include="source\ui\cars_ui.cpp" />
     <ClCompile Include="source\ui\cars_ui_menu_layer.cpp" />
     <ClCompile Include="source\ui\cars_ui_menu_page.cpp" />
     <ClCompile Include="source\ui\cars_ui_page.cpp" />
@@ -200,7 +201,8 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClInclude Include="source\action_script.hpp" />
     <ClInclude Include="source\action_sequence.hpp" />
     <ClInclude Include="source\base_object.hpp" />
-    <ClInclude Include="source\block_allocator.hpp" />
+    <ClInclude Include="source\basic_scene.hpp" />
+    <ClInclude Include="source\allocators\block_allocator.hpp" />
     <ClInclude Include="source\camera.hpp" />
     <ClInclude Include="source\cars2_activity_database.hpp" />
     <ClInclude Include="source\cars2_activity_info.hpp" />
@@ -292,9 +294,13 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClInclude Include="source\searchable_game_object.hpp" />
     <ClInclude Include="source\searchable_object.hpp" />
     <ClInclude Include="source\serializable_interface.hpp" />
+    <ClInclude Include="source\soultree\soultree_object.hpp" />
+    <ClInclude Include="source\static_model.hpp" />
     <ClInclude Include="source\streaming_listener.hpp" />
-    <ClInclude Include="source\string_block_allocator.hpp" />
+    <ClInclude Include="source\allocators\string_block_allocator.hpp" />
     <ClInclude Include="source\ui\cars_base_layer.hpp" />
+    <ClInclude Include="source\ui\cars_ui.hpp" />
+    <ClInclude Include="source\ui\cars_ui_manager.hpp" />
     <ClInclude Include="source\ui\cars_ui_menu_layer.hpp" />
     <ClInclude Include="source\ui\cars_ui_menu_page.hpp" />
     <ClInclude Include="source\ui\cars_ui_page.hpp" />
@@ -305,6 +311,7 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClInclude Include="source\ui\ui_layer.hpp" />
     <ClInclude Include="source\ui\ui_layout.hpp" />
     <ClInclude Include="source\ui\ui_linked_list.hpp" />
+    <ClInclude Include="source\ui\ui_manager.hpp" />
     <ClInclude Include="source\ui\ui_page.hpp" />
     <ClInclude Include="source\ui\ui_style_sheet.hpp" />
     <ClInclude Include="source\util\resource_setup.hpp" />

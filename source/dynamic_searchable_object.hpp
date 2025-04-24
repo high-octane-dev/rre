@@ -1,6 +1,6 @@
 #pragma once
 #include "searchable_object.hpp"
-#include "block_allocator.hpp"
+#include "allocators/block_allocator.hpp"
 #include "math/vector4.hpp"
 
 extern int g_SearchPlacementCount;

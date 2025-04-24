@@ -1,0 +1,469 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="source\action_manager.cpp" />
+    <ClCompile Include="source\action_script.cpp" />
+    <ClCompile Include="source\action_sequence.cpp" />
+    <ClCompile Include="source\base_object.cpp" />
+    <ClCompile Include="source\camera.cpp" />
+    <ClCompile Include="source\cars2_activity_database.cpp" />
+    <ClCompile Include="source\cars2_activity_info.cpp" />
+    <ClCompile Include="source\cars2_activity_set.cpp" />
+    <ClCompile Include="source\cars2_event_database.cpp" />
+    <ClCompile Include="source\cars2_event_info.cpp" />
+    <ClCompile Include="source\cars2_event_set.cpp" />
+    <ClCompile Include="source\cars2_launcher.cpp" />
+    <ClCompile Include="source\cars2_story_database.cpp" />
+    <ClCompile Include="source\cars2_story_event.cpp" />
+    <ClCompile Include="source\cars2_story_manager.cpp" />
+    <ClCompile Include="source\containers\dynamic_string_table.cpp" />
+    <ClCompile Include="source\containers\string_table.cpp" />
+    <ClCompile Include="source\data_access.cpp" />
+    <ClCompile Include="source\dynamic_searchable_object.cpp" />
+    <ClCompile Include="source\file_io.cpp" />
+    <ClCompile Include="source\gfx\x360_material_template.cpp" />
+    <ClCompile Include="source\language_configuration.cpp" />
+    <ClCompile Include="source\language_definition.cpp" />
+    <ClCompile Include="source\loading_icon.cpp" />
+    <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\cars_game.cpp" />
+    <ClCompile Include="source\game.cpp" />
+    <ClCompile Include="source\game_object.cpp" />
+    <ClCompile Include="source\material_string_table.cpp" />
+    <ClCompile Include="source\music.cpp" />
+    <ClCompile Include="source\panic.cpp" />
+    <ClCompile Include="source\parameter_block.cpp" />
+    <ClCompile Include="source\searchable_game_object.cpp" />
+    <ClCompile Include="source\searchable_object.cpp" />
+    <ClCompile Include="source\ui\cars_base_layer.cpp" />
+    <ClCompile Include="source\virtual_network.cpp" />
+    <ClCompile Include="source\x360_camera.cpp" />
+    <ClCompile Include="source\x360_game.cpp" />
+    <ClCompile Include="source\x360_loading_icon.cpp" />
+    <ClCompile Include="source\allocators\block_allocator.cpp">
+      <Filter>Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\cache.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ui\cars_ui.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ui\cars_ui_menu_layer.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ui\cars_ui_menu_page.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ui\cars_ui_page.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\shader_pass_descriptor.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\cursor.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\d3d_state_manager.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\index_buffer.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\x360_vertex_buffer_manager.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\x360_vertex_shader_manager.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\x360_video_card.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\x360_vertex_attribute_format_string_table.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\x360_texture_map_manager.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\x360_tex_map.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\x360_texture_map.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\x360_shader_manager.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\x360_shader.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\x360_render_target.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\x360_pixel_shader_manager.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\x360_parse.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\x360_index_buffer_manager.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\x360_index_buffer.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\x360_full_screen_texture_render.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\video_card.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\emotion_engine.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ui\ui_component.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ui\ui_container.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ui\ui_layer.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ui\ui_layout.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ui\ui_page.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ui\ui_style_sheet.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\texture_map_manager.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\surface_shader_list.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\renderer.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gfx\render_target.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\util\rsstring_util.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\util\resource_setup.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\allocators\string_block_allocator.cpp">
+      <Filter>Allocators</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\action_manager.hpp" />
+    <ClInclude Include="source\action_script.hpp" />
+    <ClInclude Include="source\action_sequence.hpp" />
+    <ClInclude Include="source\base_object.hpp" />
+    <ClInclude Include="source\camera.hpp" />
+    <ClInclude Include="source\cars2_activity_database.hpp" />
+    <ClInclude Include="source\cars2_activity_info.hpp" />
+    <ClInclude Include="source\cars2_activity_set.hpp" />
+    <ClInclude Include="source\cars2_bumper_sticker.hpp" />
+    <ClInclude Include="source\cars2_event_database.hpp" />
+    <ClInclude Include="source\cars2_event_info.hpp" />
+    <ClInclude Include="source\cars2_event_set.hpp" />
+    <ClInclude Include="source\cars2_launcher.hpp" />
+    <ClInclude Include="source\cars2_story_database.hpp" />
+    <ClInclude Include="source\cars2_story_event.hpp" />
+    <ClInclude Include="source\cars2_story_manager.hpp" />
+    <ClInclude Include="source\cars_audio_manager.hpp" />
+    <ClInclude Include="source\cars_dialogue.hpp" />
+    <ClInclude Include="source\cars_game.hpp" />
+    <ClInclude Include="source\containers\dynamic_string_table.hpp" />
+    <ClInclude Include="source\containers\string_table.hpp" />
+    <ClInclude Include="source\data_access.hpp" />
+    <ClInclude Include="source\dynamic_searchable_object.hpp" />
+    <ClInclude Include="source\file_io.hpp" />
+    <ClInclude Include="source\game.hpp" />
+    <ClInclude Include="source\game_object.hpp" />
+    <ClInclude Include="source\gfx\x360_material_template.hpp" />
+    <ClInclude Include="source\globals.hpp" />
+    <ClInclude Include="source\language_configuration.hpp" />
+    <ClInclude Include="source\language_definition.hpp" />
+    <ClInclude Include="source\loading_icon.hpp" />
+    <ClInclude Include="source\material_string_table.hpp" />
+    <ClInclude Include="source\music.hpp" />
+    <ClInclude Include="source\panic.hpp" />
+    <ClInclude Include="source\parameter_block.hpp" />
+    <ClInclude Include="source\searchable_game_object.hpp" />
+    <ClInclude Include="source\searchable_object.hpp" />
+    <ClInclude Include="source\serializable_interface.hpp" />
+    <ClInclude Include="source\streaming_listener.hpp" />
+    <ClInclude Include="source\ui\cars_base_layer.hpp" />
+    <ClInclude Include="source\virtual_network.hpp" />
+    <ClInclude Include="source\x360_camera.hpp" />
+    <ClInclude Include="source\x360_game.hpp" />
+    <ClInclude Include="source\x360_loading_icon.hpp" />
+    <ClInclude Include="source\math\matrix4x4.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="source\math\frect.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="source\math\vector4.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="source\allocators\block_allocator.hpp">
+      <Filter>Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\cache.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ui\cars_ui.hpp">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ui\cars_ui_manager.hpp">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ui\cars_ui_menu_layer.hpp">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ui\cars_ui_menu_page.hpp">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ui\cars_ui_page.hpp">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\containers\container_hash_table.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="source\containers\container_linked_list.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="source\containers\container_list.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="source\containers\dynamic_array.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\shader_pass_descriptor.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\cursor.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\d3d_state_manager.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\drawable_cube_data_item.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\eco_3d_data_item.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\eco_shrub_surface_data_item.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\eco_veggy_surface_data_item.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\graphics_data_item.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\image_data_format.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\index_buffer.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_video_card.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_vertex_buffer_manager.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_vertex_shader_manager.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_vertex_buffer.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_vertex_buffer_cache.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_vertex_attribute_format_string_table.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_vertex_animation_data.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_texture_map_manager.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_texture_map.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_tex_map.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_surface_shader_list.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_strip_surface_data.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_static_renderable_object_data_item.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_shader_manager.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_shader_parameters_data_item.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_shader.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_pixel_shader_manager.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_render_target.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_pixel_animation_data.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_particle_data_item.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_parse.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_mesh_geometry_data_item.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_mesh_vs_data_item.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_index_buffer_manager.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_index_buffer_cache.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_index_buffer.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_icon_vs_data_item.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_icon_geometry_data_item.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_full_screen_texture_render.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_full_screen_render_pass.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_crowd_data_item.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\x360_anim_renderable_object_data_item.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\video_card.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\emotion_engine.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ui\ui_style_sheet.hpp">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ui\ui_component.hpp">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ui\ui_container.hpp">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ui\ui_event.hpp">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ui\ui_layer.hpp">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ui\ui_layout.hpp">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ui\ui_linked_list.hpp">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ui\ui_manager.hpp">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ui\ui_page.hpp">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\util\token_string.hpp">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\texture_map_manager.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\vertex_buffer.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\surface_shader_list.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\renderer.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gfx\render_target.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ui\mouse_menu.hpp">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\soultree\soultree_object.hpp">
+      <Filter>Soultree</Filter>
+    </ClInclude>
+    <ClInclude Include="source\util\rsstring_util.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="source\util\resource_setup.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="source\allocators\string_block_allocator.hpp">
+      <Filter>Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="source\basic_scene.hpp" />
+    <ClInclude Include="source\static_model.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{d8056642-0cc7-4e8c-a1b1-2d4e1b55e6fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soultree">
+      <UniqueIdentifier>{7b937041-798d-4647-9adb-035915c10830}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{70e57e94-0ecd-4ba7-93a5-600ca877fecd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Containers">
+      <UniqueIdentifier>{41874af5-3acd-4bc6-8779-87083f75b709}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Allocators">
+      <UniqueIdentifier>{b4e4069a-23b7-4217-8fd1-c32a8f6311d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{1a1d9c97-5eda-4d14-af26-5c0f523aeef1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{6bbb1fb6-dad5-42ad-874d-dd8b6c0bc1a8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

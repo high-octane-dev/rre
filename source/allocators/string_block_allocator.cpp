@@ -1,4 +1,4 @@
-#include "string_block_allocator.hpp"
+#include "allocators/string_block_allocator.hpp"
 
 // OFFSET: 0x00595280, STATUS: COMPLETE
 StringBlockAllocator::StringBlockAllocator(std::size_t _initial_string_len, int _alloc_size) {

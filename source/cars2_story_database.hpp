@@ -1,7 +1,7 @@
 #pragma once
 #include "serializable_interface.hpp"
 #include "cars2_story_event.hpp"
-#include "string_block_allocator.hpp"
+#include "allocators/string_block_allocator.hpp"
 
 class Cars2StoryDatabase : public SerializableInterface {
 public:

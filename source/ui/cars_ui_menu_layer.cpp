@@ -8,7 +8,7 @@ CarsUIMenuLayer::CarsUIMenuLayer() : CarsBaseLayer() {
 	partial_anim = nullptr;
 }
 
-// OFFSET: 0x0x00453b60, STATUS: WIP
+// OFFSET: 0x00453b60, STATUS: WIP
 CarsUIMenuLayer::~CarsUIMenuLayer()
 {
 	// uintptr_t lpCarsUI = *reinterpret_cast<uintptr_t*>(0x006fe590);

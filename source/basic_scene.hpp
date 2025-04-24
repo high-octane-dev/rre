@@ -1,0 +1,87 @@
+#pragma once
+#include "static_model.hpp"
+#include "parameter_block.hpp"
+#include "containers/container_list.hpp"
+
+class BasicScene : GameObject {
+public:
+	int has_not_ticked;
+	ParameterBlock* scn_file;
+	ParameterBlock* aud_file;
+	char scene_dir[260];
+	char scene_name_ext[260];
+	char scene_name[260];
+	struct PlayerStart* player_start;
+    int zone_count;
+    struct ZoneInfo* zone_infos;
+    int current_zone_unk;
+    int portal_count;
+    int use_env_node;
+    float time_since_flash;
+    float ambient_color_flash_idle_time;
+    float ambient_color_flash_min_idle_time;
+    float unk_duration;
+    float ambient_color_flash_duration;
+    float ambient_color_flash_min_duration;
+    float unk_total_duration;
+    float ambient_color_flash[4];
+    unsigned char flags;
+    float wind[4];
+    int enable_stars;
+    struct PortalInfo* portal_info;
+    struct EnvironmentInfo* env_info;
+    struct WorldShadowMapInfo* wsm_info;
+    struct CrowdInfo* crowd_info;
+    struct CrowdInfo* crowd_info2;
+    struct FogInfo* fog_info;
+    struct DistanceFadeInfo* distance_fade_info;
+    struct SunflareInfo* sunflare_info;
+    void* unused_zero;
+    struct Occlusion* occlusion;
+    int light_count;
+    struct LightEmitter** lights;
+    GameObject* lights_parent;
+    struct Portal** portals;
+    int static_model_count;
+    StaticModel** static_model_list;
+    GameObject* static_models;
+    unsigned int unused1;
+    unsigned int unused2;
+    unsigned int unused3;
+    int collision_model_count;
+    struct CollisionObjectModel** collision_model_list;
+    GameObject* collision_models;
+    unsigned int unused4;
+    unsigned int unused5;
+    unsigned int unused6;
+    ContainerList<struct StaticSound*> static_sounds;
+    int unused7;
+    struct InstanceMasterTempData* instance_master_temp_data;
+    int intance_master_count;
+    int unused8;
+    int unused9;
+    struct Fog* fog;
+    struct SkyCube** sky_cubes;
+    struct Terrain* terrain;
+    struct SoultreeTerrainCollisionGrid* ground_collision;
+    int unk_zero;
+    int unused10;
+    struct EcoSystem* eco_system;
+    struct X360Crowd* crowd;
+    struct X360Crowd* crowd2;
+    struct X360ParticleManager* particle_manager;
+    GameObject** extra_scene_objects;
+    int extra_scene_object_count;
+    float unk_sun1[4];
+    float unk_sun2[4];
+    GameObject* search_node_parent;
+    struct SearchNode** vis_search_nodes;
+    struct SearchNode** collision_search_nodes;
+    struct SearchList** search_lists1;
+    struct SearchList** search_lists2;
+    struct SearchList** search_lists3;
+    struct SearchList** search_lists4;
+    struct X360SoundGroup* sound_group;
+    struct UnkFloatStruct* unk_float_structs[5];
+    unsigned char fog_and_sky_cube_flags;
+};

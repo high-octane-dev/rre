@@ -9,7 +9,7 @@ UILayer::UILayer() : components() {
 	layer_unk2 = 0x10;
 }
 
-// OFFSET: 0x0x00625be0, STATUS: COMPLETE
+// OFFSET: 0x00625be0, STATUS: COMPLETE
 UILayer::~UILayer() {
 	for (auto& component : components) {
 		component->ResetMouseMenu();

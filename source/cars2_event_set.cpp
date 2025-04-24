@@ -1,5 +1,5 @@
 #include "cars2_event_set.hpp"
-#include "string_block_allocator.hpp"
+#include "allocators/string_block_allocator.hpp"
 #include "cars2_event_database.hpp"
 
 // OFFSET: 0x00428e70, STATUS: COMPLETE

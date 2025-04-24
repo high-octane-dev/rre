@@ -1,6 +1,6 @@
 #pragma once
 #include "game_object.hpp"
-#include "string_block_allocator.hpp"
+#include "allocators/string_block_allocator.hpp"
 #include "streaming_listener.hpp"
 
 class CarsDialogue : public GameObject, StreamingListener {

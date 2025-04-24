@@ -1,6 +1,6 @@
 #pragma once
 #include "cars2_event_set.hpp"
-#include "string_block_allocator.hpp"
+#include "allocators/string_block_allocator.hpp"
 
 class Cars2EventDatabase : public SerializableInterface {
 public:

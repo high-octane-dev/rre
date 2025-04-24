@@ -15,7 +15,7 @@ protected:
 	std::size_t parameter_count;
 	ShaderParameter* parameters;
 public:
-	// OFFSET: 00409fd0, STATUS: COMPLETE
+	// OFFSET: 0x00409fd0, STATUS: COMPLETE
 	inline X360ShaderParametersDataItem(std::uint32_t desired_parameter_count) : GraphicsDataItem(), parameter_count(desired_parameter_count) {
 		parameters = new ShaderParameter[parameter_count]{};
 	}

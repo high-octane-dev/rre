@@ -1,7 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include "containers/container_list.hpp"
-#include "string_block_allocator.hpp"
+#include "allocators/string_block_allocator.hpp"
 #include "game_object.hpp"
 
 enum PlayingState {

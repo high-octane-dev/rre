@@ -1,7 +1,7 @@
 #pragma once
 #include "base_object.hpp"
 #include "containers/container_hash_table.hpp"
-#include "string_block_allocator.hpp"
+#include "allocators/string_block_allocator.hpp"
 
 struct VirtualDataDevice {
     int id;

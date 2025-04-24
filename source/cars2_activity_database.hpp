@@ -1,7 +1,7 @@
 #pragma once
 #include "cars2_activity_set.hpp"
 #include "cars2_activity_info.hpp"
-#include "string_block_allocator.hpp"
+#include "allocators/string_block_allocator.hpp"
 
 class Cars2ActivityDatabase {
 public:
