@@ -8,7 +8,7 @@ template <typename T> struct ContainerLinkedListNode {
 };
 
 template <typename T> class ContainerLinkedList {
-private:
+public:
 	std::uint32_t len;
 	ContainerLinkedListNode<T>* start_node;
 	ContainerLinkedListNode<T>* end_node;
@@ -234,3 +234,4 @@ public:
 };
 
 template <class T> using LinkedList = ContainerLinkedList<T>;
+template <class T> using LinkedListNode = ContainerLinkedListNode<T>;

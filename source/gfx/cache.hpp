@@ -1,4 +1,5 @@
 #pragma once
+#include "containers/container_linked_list.hpp"
 
 struct ListEntry {
 	int offset;
@@ -6,10 +7,10 @@ struct ListEntry {
 };
 
 class Cache {
-private:
+protected:
 	int offset;
 	int len;
-	void* linked_list;
+	LinkedList<ListEntry*>* linked_list;
 public:
 	Cache();
 	~Cache();
@@ -22,4 +23,14 @@ public:
 	virtual ListEntry* ClearAndAddListEntry(int);
 };
 
-class StaticCache : public Cache {};
+class StaticCache : public Cache {
+	// OFFSET: 0x005ea780, STATUS: COMPLETE
+	inline StaticCache(int initial_offset, int initial_len) : Cache() {
+		offset = initial_offset;
+		len = initial_len;
+	}
+	// OFFSET: INLINE, STATUS: COMPLETE
+	inline virtual ListEntry* ClearAndAddListEntry(int) override {
+		return nullptr;
+	}
+};
