@@ -1,7 +1,16 @@
 #include "action_sequence.hpp"
+#include "action_manager.hpp"
 
 // OFFSET: 0x0056edc0, STATUS: WIP
 ActionSequence::ActionSequence() : GameObject(true), action_sequence_steps(10) {
+}
+
+// OFFSET: INLINE, STATUS: COMPLETE
+ActionSequence::~ActionSequence() {
+    if (unk5 != nullptr) {
+        lpASManager->string_block_allocator->FreeString(unk5);
+        unk5 = nullptr;
+    }
 }
 
 // OFFSET: 0x005bb590, STATUS: WIP

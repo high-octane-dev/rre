@@ -12,6 +12,14 @@ ActionManager::ActionManager() : GameObject(true), action_infos(10), action_test
     unk1 = 0;
 }
 
+// OFFSET: 0x005ce1a0, STATUS: COMPLETE
+ActionManager::~ActionManager() {
+    if (string_block_allocator != nullptr) {
+        delete string_block_allocator;
+        string_block_allocator = nullptr;
+    }
+}
+
 // OFFSET: 0x0056ef30, STATUS: COMPLETE
 int ActionManager::Tick(float deltaSeconds) {
     if ((lpGame->debug_flags & 8) != 0) {
@@ -21,76 +29,49 @@ int ActionManager::Tick(float deltaSeconds) {
     return GameObject::Tick(deltaSeconds);
 }
 
-// OFFSET: 0x005e7a20, STATUS: WIP
-ActionScript* ActionManager::CreateActionScript(char* param_1, char* param_2, char* param_3) {
-    char* local_860;
-    ParameterBlock local_85c;
+char EMPTY_STR[] = "";
 
-    local_860 = param_3;
-
-    ActionScript *pActionScript;
-
-    if (local_85c.OpenFile(param_3, 0, -1, nullptr, -1) == 0)
-    {
-        local_85c.FreeKeyAndHeaderMemory();
-        pActionScript = nullptr;
-    }
-    else
-    {
-        if (((param_1 == nullptr) || (*param_1 == '\0')) && ((param_2 == nullptr || (*param_2 == '\0'))))
-        {
-            // FIXME: This raises a compiler warning. We probably need to create a constant for empty strings...
-            // param_2 == "";
-            param_1 = local_860;
+// OFFSET: 0x005e7a20, STATUS: COMPLETE
+ActionScript* ActionManager::CreateActionScript(char* unk_name, char* script_name, char* file_name) {
+    ParameterBlock file{};
+    if (file.OpenFile(file_name, 0, -1, nullptr, -1) != 0) {
+        if (((unk_name == nullptr) || (*unk_name == '\0')) && ((script_name == nullptr || (*script_name == '\0')))) {
+            script_name = EMPTY_STR;
+            unk_name = file_name;
         }
-        pActionScript = CreateActionScript(param_1, param_2, &local_85c);
-        local_85c.FreeKeyAndHeaderMemory();
+        return CreateActionScript(unk_name, script_name, &file);
     }
-    return pActionScript;
+    return nullptr;
 }
 
 // OFFSET: 0x005ce220, STATUS: WIP
-ActionScript* ActionManager::CreateActionScript(char* param_1, char* param_2, ParameterBlock* param_3) {
+ActionScript* ActionManager::CreateActionScript(char* unk_name, char* script_name, ParameterBlock* file) {
     char* pcVar4;
 
-    pcVar4 = param_2;
-    if ((param_1 != nullptr) && (*param_1 != '\0')) {
-      pcVar4 = param_1;
+    pcVar4 = script_name;
+    if ((unk_name != nullptr) && (*unk_name != '\0')) {
+      pcVar4 = unk_name;
     }
 
     //RemoveActionScript(pcVar4);
 
     ActionScript* newActionScript = new ActionScript();
 
-    newActionScript->ReadActionScript(param_2,param_3);
+    newActionScript->ReadActionScript(script_name, file);
     return newActionScript;
 }
 
 // OFFSET: 0x005e7b80, STATUS: WIP
-ActionSequence* ActionManager::CreateActionSequence(char* param_1, char* param_2, char* param_3) {
-    char* local_860;
-    ParameterBlock local_85c;  
-    
-    local_860 = param_3;
-
-    ActionSequence *pActionSequence;
-    if (local_85c.OpenFile(param_3, 0, -1, nullptr, -1) == 0)
-    {
-        local_85c.FreeKeyAndHeaderMemory();
-        pActionSequence = nullptr;
-    }
-    else
-    {
-        if (((param_1 == nullptr) || (*param_1 == '\0')) && ((param_2 == nullptr || (*param_2 == '\0'))))
-        {
-            // FIXME: This raises a compiler warning. We probably need to create a constant for empty strings...
-            // param_2 == "";
-            param_1 = local_860;
+ActionSequence* ActionManager::CreateActionSequence(char* sequence_name, char* unk_name, char* file_name) {
+    ParameterBlock file{};
+    if (file.OpenFile(file_name, 0, -1, nullptr, -1) != 0) {
+        if (((sequence_name == nullptr) || (*sequence_name == '\0')) && ((unk_name == nullptr || (*unk_name == '\0')))) {
+            unk_name = EMPTY_STR;
+            sequence_name = file_name;
         }
-        pActionSequence = CreateActionSequence(param_1, param_2, &local_85c);
-        local_85c.FreeKeyAndHeaderMemory();
+        return CreateActionSequence(sequence_name, unk_name, &file);
     }
-    return pActionSequence;
+    return nullptr;
 }
 
 // OFFSET: 0x005ce3d0, STATUS: WIP

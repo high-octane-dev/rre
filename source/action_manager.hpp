@@ -10,8 +10,7 @@
 struct MakeActionInfo {};
 struct MakeActionTestInfo {};
 
-class ActionManager : public GameObject
-{
+class ActionManager : public GameObject {
 public:
 	LinkedList<ActionSequence*> action_sequences;
 	LinkedList<ActionScript*> action_scripts;
@@ -24,13 +23,13 @@ public:
 	StringBlockAllocator* string_block_allocator;
 public:
 	ActionManager();
+	virtual ~ActionManager() override;
 	virtual int Tick(float) override;
 
-	ActionScript* CreateActionScript(char *, char *, char*);
-	ActionScript* CreateActionScript(char *, char *, ParameterBlock*);
+	ActionScript* CreateActionScript(char*, char*, char*);
+	ActionScript* CreateActionScript(char*, char*, ParameterBlock*);
 	ActionSequence* CreateActionSequence(char*, char*, char*);
 	ActionSequence* CreateActionSequence(char*, char*, ParameterBlock*);
 };
-
 
 extern ActionManager* lpASManager;

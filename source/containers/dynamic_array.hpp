@@ -30,6 +30,7 @@ public:
 	~DynamicArray() {
 		if (data != nullptr) {
 			delete[] data;
+			data = nullptr;
 		}
 	}
 
