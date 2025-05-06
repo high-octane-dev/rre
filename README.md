@@ -1,4 +1,7 @@
-# RRE
+# Rhythm Racing Engine [![Discord Badge]][discord]
+
+[Discord Badge]: https://img.shields.io/discord/1328433046105362546?color=%237289DA&logo=discord&logoColor=%23FFFFFF
+[discord]: https://discord.gg/VW3Ud4zWcm
 
 A work-in-progress *non-matching* decompilation of Rainbow Studios' Rhythm Racing Engine (1.0), as implemented in the PC version of Cars: Mater-National Championship.
 
