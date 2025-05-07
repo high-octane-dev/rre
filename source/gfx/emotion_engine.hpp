@@ -9,6 +9,7 @@ namespace EE {
 		int ref_count;
 	public:
 		RRE_DISABLE_COPY(RefObject);
+		inline RefObject() : ref_count(0) {};
 		virtual ~RefObject();
 		inline void AddRef() {
 			ref_count++;

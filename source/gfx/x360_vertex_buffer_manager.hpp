@@ -7,6 +7,7 @@
 
 class VertexBufferManager {
 public:
+	inline VertexBufferManager() {};
 	RRE_DISABLE_COPY(VertexBufferManager);
 	virtual int CreateVertexBuffer(D3DFORMAT format, int vertex_count) = 0;
 	virtual void EmptyCacheList() = 0;

@@ -6,6 +6,7 @@
 
 class IndexBufferManager {
 public:
+	inline IndexBufferManager() {};
 	RRE_DISABLE_COPY(IndexBufferManager);
 	virtual int CreateIndexBuffer(D3DFORMAT format, int index_count) = 0;
 	virtual void EmptyCacheList() = 0;

@@ -14,6 +14,7 @@ protected:
 	unsigned short multi_sample_type;
 	float max_projected_size;
 public:
+	inline BaseTextureMap() {}
 	RRE_DISABLE_COPY(BaseTextureMap);
 };
 
