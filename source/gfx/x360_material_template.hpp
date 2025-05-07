@@ -45,4 +45,6 @@ public:
 	void LoadFromFile(const char* file_name);
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(X360MaterialTemplate) == 0x2b8);
+#endif

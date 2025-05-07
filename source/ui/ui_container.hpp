@@ -47,5 +47,7 @@ public:
 	virtual void DoRender(int render) override;
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(UIContainerLayout) == 0x30);
 static_assert(sizeof(UIContainer) == 0xa0);
+#endif

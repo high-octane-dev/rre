@@ -42,7 +42,9 @@ class UIControllerEventListener {
 	virtual void ControllerAttached(UIControllerEvent*) = 0;
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(UIFlashAnimationListener) == 4);
 static_assert(sizeof(UIEvent) == 4);
 static_assert(sizeof(UIInputEvent) == 0x20c);
 static_assert(sizeof(UIInputEventListener) == 4);
+#endif

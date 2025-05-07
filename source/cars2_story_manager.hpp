@@ -117,6 +117,8 @@ public:
 
 extern Cars2StoryManager* lpGlobalStoryManager;
 
+#ifdef _M_IX86
 static_assert(sizeof(Cars2StoryManager::VehicleInfo) == 124);
 static_assert(sizeof(Cars2StoryManager::ExploreHub) == 124);
 static_assert(sizeof(Cars2StoryManager) == 852);
+#endif

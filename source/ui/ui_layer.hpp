@@ -44,4 +44,6 @@ public:
 	UIComponent* GetComponent(const char*);
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(UILayer) == 0x30);
+#endif

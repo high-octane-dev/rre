@@ -40,7 +40,9 @@ public:
 	virtual int GetSerializedDataSize() override;
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(Cars2StoryEvent::StoryEventStatusType) == 4);
 static_assert(sizeof(Cars2StoryEvent::ActionScriptInfo) == 8);
 static_assert(sizeof(Cars2StoryEvent::BoltBannerStruct) == 8);
 static_assert(sizeof(Cars2StoryEvent) == 60);
+#endif

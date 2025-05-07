@@ -68,5 +68,7 @@ public:
 	}
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(PageState) == 4);
 static_assert(sizeof(CarsUIMenuPage) == 0xb4);
+#endif

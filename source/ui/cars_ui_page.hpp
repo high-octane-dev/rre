@@ -9,4 +9,6 @@ public:
 	virtual ~CarsUIPage() override;
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(CarsUIPage) == 0x48);
+#endif

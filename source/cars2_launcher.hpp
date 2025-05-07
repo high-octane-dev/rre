@@ -53,4 +53,6 @@ public:
 	static Cars2Launcher* GetInstance();
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(Cars2Launcher) == 856);
+#endif

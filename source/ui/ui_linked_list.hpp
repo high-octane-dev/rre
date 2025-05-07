@@ -38,5 +38,7 @@ public:
 	}
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(UILinkedListNode<int>) == 0x10);
 static_assert(sizeof(UILinkedList<int>) == 0xc);
+#endif

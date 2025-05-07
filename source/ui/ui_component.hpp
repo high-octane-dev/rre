@@ -122,5 +122,7 @@ public:
 	void Render(int);
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(UIComponentLayout) == 0x24);
 static_assert(sizeof(UIComponent) == 0x80);
+#endif

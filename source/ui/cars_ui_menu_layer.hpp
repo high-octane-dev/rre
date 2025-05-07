@@ -19,4 +19,6 @@ public:
 	virtual char* GetSelectedOption();
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(CarsUIMenuLayer) == 0x50);
+#endif

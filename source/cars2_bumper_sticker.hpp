@@ -23,4 +23,6 @@ public:
 	}
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(Cars2BumperSticker) == 16);
+#endif

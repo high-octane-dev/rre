@@ -12,4 +12,6 @@ public:
 	virtual void Render(int) override;
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(CarsBaseLayer) == 0x44);
+#endif

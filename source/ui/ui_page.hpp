@@ -45,5 +45,7 @@ public:
 	virtual void End();
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(PageStackState) == 4);
 static_assert(sizeof(UIPage) == 0x40);
+#endif

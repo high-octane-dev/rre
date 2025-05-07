@@ -14,4 +14,6 @@ public:
 	UIComponentLayout* GetComponentLayout(char* name);
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(UILayout) == 0x20);
+#endif

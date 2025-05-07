@@ -25,4 +25,6 @@ public:
 	virtual int GetSerializedDataSize() override;
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(Cars2EventSet) == 0x2c);
+#endif

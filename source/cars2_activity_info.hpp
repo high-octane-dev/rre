@@ -39,4 +39,6 @@ public:
 	void Create(ParameterBlock* file);
 };
 
+#ifdef _M_IX86
 static_assert(sizeof(Cars2ActivityInfo) == 28);
+#endif
