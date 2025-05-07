@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 #include "containers/container_list.hpp"
-#include "../parameter_block.hpp"
+#include "parameter_block.hpp"
 
 enum PageStackState {
 	NotTopOfStack,
@@ -22,6 +22,7 @@ protected:
 	std::uint8_t has_not_top_enabled;
 	std::uint8_t has_top_enabled;
 public:
+	RRE_DISABLE_COPY(UIPage);
 	UIPage();
 	virtual ~UIPage();
 	virtual void CreateFromFile(char*, ParameterBlock*);

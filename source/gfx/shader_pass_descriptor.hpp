@@ -1,6 +1,7 @@
 #pragma once
 #include "base_object.hpp"
 #include "x360_shader_parameters_data_item.hpp"
+#include "util/macros.hpp"
 
 struct ShaderPassAnimationData;
 
@@ -18,10 +19,8 @@ public:
 	unsigned int force_unique;
 	char texture_coordinate_indices[16];
 public:
+	RRE_DISABLE_COPY(ShaderPassDescriptor);
 	ShaderPassDescriptor();
-	ShaderPassDescriptor(const ShaderPassDescriptor&) = delete;
-	ShaderPassDescriptor& operator=(const ShaderPassDescriptor&) = delete;
-
 	virtual ~ShaderPassDescriptor() override;
 	virtual int Unk0(char*) = 0;
 	virtual int Unk1(int) = 0;

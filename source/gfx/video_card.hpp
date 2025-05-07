@@ -1,5 +1,6 @@
 #pragma once
 #include "containers/container_list.hpp"
+#include "util/macros.hpp"
 
 class VideoCard {
 public:
@@ -13,9 +14,8 @@ protected:
 	int unused3;
 	ContainerList<std::uint32_t> unused4;
 public:
+	RRE_DISABLE_COPY(VideoCard);
 	VideoCard();
-	VideoCard(const VideoCard&) = delete;
-	VideoCard& operator=(const VideoCard&) = delete;
 	virtual ~VideoCard();
 	virtual void FreeCursor();
 	virtual int ResetStateManager() = 0;

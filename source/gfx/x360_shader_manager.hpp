@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <cstddef>
 #include <cstring>
+#include "util/macros.hpp"
 
 struct Shader {
 	char name[260];
@@ -40,6 +41,7 @@ public:
 	ShaderCollection compiled_pixel_shaders;
 	ShaderCollection shader_source_codes;
 public:
+	RRE_DISABLE_COPY(X360ShaderManager);
 	virtual int Unk1(int, int, int, int, int, int);
 	virtual int Unk2(int, int);
 	

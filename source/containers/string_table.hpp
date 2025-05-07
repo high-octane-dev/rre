@@ -1,6 +1,7 @@
 #pragma once
 #include "base_object.hpp"
 #include "container_hash_table.hpp"
+#include "util/macros.hpp"
 
 class StringTable : public BaseObject {
 public:
@@ -35,9 +36,8 @@ protected:
 	std::size_t max_table_markers;
 	std::size_t table_marker_index;
 public:
+	RRE_DISABLE_COPY(StringTable);
 	StringTable(std::size_t user_data_stride, LookupType lookup_type, std::size_t initial_string_entry_count, std::size_t string_entries_increment, std::size_t string_heap_capacity, int unk3, std::size_t max_table_markers);
-	StringTable(const StringTable&) = delete;
-	StringTable& operator=(const StringTable&) = delete;
 	virtual ~StringTable() override;
 	virtual int Load(char*);
 	virtual void Unload(int);

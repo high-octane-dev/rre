@@ -1,6 +1,7 @@
 #pragma once
 #include <cstddef>
 #include "base_object.hpp"
+#include "util/macros.hpp"
 
 class BlockAllocator : public BaseObject {
 public:
@@ -24,9 +25,8 @@ private:
 	// always equal to sizeof(Block*), or just 4
 	int block_data_offset;
 public:
+	RRE_DISABLE_COPY(BlockAllocator);
 	BlockAllocator(int _used_size_per_block, int _block_size_bytes);
-	BlockAllocator(const BlockAllocator&) = delete;
-	BlockAllocator& operator=(const BlockAllocator&) = delete;
 	virtual ~BlockAllocator();
 
 	void Purge();

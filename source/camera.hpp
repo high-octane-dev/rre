@@ -2,11 +2,11 @@
 #include "game_object.hpp"
 #include "math/matrix4x4.hpp"
 #include "dynamic_searchable_object.hpp"
+#include "util/macros.hpp"
 
 class Camera : public DynamicSearchableObject, GameObject {
 protected:
     SearchNode* search_node;
-    int unused0[3];
     Matrix4x4 projection_matrix;
     Matrix4x4 view_matrix;
     Matrix4x4 view_projection_matrix;
@@ -54,8 +54,6 @@ public:
     int enable_perspective;
 public:
     Camera(bool start_enabled);
-    Camera(const Camera&) = delete;
-    Camera& operator=(const Camera&) = delete;
     virtual ~Camera() override;
     virtual void Disable() override;
     virtual void Enable() override;

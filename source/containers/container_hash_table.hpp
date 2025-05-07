@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 #include "allocators/block_allocator.hpp"
+#include "util/macros.hpp"
 
 typedef void (*HashEnumCallBack)(void* val, void* userData);
 typedef int (*HashValueFunction)(void* value);
@@ -70,10 +71,9 @@ public:
     HashCompareFunction  hash_compare_func; // The function used to hash keys
 
 public:
+    RRE_DISABLE_COPY(ContainerHashTable);
     ContainerHashTable();
     ~ContainerHashTable();
-    ContainerHashTable(const ContainerHashTable&) = delete;
-    ContainerHashTable& operator=(const ContainerHashTable&) = delete;
     void CHTCreateFull(int _bucket_count, int nodes_per_block, HashValueFunction _hash_value_func, HashCompareFunction _hash_compare_func);
     int Lookup(TKey key, TVal* value);
     int ChangeValue(TKey key, TVal value);

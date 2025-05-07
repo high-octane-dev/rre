@@ -34,6 +34,7 @@ public:
 	ActionScriptInfo* continue_script;
 	int on_critical_path;
 public:
+	RRE_DISABLE_COPY(Cars2StoryEvent);
 	virtual int Serialize(void* buffer, int len) override;
 	virtual int DeSerialize(void* buffer, int len) override;
 	virtual int GetSerializedDataSize() override;

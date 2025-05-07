@@ -2,6 +2,7 @@
 #include "searchable_object.hpp"
 #include "allocators/block_allocator.hpp"
 #include "math/vector4.hpp"
+#include "util/macros.hpp"
 
 extern int g_SearchPlacementCount;
 extern BlockAllocator* g_SearchPlacementAllocator;
@@ -16,9 +17,8 @@ public:
     SearchMethod* search_method;
     unsigned int box_placement_code;
 public:
+    RRE_DISABLE_COPY(SearchPlacement);
     SearchPlacement();
-    SearchPlacement(const SearchPlacement&) = delete;
-    SearchPlacement& operator=(const SearchPlacement&) = delete;
     ~SearchPlacement();
 
     void FreeBlockAllocator();
@@ -32,9 +32,8 @@ class DynamicSearchableObject : public SearchableObject {
 protected:
     SearchPlacement* placement;
 public:
+    RRE_DISABLE_COPY(DynamicSearchableObject);
     DynamicSearchableObject();
-    DynamicSearchableObject(const DynamicSearchableObject&) = delete;
-    DynamicSearchableObject& operator=(const DynamicSearchableObject&) = delete;
     virtual ~DynamicSearchableObject() override;
 
     void PerformInitialPlacement(SearchNode*, unsigned int, Vector4 const*, Vector4 const*, float, int, int, char*);

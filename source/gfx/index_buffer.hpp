@@ -8,6 +8,7 @@ protected:
 	int bytes_per_index;
 	int index_count;
 public:
+	RRE_DISABLE_COPY(IndexBuffer);
 	IndexBuffer();
 	~IndexBuffer();
 	virtual int Create(D3DFORMAT fmt, int index_count) = 0;

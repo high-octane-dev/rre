@@ -2,6 +2,7 @@
 #include "serializable_interface.hpp"
 #include "cars2_story_event.hpp"
 #include "allocators/string_block_allocator.hpp"
+#include "util/macros.hpp"
 
 class Cars2StoryDatabase : public SerializableInterface {
 public:
@@ -14,9 +15,8 @@ public:
 	int starting_bolt_banners;
 	StringBlockAllocator* string_block_allocator;
 public:
+	RRE_DISABLE_COPY(Cars2StoryDatabase);
 	Cars2StoryDatabase();
-	Cars2StoryDatabase(const Cars2StoryDatabase&) = delete;
-	Cars2StoryDatabase& operator=(const Cars2StoryDatabase&) = delete;
 
 	virtual int Serialize(void* buffer, int len) override;
 	virtual int DeSerialize(void* buffer, int len) override;

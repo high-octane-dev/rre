@@ -9,6 +9,7 @@ public:
 	int activity_sets_len;
 	StringBlockAllocator* string_block_allocator;
 public:
+	RRE_DISABLE_COPY(Cars2ActivityDatabase);
 	Cars2ActivityDatabase();
 	~Cars2ActivityDatabase();
 	void Create();

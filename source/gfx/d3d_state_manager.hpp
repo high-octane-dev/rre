@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include <d3d9.h>
+#include "util/macros.hpp"
 
 constexpr std::size_t MAX_RENDER_STATE_TYPE = static_cast<std::size_t>(D3DRS_BLENDOPALPHA) + 1;
 constexpr std::size_t MAX_SAMPLER_STATE_TYPE = 48;
@@ -27,10 +28,9 @@ public:
 	unsigned int min_sampler_used;
 	unsigned int max_sampler_used;
 public:
+	RRE_DISABLE_COPY(D3DStateManager);
 	D3DStateManager();
 	~D3DStateManager();
-	D3DStateManager(const D3DStateManager&) = delete;
-	D3DStateManager& operator=(const D3DStateManager&) = delete;
 	void Reset();
 	void SendData();
 	void SetInitialRenderState(D3DRENDERSTATETYPE type, DWORD value);

@@ -1,6 +1,7 @@
 #pragma once
 #include "containers/container_list.hpp"
 #include "game_object.hpp"
+#include "util/macros.hpp"
 
 class VNObject;
 
@@ -15,9 +16,8 @@ public:
 	ContainerList<VNObjectRef*> reference_list_1;
 	ContainerList<VNObjectRef*> reference_list_2;
 public:
+	RRE_DISABLE_COPY(VNObjectRef);
 	VNObjectRef();
-	VNObjectRef(const VNObjectRef&) = delete;
-	VNObjectRef& operator=(const VNObjectRef&) = delete;
 	~VNObjectRef();
 
 };

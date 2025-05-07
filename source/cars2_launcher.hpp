@@ -1,5 +1,6 @@
 #pragma once
 #include "cars2_activity_info.hpp"
+#include "util/macros.hpp"
 
 struct VehicleInformation {
 	char vehicle_name[32];
@@ -40,9 +41,8 @@ public:
 	int needs_character_select_screen;
 	char* current_event_in_explore_hub;
 public:
+	RRE_DISABLE_COPY(Cars2Launcher);
 	Cars2Launcher();
-	Cars2Launcher(const Cars2Launcher&) = delete;
-	Cars2Launcher& operator=(const Cars2Launcher&) = delete;
 	void SetVehicleInfo(int index, char* name, char* _paint_job, char* _wheel_set);
 	void LaunchActivity();
 	void LaunchFrontEndUI();

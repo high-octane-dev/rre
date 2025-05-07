@@ -1,6 +1,7 @@
 #pragma once
 #include <d3d9.h>
 #include "x360_shader.hpp"
+#include "util/macros.hpp"
 
 class X360VertexShaderManager {
 private:
@@ -10,11 +11,9 @@ public:
 private:
 	int is_fullscreen_effect;
 public:
+	RRE_DISABLE_COPY(X360VertexShaderManager);
 	X360VertexShaderManager();
 	~X360VertexShaderManager();
-	X360VertexShaderManager(const X360VertexShaderManager&) = delete;
-	X360VertexShaderManager& operator=(const X360VertexShaderManager&) = delete;
-
 	void Reset();
 	void SetVertexFormatIndex(int);
 	void SetIsFullscreenEffect(int);

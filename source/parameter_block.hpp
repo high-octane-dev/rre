@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <cstddef>
 #include "math/vector4.hpp"
+#include "util/macros.hpp"
 
 struct UnkArrayEntry {
 	int file_offset;
@@ -87,9 +88,8 @@ private:
 public:
 	class PBSearch search;
 public:
+	RRE_DISABLE_COPY(ParameterBlock);
 	ParameterBlock();
-	ParameterBlock(const ParameterBlock&) = delete;
-	ParameterBlock& operator=(const ParameterBlock&) = delete;
 	~ParameterBlock();
 
 	void FreeHeaders();

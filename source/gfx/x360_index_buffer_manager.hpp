@@ -6,6 +6,7 @@
 
 class IndexBufferManager {
 public:
+	RRE_DISABLE_COPY(IndexBufferManager);
 	virtual int CreateIndexBuffer(D3DFORMAT format, int index_count) = 0;
 	virtual void EmptyCacheList() = 0;
 };
@@ -17,8 +18,6 @@ private:
 	unsigned int unused;
 public:
 	X360IndexBufferManager();
-	X360IndexBufferManager(const X360IndexBufferManager&) = delete;
-	X360IndexBufferManager& operator=(const X360IndexBufferManager&) = delete;
 	~X360IndexBufferManager();
 	virtual int CreateIndexBuffer(D3DFORMAT format, int index_count) override;
 	virtual void EmptyCacheList() override;

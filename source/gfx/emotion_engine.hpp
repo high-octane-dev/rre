@@ -1,12 +1,14 @@
 #pragma once
 #include <d3d9.h>
 #include <type_traits>
+#include "util/macros.hpp"
 
 namespace EE {
 	class RefObject {
 	protected:
 		int ref_count;
 	public:
+		RRE_DISABLE_COPY(RefObject);
 		virtual ~RefObject();
 		inline void AddRef() {
 			ref_count++;
@@ -25,14 +27,13 @@ namespace EE {
 		std::size_t capacity;
 		std::size_t len;
 	public:
+		RRE_DISABLE_COPY(RefObjectList);
 		RefObjectList(std::size_t initial_capacity) {
 			capacity = initial_capacity;
 			data = reinterpret_cast<T*>(malloc(initial_capacity * sizeof(T)));
 			len = 0;
 			std::memset(data, 0, initial_capacity);
 		}
-		RefObjectList(RefObjectList&) = delete;
-		RefObjectList& operator=(const RefObjectList&) = delete;
 		~RefObjectList() {
 			for (std::size_t i = 0; i < len; i++) {
 				reinterpret_cast<RefObject*>(data[i])->Release();
@@ -72,14 +73,13 @@ namespace EE {
 		std::size_t capacity;
 		std::size_t len;
 	public:
+		RRE_DISABLE_COPY(List);
 		List(std::size_t initial_capacity) {
 			capacity = initial_capacity;
 			data = reinterpret_cast<T*>(malloc(initial_capacity * sizeof(T)));
 			len = 0;
 			std::memset(data, 0, initial_capacity);
 		}
-		List(List&) = delete;
-		List& operator=(const List&) = delete;
 		~List() {
 			free(data);
 		}
@@ -195,8 +195,6 @@ namespace EE {
 		bool is_reference_device;
 	public:
 		D3DDeviceManager(IDirect3D9* _d3d9);
-		D3DDeviceManager(const D3DDeviceManager&) = delete;
-		D3DDeviceManager& operator=(const D3DDeviceManager&) = delete;
 		virtual ~D3DDeviceManager() override;
 
 		void SetMultiSampleType(bool enable);

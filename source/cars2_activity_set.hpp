@@ -1,5 +1,6 @@
 #pragma once
 #include "cars2_activity_info.hpp"
+#include "util/macros.hpp"
 
 class Cars2ActivitySet {
 public:
@@ -8,9 +9,8 @@ public:
 	Cars2ActivityInfo* activities;
 	int activities_len;
 public:
+	RRE_DISABLE_COPY(Cars2ActivitySet);
 	Cars2ActivitySet();
-	Cars2ActivitySet(const Cars2ActivitySet&) = delete;
-	Cars2ActivitySet& operator=(const Cars2ActivitySet&) = delete;
 	~Cars2ActivitySet();
 
 	Cars2ActivityInfo* GetActivityInfo(char* name);

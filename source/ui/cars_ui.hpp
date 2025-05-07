@@ -1,6 +1,7 @@
 #pragma once
 #include "game_object.hpp"
 #include "cars_ui_manager.hpp"
+#include "util/macros.hpp"
 
 class CarsUI : public GameObject {
 public:
@@ -12,8 +13,6 @@ public:
 	int unused3;
 public:
 	CarsUI();
-	CarsUI(const CarsUI&) = delete;
-	CarsUI& operator=(const CarsUI&) = delete;
 	virtual ~CarsUI() override;
 	virtual GameObject* Create() override;
 	virtual int Tick(float dt) override;

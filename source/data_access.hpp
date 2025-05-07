@@ -2,6 +2,7 @@
 #include "base_object.hpp"
 #include "containers/container_hash_table.hpp"
 #include "allocators/string_block_allocator.hpp"
+#include "util/macros.hpp"
 
 struct VirtualDataDevice {
     int id;
@@ -87,9 +88,8 @@ public:
     // not this though!!!!!
     StringBlockAllocator* string_block_allocator;
 public:
+    RRE_DISABLE_COPY(DataAccess);
     DataAccess();
-    DataAccess(const DataAccess&) = delete;
-    DataAccess& operator=(const DataAccess&) = delete;
     virtual ~DataAccess() override;
 
     int ActivateDevice(VirtualDataDevice*, int);

@@ -1,6 +1,7 @@
 #pragma once
 #include "gfx/x360_texture_map.hpp"
 #include "parameter_block.hpp"
+#include "util/macros.hpp"
 
 class LoadingImageIcon {
 public:
@@ -9,9 +10,8 @@ public:
     unsigned int height;
     D3DFORMAT format;
 public:
+    RRE_DISABLE_COPY(LoadingImageIcon);
 	LoadingImageIcon();
-	LoadingImageIcon(const LoadingImageIcon&) = delete;
-	LoadingImageIcon& operator=(const LoadingImageIcon&) = delete;
 	~LoadingImageIcon();
 };
 
@@ -62,9 +62,8 @@ public:
     unsigned int start_time_ms;
     bool color_set;
 public:
+    RRE_DISABLE_COPY(LoadingIconAnim);
 	LoadingIconAnim();
-	LoadingIconAnim(const LoadingIconAnim&) = delete;
-	LoadingIconAnim& operator=(const LoadingIconAnim&) = delete;
 	~LoadingIconAnim();
     
     void SetMoveTime(float);
@@ -83,9 +82,8 @@ public:
 	unsigned int unused_callback_data;
 	unsigned int enable_timestamp;
 public:
+    RRE_DISABLE_COPY(LoadingIcon);
 	LoadingIcon();
-	LoadingIcon(const LoadingIcon&) = delete;
-	LoadingIcon& operator=(const LoadingIcon&) = delete;
 	virtual ~LoadingIcon();
 	virtual void Create(char*);
 	virtual void Enable();

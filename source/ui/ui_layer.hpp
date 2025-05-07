@@ -17,6 +17,7 @@ public:
 protected:
 	std::uint8_t layer_unk2;
 public:
+	RRE_DISABLE_COPY(UILayer);
 	UILayer();
 	virtual ~UILayer();
 	virtual void CreateFromFile(char*, ParameterBlock*);

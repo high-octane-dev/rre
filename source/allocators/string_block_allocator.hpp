@@ -1,5 +1,6 @@
 #pragma once
 #include "containers/container_list.hpp"
+#include "util/macros.hpp"
 
 class StringBlockAllocator {
 public:
@@ -9,9 +10,8 @@ public:
 		char* end;
 		// always set to zero so doesn't matter
 		int unk;
+		RRE_DISABLE_COPY(StringBlock);
 		StringBlock();
-		StringBlock(const StringBlock&) = delete;
-		StringBlock& operator=(const StringBlock&) = delete;
 		~StringBlock();
 	};
 private:
@@ -19,9 +19,8 @@ private:
 	int alloc_size;
 	ContainerList<StringBlock*> string_blocks;
 public:
+	RRE_DISABLE_COPY(StringBlockAllocator);
 	StringBlockAllocator(std::size_t _initial_string_len, int _alloc_size);
-	StringBlockAllocator(const StringBlockAllocator&) = delete;
-	StringBlockAllocator& operator=(const StringBlockAllocator&) = delete;
 	~StringBlockAllocator();
 
 	void Create(int unk);

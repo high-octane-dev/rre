@@ -314,6 +314,7 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClInclude Include="source\ui\ui_manager.hpp" />
     <ClInclude Include="source\ui\ui_page.hpp" />
     <ClInclude Include="source\ui\ui_style_sheet.hpp" />
+    <ClInclude Include="source\util\macros.hpp" />
     <ClInclude Include="source\util\resource_setup.hpp" />
     <ClInclude Include="source\util\rsstring_util.hpp" />
     <ClInclude Include="source\util\token_string.hpp" />

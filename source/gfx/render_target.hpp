@@ -4,6 +4,7 @@
 #include "video_card.hpp"
 #include "camera.hpp"
 #include "image_data_format.hpp"
+#include "util/macros.hpp"
 
 class RenderTarget {
 public:
@@ -30,10 +31,8 @@ protected:
     float minimum_fog_distance;
     float maximum_fog_distance;
 public:
+    RRE_DISABLE_COPY(RenderTarget);
 	RenderTarget();
-	RenderTarget(const RenderTarget&) = delete;
-	RenderTarget& operator=(const RenderTarget&) = delete;
-
 	virtual ~RenderTarget();
     virtual void Create(VideoCard* unused) = 0;
     virtual void SetDimensions(VideoCard* unused) = 0;

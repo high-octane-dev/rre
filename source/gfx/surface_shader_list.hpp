@@ -3,6 +3,7 @@
 #include <array>
 #include "allocators/block_allocator.hpp"
 #include "shader_pass_descriptor.hpp"
+#include "util/macros.hpp"
 
 constexpr std::size_t MAX_SURFACE_SHADER_PASSES = 4096;
 
@@ -17,9 +18,8 @@ public:
 	std::array<void*, MAX_SURFACE_SHADER_PASSES> surface_shader_passes;
 	SurfaceShader shaders[4];
 public:
+	RRE_DISABLE_COPY(SurfaceShaderList);
 	SurfaceShaderList();
-	SurfaceShaderList(const SurfaceShaderList&) = delete;
-	SurfaceShaderList& operator=(const SurfaceShaderList&) = delete;
 	virtual ~SurfaceShaderList();
 	int AddShaderPass(ShaderPassDescriptor* desc, int unused, uintptr_t unk);
 	void ActivateMaterial(int material, int shader);

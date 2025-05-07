@@ -407,9 +407,6 @@
     <ClInclude Include="source\ui\ui_page.hpp">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="source\util\token_string.hpp">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="source\gfx\texture_map_manager.hpp">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -442,6 +439,12 @@
     </ClInclude>
     <ClInclude Include="source\basic_scene.hpp" />
     <ClInclude Include="source\static_model.hpp" />
+    <ClInclude Include="source\util\macros.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="source\util\token_string.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Graphics">

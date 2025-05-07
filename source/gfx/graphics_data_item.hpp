@@ -1,12 +1,12 @@
 #pragma once
+#include "util/macros.hpp"
 
 class GraphicsDataItem {
 protected:
 	unsigned int unk;
 public:
+	RRE_DISABLE_COPY(GraphicsDataItem);
 	inline GraphicsDataItem() : unk(0) {};
-	GraphicsDataItem(const GraphicsDataItem&) = delete;
-	GraphicsDataItem& operator=(const GraphicsDataItem&) = delete;
 	inline virtual ~GraphicsDataItem() {}
 	virtual void SendData(int) = 0;
 };

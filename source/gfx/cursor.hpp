@@ -1,5 +1,6 @@
 #pragma once
 #include "x360_texture_map.hpp"
+#include "util/macros.hpp"
 
 class Cursor {
 public:
@@ -11,10 +12,9 @@ public:
 	unsigned int frame_timer;
 	unsigned int cursor_clicked_state;
 public:
+	RRE_DISABLE_COPY(Cursor);
 	Cursor();
 	~Cursor();
-	Cursor(const Cursor&) = delete;
-	Cursor& operator=(const Cursor&) = delete;
 	void Draw();
 };
 

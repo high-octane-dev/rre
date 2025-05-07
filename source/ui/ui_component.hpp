@@ -22,6 +22,7 @@ public:
 	int selected;
 	ApplyCondition condition;
 public:
+	RRE_DISABLE_COPY(UIComponentLayout);
 	// OFFSET: 0x0060f310, STATUS: COMPLETE
 	inline UIComponentLayout(char* new_name) {
 		std::size_t len = strlen(new_name);
@@ -54,8 +55,7 @@ class UIComponent {
 public:
 	char unk[12] = {};
 	class UIContainer* parent_container;
-	// char unk2[12] = {};
-	__declspec(align(16)) Matrix4x4 transform;
+	Matrix4x4 transform;
 	char* name;
 	int visible;
 	int enabled;
@@ -65,6 +65,7 @@ public:
 	int selected;
 	MouseMenu* parent_mouse_menu;
 public:
+	RRE_DISABLE_COPY(UIComponent);
 	UIComponent();
 	virtual ~UIComponent();
 	virtual void Create(char* new_name);

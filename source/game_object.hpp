@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdio>
 #include "base_object.hpp"
+#include "util/macros.hpp"
 
 struct ProcessNode;
 struct KeyInfo;
@@ -56,8 +57,7 @@ public:
 	virtual void DumpHierarchy(char*, DumpType, std::int32_t);
 
 	GameObject(bool startEnabled);
-	GameObject(const GameObject&) = delete;
-	GameObject& operator=(const GameObject&) = delete;
+	RRE_DISABLE_COPY(GameObject);
 	GameObject* AddChild(GameObject*, unsigned int);
 	void DumpHierarchy(FILE*, DumpType, std::int32_t);
 

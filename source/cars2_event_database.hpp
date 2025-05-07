@@ -1,6 +1,7 @@
 #pragma once
 #include "cars2_event_set.hpp"
 #include "allocators/string_block_allocator.hpp"
+#include "util/macros.hpp"
 
 class Cars2EventDatabase : public SerializableInterface {
 public:
@@ -8,9 +9,8 @@ public:
 	int event_sets_len;
 	StringBlockAllocator* string_block_allocator;
 public:
+	RRE_DISABLE_COPY(Cars2EventDatabase);
 	Cars2EventDatabase();
-	Cars2EventDatabase(const Cars2EventDatabase&) = delete;
-	Cars2EventDatabase& operator=(const Cars2EventDatabase&) = delete;
 	~Cars2EventDatabase();
 	void Create();
 	Cars2EventInfo* GetEventInfo(Cars2ActivityInfo* activity);

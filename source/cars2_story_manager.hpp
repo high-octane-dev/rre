@@ -5,6 +5,7 @@
 #include "cars2_bumper_sticker.hpp"
 #include "cars2_story_database.hpp"
 #include "util/rsstring_util.hpp"
+#include "util/macros.hpp"
 
 class Cars2StoryManager : public VNObject, SerializableInterface {
 public:
@@ -97,9 +98,8 @@ private:
 	int mcq_hq_stage;
 	Cars2StoryEvent* current_story_event;
 public:
+	RRE_DISABLE_COPY(Cars2StoryManager);
 	Cars2StoryManager();
-	Cars2StoryManager(const Cars2StoryManager&) = delete;
-	Cars2StoryManager& operator=(const Cars2StoryManager&) = delete;
 	void Create();
 
 	virtual ~Cars2StoryManager() override;

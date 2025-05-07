@@ -1,5 +1,6 @@
 #pragma once
 #include "containers/container_linked_list.hpp"
+#include "util/macros.hpp"
 
 struct ListEntry {
 	int offset;
@@ -12,10 +13,9 @@ protected:
 	int len;
 	LinkedList<ListEntry*>* linked_list;
 public:
+	RRE_DISABLE_COPY(Cache);
 	Cache();
 	~Cache();
-	Cache(const Cache&) = delete;
-	Cache& operator=(const Cache&) = delete;
 	void FreeAllNodes();
 
 	virtual ListEntry* CreateListEntry(int, int);

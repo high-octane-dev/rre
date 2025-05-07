@@ -1,5 +1,6 @@
 #pragma once
 #include <algorithm>
+#include "util/macros.hpp"
 
 template <class T> class DynamicArray {
 private:
@@ -10,6 +11,8 @@ private:
 	int initialized;
 	T default_value;
 public:
+	RRE_DISABLE_COPY(DynamicArray);
+
 	DynamicArray(int initial_capacity, int _max_capacity = 100000) : default_value() {
 		initialized = 0;
 		capacity = initial_capacity;
@@ -22,10 +25,6 @@ public:
 			data = nullptr;
 		}
 	}
-	
-	DynamicArray(const DynamicArray&) = delete;
-	
-	DynamicArray& operator=(const DynamicArray&) = delete;
 
 	~DynamicArray() {
 		if (data != nullptr) {

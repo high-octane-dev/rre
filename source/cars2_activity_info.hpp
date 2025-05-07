@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include "parameter_block.hpp"
+#include "util/macros.hpp"
 
 enum class ActivityType : std::uint32_t {
 	Invalid = 0,
@@ -32,10 +33,9 @@ public:
 	int can_run_during_day_or_night;
 	int unk;
 public:
+	RRE_DISABLE_COPY(Cars2ActivityInfo);
 	Cars2ActivityInfo();
 	~Cars2ActivityInfo();
-	Cars2ActivityInfo(const Cars2ActivityInfo&) = delete;
-	Cars2ActivityInfo& operator=(const Cars2ActivityInfo&) = delete;
 	void Create(ParameterBlock* file);
 };
 

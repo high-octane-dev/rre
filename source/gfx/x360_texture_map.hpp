@@ -3,6 +3,7 @@
 #include <d3d9.h>
 #include "base_object.hpp"
 #include "image_data_format.hpp"
+#include "util/macros.hpp"
 
 struct X360Palette;
 
@@ -13,6 +14,7 @@ protected:
 	unsigned short multi_sample_type;
 	float max_projected_size;
 public:
+	RRE_DISABLE_COPY(BaseTextureMap);
 };
 
 class TextureMap : public BaseTextureMap /*, StreamingComponent */ {

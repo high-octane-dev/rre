@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <cstdint>
+#include "util/macros.hpp"
 
 template <typename T>
 class ContainerList {
@@ -12,6 +13,7 @@ private:
 	std::size_t capacity;
 	std::size_t max;
 public:
+	RRE_DISABLE_COPY(ContainerList);
 	template <typename T>
 	class Iterator {
 	private:
@@ -41,9 +43,6 @@ public:
 			return current != other.current;
 		}
 	};
-
-	ContainerList(const ContainerList&) = delete;
-	ContainerList& operator=(const ContainerList&) = delete;
 
 	inline ContainerList() {
 		flags = 0;

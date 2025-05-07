@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include "util/macros.hpp"
 
 template <typename T> struct ContainerLinkedListNode {
 	T data;
@@ -13,6 +14,8 @@ public:
 	ContainerLinkedListNode<T>* start_node;
 	ContainerLinkedListNode<T>* end_node;
 public:
+	RRE_DISABLE_COPY(ContainerLinkedList);
+
 	template <typename T> class Iterator {
 	private:
 		ContainerLinkedListNode<T>* current;
@@ -46,9 +49,6 @@ public:
 		}
 	};
 
-	ContainerLinkedList(const ContainerLinkedList<T>&) = delete;
-	ContainerLinkedList& operator=(const ContainerLinkedList<T>&) = delete;
-	
 	inline ContainerLinkedList() {
 		len = 0;
 		start_node = nullptr;

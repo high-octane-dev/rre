@@ -1,5 +1,6 @@
 #pragma once
 #include "containers/container_list.hpp"
+#include "util/macros.hpp"
 
 class UIStyleSheet {
 private:
@@ -9,9 +10,8 @@ private:
 private:
 	void InitializeLists();
 public:
+	RRE_DISABLE_COPY(UIStyleSheet);
 	UIStyleSheet();
-	UIStyleSheet(const UIStyleSheet&) = delete;
-	UIStyleSheet& operator=(const UIStyleSheet&) = delete;
 	virtual ~UIStyleSheet();
 	void CreateFromFile(char*);
 	void AddColorStyle(char*, unsigned int);

@@ -7,6 +7,7 @@ public:
 	std::uint8_t unk;
 	ContainerList<UIComponentLayout*> component_layouts;
 public:
+	RRE_DISABLE_COPY(UILayout);
 	virtual ~UILayout();
 	virtual void Create();
 
