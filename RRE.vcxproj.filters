@@ -160,6 +160,9 @@
     <ClCompile Include="source\allocators\string_block_allocator.cpp">
       <Filter>Allocators</Filter>
     </ClCompile>
+    <ClCompile Include="source\x360_sound.cpp" />
+    <ClCompile Include="source\sound.cpp" />
+    <ClCompile Include="source\x360_sound_interface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\action_manager.hpp" />
@@ -445,6 +448,10 @@
     <ClInclude Include="source\util\token_string.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="source\sound_interface.hpp" />
+    <ClInclude Include="source\sound.hpp" />
+    <ClInclude Include="source\x360_sound.hpp" />
+    <ClInclude Include="source\x360_sound_interface.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Graphics">

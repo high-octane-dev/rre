@@ -3,6 +3,7 @@
 #include "containers/container_list.hpp"
 #include "allocators/string_block_allocator.hpp"
 #include "game_object.hpp"
+#include "x360_sound.hpp"
 
 enum PlayingState {
 	Stopped,
@@ -30,7 +31,7 @@ private:
 	unsigned int max_volume;
 	char** genres;
 	char** artists;
-	struct X360Sound* sound;
+	X360Sound* sound;
 	struct X360SoundGroup* sound_group;
 	unsigned int unk4;
 	float current_elapased_time;

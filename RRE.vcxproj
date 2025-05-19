@@ -178,6 +178,7 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClCompile Include="source\searchable_game_object.cpp" />
     <ClCompile Include="source\searchable_object.cpp" />
     <ClCompile Include="source\allocators\string_block_allocator.cpp" />
+    <ClCompile Include="source\sound.cpp" />
     <ClCompile Include="source\ui\cars_base_layer.cpp" />
     <ClCompile Include="source\ui\cars_ui.cpp" />
     <ClCompile Include="source\ui\cars_ui_menu_layer.cpp" />
@@ -195,8 +196,11 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClCompile Include="source\x360_camera.cpp" />
     <ClCompile Include="source\x360_game.cpp" />
     <ClCompile Include="source\x360_loading_icon.cpp" />
+    <ClCompile Include="source\x360_sound.cpp" />
+    <ClCompile Include="source\x360_sound_interface.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\sound_interface.hpp" />
     <ClInclude Include="source\action_manager.hpp" />
     <ClInclude Include="source\action_script.hpp" />
     <ClInclude Include="source\action_sequence.hpp" />
@@ -295,6 +299,7 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClInclude Include="source\searchable_object.hpp" />
     <ClInclude Include="source\serializable_interface.hpp" />
     <ClInclude Include="source\soultree\soultree_object.hpp" />
+    <ClInclude Include="source\sound.hpp" />
     <ClInclude Include="source\static_model.hpp" />
     <ClInclude Include="source\streaming_listener.hpp" />
     <ClInclude Include="source\allocators\string_block_allocator.hpp" />
@@ -322,6 +327,8 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClInclude Include="source\x360_camera.hpp" />
     <ClInclude Include="source\x360_game.hpp" />
     <ClInclude Include="source\x360_loading_icon.hpp" />
+    <ClInclude Include="source\x360_sound.hpp" />
+    <ClInclude Include="source\x360_sound_interface.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
