@@ -8,6 +8,7 @@
 #include "language_definition.hpp"
 #include "language_configuration.hpp"
 #include "x360_camera.hpp"
+#include "x360_sound.hpp"
 
 struct TimeIntervalCallback {
     void (**callback)(int, float, void*);
@@ -55,7 +56,7 @@ public:
     float dt_seconds_unpaused;
     float one_over_dt_seconds_unpaused;
     float unused6;
-    struct X360Sound* unused7; /* technically not unused */
+    X360Sound* unused7; /* technically not unused */
     int prev_snd_play_position;
     float unused8;
     float unused9;
