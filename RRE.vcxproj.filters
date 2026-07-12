@@ -160,6 +160,10 @@
     <ClCompile Include="source\allocators\string_block_allocator.cpp">
       <Filter>Allocators</Filter>
     </ClCompile>
+    <ClCompile Include="source\search_node.cpp" />
+    <ClCompile Include="source\ui\cars_ui_menu_manager.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\action_manager.hpp" />
@@ -445,6 +449,18 @@
     <ClInclude Include="source\util\token_string.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="source\search_node.hpp" />
+    <ClInclude Include="source\input\input_device.hpp">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="source\input\x360_input_device.hpp">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ui\cars_ui_menu_manager.hpp">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\cars_settings.hpp" />
+    <ClInclude Include="source\game_text.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Graphics">
@@ -467,6 +483,9 @@
     </Filter>
     <Filter Include="Math">
       <UniqueIdentifier>{6bbb1fb6-dad5-42ad-874d-dd8b6c0bc1a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{e5016bea-74d8-4d01-85d4-be90903f6a85}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

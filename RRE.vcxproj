@@ -22,14 +22,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <EnableASAN>false</EnableASAN>
@@ -178,9 +178,11 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClCompile Include="source\searchable_game_object.cpp" />
     <ClCompile Include="source\searchable_object.cpp" />
     <ClCompile Include="source\allocators\string_block_allocator.cpp" />
+    <ClCompile Include="source\search_node.cpp" />
     <ClCompile Include="source\ui\cars_base_layer.cpp" />
     <ClCompile Include="source\ui\cars_ui.cpp" />
     <ClCompile Include="source\ui\cars_ui_menu_layer.cpp" />
+    <ClCompile Include="source\ui\cars_ui_menu_manager.cpp" />
     <ClCompile Include="source\ui\cars_ui_menu_page.cpp" />
     <ClCompile Include="source\ui\cars_ui_page.cpp" />
     <ClCompile Include="source\ui\ui_component.cpp" />
@@ -218,6 +220,7 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClInclude Include="source\cars_audio_manager.hpp" />
     <ClInclude Include="source\cars_dialogue.hpp" />
     <ClInclude Include="source\cars_game.hpp" />
+    <ClInclude Include="source\cars_settings.hpp" />
     <ClInclude Include="source\containers\container_hash_table.hpp" />
     <ClInclude Include="source\containers\container_linked_list.hpp" />
     <ClInclude Include="source\containers\container_list.hpp" />
@@ -229,6 +232,7 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClInclude Include="source\file_io.hpp" />
     <ClInclude Include="source\game.hpp" />
     <ClInclude Include="source\game_object.hpp" />
+    <ClInclude Include="source\game_text.hpp" />
     <ClInclude Include="source\gfx\cache.hpp" />
     <ClInclude Include="source\gfx\cursor.hpp" />
     <ClInclude Include="source\gfx\d3d_state_manager.hpp" />
@@ -281,6 +285,8 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClInclude Include="source\gfx\x360_vertex_shader_manager.hpp" />
     <ClInclude Include="source\gfx\x360_video_card.hpp" />
     <ClInclude Include="source\globals.hpp" />
+    <ClInclude Include="source\input\input_device.hpp" />
+    <ClInclude Include="source\input\x360_input_device.hpp" />
     <ClInclude Include="source\language_configuration.hpp" />
     <ClInclude Include="source\language_definition.hpp" />
     <ClInclude Include="source\loading_icon.hpp" />
@@ -293,6 +299,7 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClInclude Include="source\parameter_block.hpp" />
     <ClInclude Include="source\searchable_game_object.hpp" />
     <ClInclude Include="source\searchable_object.hpp" />
+    <ClInclude Include="source\search_node.hpp" />
     <ClInclude Include="source\serializable_interface.hpp" />
     <ClInclude Include="source\soultree\soultree_object.hpp" />
     <ClInclude Include="source\static_model.hpp" />
@@ -302,6 +309,7 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClInclude Include="source\ui\cars_ui.hpp" />
     <ClInclude Include="source\ui\cars_ui_manager.hpp" />
     <ClInclude Include="source\ui\cars_ui_menu_layer.hpp" />
+    <ClInclude Include="source\ui\cars_ui_menu_manager.hpp" />
     <ClInclude Include="source\ui\cars_ui_menu_page.hpp" />
     <ClInclude Include="source\ui\cars_ui_page.hpp" />
     <ClInclude Include="source\ui\mouse_menu.hpp" />

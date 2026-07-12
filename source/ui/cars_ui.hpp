@@ -20,3 +20,5 @@ public:
 	void LoadGroup(char*, char*, int);
 	void LoadLocalization();
 };
+
+extern CarsUI* lpCarsUI;

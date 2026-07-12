@@ -7,6 +7,7 @@
 #include "cars2_activity_database.hpp"
 #include "cars2_story_manager.hpp"
 #include "cars_audio_manager.hpp"
+#include "cars_settings.hpp"
 #include "ui/cars_ui.hpp"
 
 enum class XboxLocale {
@@ -118,7 +119,7 @@ public:
     struct VideoFXManager* video_fx_manager;
     struct CarsBonusContentManager* bonus_content_manager;
     struct CarsControllerSettings* controller_settings;
-    struct CarsSettings* settings;
+    CarsSettings* settings;
     struct CarsBoltManager* bolt_manager;
     struct Cars2PickupManager* pickup_manager;
     struct CarsScavengerHuntManager* scavenger_hunt_manager;

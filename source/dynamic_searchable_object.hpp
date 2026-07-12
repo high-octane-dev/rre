@@ -3,11 +3,10 @@
 #include "allocators/block_allocator.hpp"
 #include "math/vector4.hpp"
 #include "util/macros.hpp"
+#include "search_node.hpp"
 
 extern int g_SearchPlacementCount;
 extern BlockAllocator* g_SearchPlacementAllocator;
-struct SearchNode {};
-struct SearchMethod {};
 
 class SearchPlacement {
 public:

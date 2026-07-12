@@ -3,6 +3,7 @@
 #include "ui_layout.hpp"
 #include "ui_component.hpp"
 #include "ui_layer.hpp"
+#include "game_text.hpp"
 
 class UIManager : public GameObject {
 public:
@@ -27,4 +28,8 @@ public:
 	virtual void SetupSearchNode();
 	virtual void CreateScene(char*);
 	virtual int AttachSceneObjects();
+
+	GameText* GetGameText(const char*);
+	UILayer* GetLayer(const char*);
+	UIPage* GetPage(const char*);
 };

@@ -113,6 +113,13 @@ public:
 	virtual void ReceiveVNOData(VNObject*, void*) override;
 	virtual void ReceiveVNOEvent(VNObject*, VNMessage*) override;
 
+	inline Cars2StoryDatabase* GetStoryDatabase() {
+		return story_database;
+	}
+
+	inline ExploreHub* GetCurrentExploreHub() {
+		return &explore_hubs[current_explore_hub];
+	}
 };
 
 extern Cars2StoryManager* lpGlobalStoryManager;

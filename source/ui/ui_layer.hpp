@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 #include <cstdint>
 #include "parameter_block.hpp"
 #include "ui_container.hpp"

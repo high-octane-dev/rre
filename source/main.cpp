@@ -243,7 +243,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 // OFFSET: 0x00619050, STATUS: COMPLETE
 int InitializeWindow(HINSTANCE param_1) {
     
-    WNDCLASSA wnd_class;
+    WNDCLASSA wnd_class{};
     wnd_class.style = 8;
     wnd_class.hIcon = nullptr;
     wnd_class.hCursor = nullptr;
@@ -264,10 +264,10 @@ int InitializeWindow(HINSTANCE param_1) {
     
     DWORD dwStyle = 0;
     if (g_IsWindowed == false) {
-        dwStyle = 0x80080000;
+        dwStyle = WS_POPUP | WS_SYSMENU;
     }
     else {
-        dwStyle = 0x10cf0000;
+        dwStyle = WS_VISIBLE | WS_OVERLAPPEDWINDOW;
     }
     
     g_HWND = CreateWindowExA(0, g_ClassName, g_Caption, dwStyle, 0, 0, g_WindowWidth, g_WindowHeight, nullptr, nullptr, param_1, nullptr);

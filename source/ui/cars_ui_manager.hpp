@@ -5,4 +5,5 @@
 class CarsUIManager : public UIManager, UIControllerEventListener {
 public:
 	virtual ~CarsUIManager() override;
+	void PlaySoundEvent(int, int, int);
 };

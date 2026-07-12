@@ -1,9 +1,10 @@
 #pragma once
 #include "ui_page.hpp"
+#include "game_text.hpp"
 
 class CarsUIPage : public UIPage {
 protected:
-	struct GameText* game_text;
+	GameText* game_text;
 	int unk;
 public:
 	virtual ~CarsUIPage() override;

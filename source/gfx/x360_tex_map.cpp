@@ -24,6 +24,7 @@ TextureMap* X360TexMap::GetTextureMapFromResourceName(char* path, int, unsigned 
             map->LoadViaD3DX(ptr, len);
             lpDataAccess->AttachObject(out_res_handle, map);
             lpDataAccess->FClose(out_res_handle);
+            delete[] ptr;
             return map;
         }
         else {

@@ -40,6 +40,7 @@ public:
 	VNObjectRef* GetReference(VNObject*);
 	int RemoveReference(VNObjectRef*);
 	int SendMessage(VNObjectRef*, VNMessage*);
+	void UpdateVNObjectEvent(VNObject*, int, int, void*, int);
 };
 
 class VNObject {

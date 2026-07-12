@@ -49,7 +49,7 @@ public:
 	void LaunchRace();
 	void LaunchStoryMode();
 	void LaunchVersusRace();
-	void SetActivity(char* activity);
+	void SetActivity(const char* activity);
 	static Cars2Launcher* GetInstance();
 };
 

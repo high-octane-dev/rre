@@ -61,6 +61,19 @@ int VirtualNetwork::SendMessage(VNObjectRef* ref, VNMessage* message) {
 	return 1; 
 }
 
+// OFFSET: 0x005baa40, STATUS: COMPLETE
+void VirtualNetwork::UpdateVNObjectEvent(VNObject* object, int unk, int unk1, void* data, int unk2) {
+	VNMessage message{};
+	message.unk1 = unk1;
+	message.unk = unk;
+	message.unk2 = unk2;
+	message.data = data;
+	VNObjectRef* ref = GetReference(object);
+	if (ref != nullptr) {
+		SendMessage(ref, &message);
+	}
+}
+
 // OFFSET: 0x0059e7c0, STATUS: COMPLETE
 VNObjectRef::VNObjectRef() : reference_list_1(), reference_list_2() {
 	unk0 = nullptr;

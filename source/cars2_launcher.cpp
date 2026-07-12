@@ -52,7 +52,7 @@ void Cars2Launcher::LaunchVersusRace() {
 }
 
 // OFFSET: 0x00429af0, STATUS: COMPLETE
-void Cars2Launcher::SetActivity(char* activity) {
+void Cars2Launcher::SetActivity(const char* activity) {
 	RSStringUtil::Ssnprintf(activity_name, sizeof(activity_name), "%s", activity);
 }
 

@@ -32,6 +32,7 @@ protected:
 	UIPage* unk_page;
 	int pause_when_up;
 	int visible_if_no_animation_present;
+public:
 	int deferred_load; // fs an enum DeferredLoad but idc
 	int is_not_top_of_stack;
 public:
