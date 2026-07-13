@@ -14,6 +14,7 @@ char g_AudioDirectory[260] = "C\\Audio\\";
 void X360Sound::LoadSoundData()
 {
 	char local_108[256];
+	char ogg_ext[] = ".ogg\0";
 
 	if ((sound_flags & 32) != NULL)
 	{
@@ -21,7 +22,7 @@ void X360Sound::LoadSoundData()
 	}
 	
 	RSStringUtil::Ssnprintf(local_108, 0x104, "%s%s", g_DataPCDirectory, file_name);
-	//RSStringUtil::ChangeExtension(local_108, ".ogg");
+	RSStringUtil::ChangeExtension(local_108, ogg_ext);
 
 	if ((sound_flags & 16) != NULL)
 	{
@@ -45,6 +46,7 @@ void X360Sound::CreateFromFile(const char* file, int param_2, int param_3, SOUND
 {
 	char* pcVar2;
 	char local_108[256];
+	char ogg_ext[] = ".ogg\0";
 
 	if (strstr(file, "windmill03_loop") != NULL)
 	{
@@ -71,7 +73,7 @@ void X360Sound::CreateFromFile(const char* file, int param_2, int param_3, SOUND
 
 	pcVar2 = g_AudioDialogueDirectory;
 
-	int i;
+	int i = 0;
 
 	if ((param_2 & 16) == 0)
 	{
@@ -80,7 +82,7 @@ void X360Sound::CreateFromFile(const char* file, int param_2, int param_3, SOUND
 			pcVar2 = g_AudioDirectory;
 		}
 		RSStringUtil::Ssnprintf(local_108, 0x104, "%s%s", pcVar2, file);
-		//RSStringUtil::ChangeExtension(local_108, ".ogg");
+		RSStringUtil::ChangeExtension(local_108, ogg_ext);
 		//RSStringUtil::RemoveExtension(local_108);
 
 		if (g_lpX360SoundInterface->audio_string->GetIndex(local_108) == -1)
@@ -92,7 +94,7 @@ void X360Sound::CreateFromFile(const char* file, int param_2, int param_3, SOUND
 				pcVar2 = g_AudioDirectory;
 			}
 			RSStringUtil::Ssnprintf(local_108, 0x104, "%s%s", pcVar2, file);
-			//RSStringUtil::ChangeExtension(local_108, ".ogg");
+			RSStringUtil::ChangeExtension(local_108, ogg_ext);
 			//RSStringUtil::RemoveExtension(local_108);
 		}
 		//file_name = g_lpX360SoundInterface->audio_string->string_entries[i].string;
@@ -104,7 +106,7 @@ void X360Sound::CreateFromFile(const char* file, int param_2, int param_3, SOUND
 			pcVar2 = g_AudioDialogueDirectory;
 		}
 		RSStringUtil::Ssnprintf(local_108, 0x104, "%s%s", pcVar2, file);
-		//RSStringUtil::ChangeExtension(local_108, ".ogg");
+		RSStringUtil::ChangeExtension(local_108, ogg_ext);
 
 		if (g_lpX360SoundInterface->streams_jukebox->GetIndex(local_108) == -1)
 		{
@@ -114,7 +116,7 @@ void X360Sound::CreateFromFile(const char* file, int param_2, int param_3, SOUND
 				pcVar2 = g_AudioDirectory;
 			}
 			RSStringUtil::Ssnprintf(local_108, 0x104, "%s%s", pcVar2, file);
-			//RSStringUtil::ChangeExtension(local_108, ".ogg");
+			RSStringUtil::ChangeExtension(local_108, ogg_ext);
 			//iVar3 = StringTable::GetIndex(lpX360SoundInterface->streams_jukebox,local_108);
 		}
 		//file_name = g_lpX360SoundInterface->streams_jukebox->string_entries[i].string;
