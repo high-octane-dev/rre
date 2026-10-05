@@ -8,6 +8,22 @@ public:
     int field1_0xb4;
 };
 
+class CarsUIStoryModeMapPage : public CarsUIMenuPage {
+public:
+    int field1_0xb4;
+};
+
+class CarsUIArcadeEventOverMenu : public CarsUIMenuLayer /* CarsUIListMenuLayer */ {
+public:
+    Cars2EventInfo* GetSelectedEvent();
+};
+
+class CarsUIStoryModeMapLayer : public CarsUIMenuLayer /* CarsUIListMenuLayer */ {
+public:
+    const char* GetChosenActivity();
+};
+
+
 enum class MenuState {
     Invalid = -1,
     Activity_Instructions = 0,
@@ -108,6 +124,7 @@ public:
     int FUN_004a45e0();
     void FUN_004dfe70(const char*, int);
     void ShowPopup(const char*, const char*, const char*, const char*, CarsPopupListener*, int);
+    void ShowPauseMenu();
 };
 
 #ifdef _M_IX86

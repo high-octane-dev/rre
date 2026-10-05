@@ -120,6 +120,16 @@ public:
 	inline ExploreHub* GetCurrentExploreHub() {
 		return &explore_hubs[current_explore_hub];
 	}
+
+	// OFFSET: 0x0042b270, STATUS: COMPLETE
+	inline void SetCurrentExploreHub(const char* name) {
+		for (auto i = 0; i < (sizeof(explore_hubs) / sizeof(ExploreHub)); i++) {
+			if (_stricmp(explore_hubs[i].explore_hub_name, name) == 0) {
+				current_explore_hub = i;
+				break;
+			}
+		}
+	}
 };
 
 extern Cars2StoryManager* lpGlobalStoryManager;

@@ -18,6 +18,8 @@ public:
 	RRE_DISABLE_COPY(Cars2StoryDatabase);
 	Cars2StoryDatabase();
 
+	Cars2StoryEvent* GetStoryEvent(const char* story_event_name);
+
 	virtual int Serialize(void* buffer, int len) override;
 	virtual int DeSerialize(void* buffer, int len) override;
 	virtual int GetSerializedDataSize() override;

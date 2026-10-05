@@ -12,6 +12,16 @@ Cars2StoryDatabase::Cars2StoryDatabase() {
 	string_block_allocator = nullptr;
 }
 
+// OFFSET: 0x0042aca0, STATUS: COMPLETE
+Cars2StoryEvent* Cars2StoryDatabase::GetStoryEvent(const char* story_event_name) {
+	for (int i = 0; i < story_events_len; i++) {
+		if (_stricmp(story_event_name, story_events[i].story_event_name) == 0) {
+			return &story_events[i];
+		}
+	}
+	return nullptr;
+}
+
 // OFFSET: 0x0042abc0, STATUS: COMPLETE
 int Cars2StoryDatabase::Serialize(void* buffer, int len) {
 	int written = 0;
