@@ -129,6 +129,9 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClCompile Include="source\cars2_event_info.cpp" />
     <ClCompile Include="source\cars2_event_set.cpp" />
     <ClCompile Include="source\cars2_launcher.cpp" />
+    <ClCompile Include="source\cars2_event_join_point_manager.cpp" />
+    <ClCompile Include="source\cars2_scene_database.cpp" />
+    <ClCompile Include="source\cars2_vehicle_database.cpp" />
     <ClCompile Include="source\cars2_story_database.cpp" />
     <ClCompile Include="source\cars2_story_event.cpp" />
     <ClCompile Include="source\cars2_story_manager.cpp" />
@@ -218,6 +221,9 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClInclude Include="source\cars2_event_info.hpp" />
     <ClInclude Include="source\cars2_event_set.hpp" />
     <ClInclude Include="source\cars2_launcher.hpp" />
+    <ClInclude Include="source\cars2_event_join_point_manager.hpp" />
+    <ClInclude Include="source\cars2_scene_database.hpp" />
+    <ClInclude Include="source\cars2_vehicle_database.hpp" />
     <ClInclude Include="source\cars2_story_database.hpp" />
     <ClInclude Include="source\cars2_story_event.hpp" />
     <ClInclude Include="source\cars2_story_manager.hpp" />
@@ -277,7 +283,6 @@ copy /Y dependencies\binkw32.dll "$(TargetDir)binkw32.dll"</Command>
     <ClInclude Include="source\gfx\x360_shader_parameters_data_item.hpp" />
     <ClInclude Include="source\gfx\x360_static_renderable_object_data_item.hpp" />
     <ClInclude Include="source\gfx\x360_strip_surface_data.hpp" />
-    <ClInclude Include="source\gfx\x360_surface_shader_list.hpp" />
     <ClInclude Include="source\gfx\x360_texture_map.hpp" />
     <ClInclude Include="source\gfx\x360_texture_map_manager.hpp" />
     <ClInclude Include="source\gfx\x360_tex_map.hpp" />

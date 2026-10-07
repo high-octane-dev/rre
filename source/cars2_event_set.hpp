@@ -20,6 +20,8 @@ public:
 	Cars2EventSet();
 	~Cars2EventSet();
 
+	Cars2EventInfo* GetEventInfo(const char* name);
+
 	virtual int Serialize(void* buffer, int len) override;
 	virtual int DeSerialize(void* buffer, int len) override;
 	virtual int GetSerializedDataSize() override;

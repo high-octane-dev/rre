@@ -13,6 +13,9 @@
     <ClCompile Include="source\cars2_event_info.cpp" />
     <ClCompile Include="source\cars2_event_set.cpp" />
     <ClCompile Include="source\cars2_launcher.cpp" />
+    <ClCompile Include="source\cars2_event_join_point_manager.cpp" />
+    <ClCompile Include="source\cars2_scene_database.cpp" />
+    <ClCompile Include="source\cars2_vehicle_database.cpp" />
     <ClCompile Include="source\cars2_story_database.cpp" />
     <ClCompile Include="source\cars2_story_event.cpp" />
     <ClCompile Include="source\cars2_story_manager.cpp" />
@@ -182,6 +185,9 @@
     <ClInclude Include="source\cars2_event_info.hpp" />
     <ClInclude Include="source\cars2_event_set.hpp" />
     <ClInclude Include="source\cars2_launcher.hpp" />
+    <ClInclude Include="source\cars2_event_join_point_manager.hpp" />
+    <ClInclude Include="source\cars2_scene_database.hpp" />
+    <ClInclude Include="source\cars2_vehicle_database.hpp" />
     <ClInclude Include="source\cars2_story_database.hpp" />
     <ClInclude Include="source\cars2_story_event.hpp" />
     <ClInclude Include="source\cars2_story_manager.hpp" />

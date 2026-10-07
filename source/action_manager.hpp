@@ -30,6 +30,7 @@ public:
 	ActionScript* CreateActionScript(char*, char*, ParameterBlock*);
 	ActionSequence* CreateActionSequence(char*, char*, char*);
 	ActionSequence* CreateActionSequence(char*, char*, ParameterBlock*);
+	void RemoveActionScript(const char* name);
 };
 
 extern ActionManager* lpASManager;

@@ -67,3 +67,13 @@ int Cars2EventSet::DeSerialize(void* buffer, int len) {
 int Cars2EventSet::GetSerializedDataSize() {
 	return 0;
 }
+
+// OFFSET: INLINE, STATUS: COMPLETE
+Cars2EventInfo* Cars2EventSet::GetEventInfo(const char* name) {
+	for (int i = 0; i < events_len; i++) {
+		if (_stricmp(name, events[i].activity_name) == 0) {
+			return &events[i];
+		}
+	}
+	return nullptr;
+}

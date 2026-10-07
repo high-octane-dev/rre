@@ -1,5 +1,6 @@
 #pragma once
 #include "virtual_network.hpp"
+#include "cars2_event_info.hpp"
 #include "cars_ui_menu_page.hpp"
 #include "containers/container_linked_list.hpp"
 

@@ -4,6 +4,9 @@
 #include "gfx/x360_full_screen_render_pass.hpp"
 #include "x360_loading_icon.hpp"
 #include "cars2_event_database.hpp"
+#include "cars2_event_join_point_manager.hpp"
+#include "cars2_scene_database.hpp"
+#include "cars2_vehicle_database.hpp"
 #include "cars2_activity_database.hpp"
 #include "cars2_story_manager.hpp"
 #include "cars_audio_manager.hpp"
@@ -125,12 +128,12 @@ public:
     struct CarsScavengerHuntManager* scavenger_hunt_manager;
     struct Cars2BonusPointManager* bonus_point_manager;
     struct CarsAchievementManager* achievement_manager;
-    struct Cars2SceneDatabase* scene_database;
+    Cars2SceneDatabase* scene_database;
     Cars2ActivityDatabase* activity_database;
     Cars2EventDatabase* event_database;
-    struct Cars2VehicleDatabase* vehicle_database;
+    Cars2VehicleDatabase* vehicle_database;
     Cars2StoryManager* story_manager;
-    struct Cars2EventJoinPointManager* event_join_point_manager;
+    Cars2EventJoinPointManager* event_join_point_manager;
     struct Cars2UIResourceManager* ui_resource_manager;
     GameObject* unused24;
     char scene[64];
@@ -276,6 +279,18 @@ extern char g_AudioDialogueDirectory[260];
 
 // C\Debug
 extern char g_DebugDirectory[260];
+
+// C\Act
+extern char g_ActivityContentDirectory[260];
+
+// C\Scenes
+extern char g_SceneContentDirectory[260];
+
+// C\Global\Chars
+extern char g_GlobalCharsContentDirectory[260];
+
+// C\Story
+extern char g_StoryContentDirectory[260];
 
 extern int g_GetActivityTypeFromActivityFile;
 extern int g_FixMcqueensHeadquartersStage;

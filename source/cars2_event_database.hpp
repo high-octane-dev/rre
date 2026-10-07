@@ -14,9 +14,9 @@ public:
 	~Cars2EventDatabase();
 	void Create();
 	Cars2EventInfo* GetEventInfo(Cars2ActivityInfo* activity);
-	Cars2EventInfo* GetEventInfo(char* name);
+	Cars2EventInfo* GetEventInfo(const char* name);
 	Cars2EventSet* GetEventSet(Cars2EventInfo* info);
-	Cars2EventSet* GetEventSet(char* name);
+	Cars2EventSet* GetEventSet(const char* name);
 	void Reset();
 
 	// OFFSET: INLINE, STATUS: COMPLETE

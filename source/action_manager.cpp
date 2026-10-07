@@ -90,3 +90,7 @@ ActionSequence* ActionManager::CreateActionSequence(char* param_1, char* param_2
 
     return newActionSequence;
 }
+
+// OFFSET: 0x005a0da0, STATUS: TODO
+void ActionManager::RemoveActionScript(const char* name) {
+}

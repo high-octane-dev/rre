@@ -21,6 +21,10 @@ char g_LocalizationContentDirectory[260] = "E\\Loc\\";
 char g_FontTextureContentDirectory[260] = "E\\Font\\";
 char g_AudioDialogueDirectory[260] = "E\\Audio\\";
 char g_DebugDirectory[260] = "C\\Debug\\";
+char g_ActivityContentDirectory[260] = "C\\Act\\";
+char g_SceneContentDirectory[260] = "C\\Scenes\\";
+char g_GlobalCharsContentDirectory[260] = "C\\Global\\Chars\\";
+char g_StoryContentDirectory[260] = "C\\Story\\";
 
 int g_GetActivityTypeFromActivityFile = FALSE;
 int g_FixMcqueensHeadquartersStage = FALSE;
@@ -267,6 +271,39 @@ int CarsGame::Initialize() {
     cars_settings->Create();
     */
     SetConfigArguments();
+    /*
+    lpMotionLibrary->ResizeMotionArray(750);
+    lpMotionLibrary->motions_capacity_add = 10;
+    lpMotionLibrary->ResizeMotionPackArray(650);
+    lpMotionLibrary->motion_packs_capacity_add = 10;
+    */
+    if (scene_database == nullptr) {
+        scene_database = new Cars2SceneDatabase();
+        scene_database->Create();
+    }
+    CreateActivityDatabase();
+    CreateRecordLibraries();
+    CreateEventDatabase();
+    /*
+    if (hall_of_fame != nullptr) {
+        hall_of_fame->FUN_004f6630();
+        hall_of_fame->FUN_004f6760(1);
+    }
+    if (personal_records != nullptr) {
+        personal_records->FUN_004f6630();
+        personal_records->FUN_004f6760(0);
+    }
+    */
+    if (event_join_point_manager == nullptr) {
+        event_join_point_manager = new Cars2EventJoinPointManager();
+        event_join_point_manager->Create();
+    }
+    CreateUIResourceManager();
+    if (vehicle_database == nullptr) {
+        vehicle_database = new Cars2VehicleDatabase();
+        vehicle_database->Create();
+    }
+    // FIXME: The rest of this function (managers, audio, UI) is not yet implemented.
     return 1;
 }
 
